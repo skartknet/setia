@@ -1,17 +1,52 @@
-﻿using System;
+﻿using Setas.Models;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Setas
 {
+
     public partial class App : Application
     {
+        public static Prediction FirstPrediction { get; set; }
+        public static IEnumerable<Prediction> SecondaryPredictions { get; set; }
+        public static ImageSource SourceImage { get; set; }
+
         public App()
         {
-            InitializeComponent();
+            if (DesignMode.IsDesignModeEnabled)
+            {
 
-            MainPage = new MainPage();
+                FirstPrediction = new Prediction
+                {
+                    TagName = "Predi1",
+                    Probability = 55.5f
+                };
+                SecondaryPredictions = new Prediction[]
+                {
+                    new Prediction
+                    {
+                        TagName ="Predi1",
+                        Probability = 55.5f
+                    },
+                    new Prediction
+                    {
+                        TagName ="Predi1",
+                        Probability = 38f
+                    },
+                    new Prediction
+                    {
+                        TagName ="Predi1",
+                        Probability = 10f
+                    }
+                };
+            }
+
+            InitializeComponent();
+            MainPage = new NavigationPage(new IdentificationPage());
+
+
         }
 
         protected override void OnStart()

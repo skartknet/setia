@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"   
+            x:Class="Setas.IdentificationPage"
+            xmlns:local="clr-namespace:Setas"
+            Title="Identificar Hongo" 
+             Padding="10, 20">
+    <StackLayout BackgroundColor="Accent" VerticalOptions="Fill">
+       
+        <Button Text="Hacer foto"
+                Clicked="CameraButton_Clicked"
+                VerticalOptions="CenterAndExpand"/>
+        
+    </StackLayout>
+</ContentPage>
