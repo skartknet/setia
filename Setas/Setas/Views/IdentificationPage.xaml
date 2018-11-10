@@ -5,11 +5,43 @@
             xmlns:local="clr-namespace:Setas"
             Title="Identificar Hongo" 
              Padding="10, 20">
-    <StackLayout BackgroundColor="Accent" VerticalOptions="Fill">
-       
-        <Button Text="Hacer foto"
-                Clicked="CameraButton_Clicked"
-                VerticalOptions="CenterAndExpand"/>
-        
+    <StackLayout VerticalOptions="Fill">
+        <Label Text="Identificar" TextColor="Black">
+            <Label.FontFamily>
+                <OnPlatform x:TypeArguments="x:String">
+                    <On Platform="Android" Value="LibreBaskerville-Regular.ttf#LibreBaskerville-Regular"/>
+                </OnPlatform>
+            </Label.FontFamily>
+        </Label>
+        <StackLayout Orientation="Horizontal"
+                     VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="Center">
+            <Button Text="&#xf030;"
+                    FontSize="42"
+                    Clicked="CameraButton_Clicked"
+                    VerticalOptions="CenterAndExpand"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    BorderRadius="50">
+                <Button.FontFamily>
+                    <OnPlatform x:TypeArguments="x:String">
+                        <On Platform="Android" Value="fa-solid.otf#Font Awesome 5 Free Solid"/>
+                    </OnPlatform>
+                </Button.FontFamily>
+            </Button>
+            <Button Text="&#xf03e;"
+                    FontSize="42"
+                    Clicked="CameraButton_Clicked"
+                    VerticalOptions="CenterAndExpand"
+                    WidthRequest="100"
+                    HeightRequest="100"
+                    BorderRadius="50">
+                <Button.FontFamily>
+                <OnPlatform x:TypeArguments="x:String">
+                    <On Platform="Android" Value="fa-solid.otf#Font Awesome 5 Free Solid"/>
+                </OnPlatform>
+                </Button.FontFamily>
+            </Button>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

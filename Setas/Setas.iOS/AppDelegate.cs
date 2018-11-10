@@ -23,6 +23,13 @@ namespace Setas.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+
+            UINavigationBar.Appearance.SetTitleTextAttributes(new UITextAttributes()
+            {
+                Font = UIFont.FromName("LibreBaskerville-Regular", 20)
+            });
+
+
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);

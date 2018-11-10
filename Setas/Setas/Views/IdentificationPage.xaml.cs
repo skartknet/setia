@@ -10,7 +10,7 @@ namespace Setas
 {
     public partial class IdentificationPage : ContentPage
     {
-        public const double Miborder = 3.5;
+     
      
         public IdentificationPage()
         {         

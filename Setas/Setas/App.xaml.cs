@@ -1,4 +1,5 @@
 ﻿using Setas.Models;
+using Setas.Views;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -44,7 +45,7 @@ namespace Setas
             }
 
             InitializeComponent();
-            MainPage = new NavigationPage(new IdentificationPage());
+            MainPage = new SetasNavigationPage(new IdentificationPage());
 
 
         }

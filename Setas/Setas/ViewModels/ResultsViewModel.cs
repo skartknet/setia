@@ -6,64 +6,7 @@ namespace Setas.ViewModels
 {
     class ResultsViewModel : INotifyPropertyChanged
     {
-        public ResultsViewModel()
-        {
-
-            if (DesignMode.IsDesignModeEnabled)
-            {
-
-                FirstResult = new Prediction
-                {
-                    TagName = "Seta 1",
-                    Probability = 55.5f
-                };
-                SecondaryResults = new Prediction[]
-                {
-                    new Prediction
-                    {
-                        TagName ="Seta 2",
-                        Probability = 55.5f
-                    },
-                    new Prediction
-                    {
-                        TagName ="Seta 3",
-                        Probability = 38f
-                    },
-                    new Prediction
-                    {
-                        TagName ="Seta 4",
-                        Probability = 10f
-                    }
-                };
-
-
-                Setas = new Seta[]
-                {
-                    new Seta
-                    {
-                        Name="Seta 1",
-                        Image = "http://placehold.it/300x300"
-                    },
-                    new Seta
-                    {
-                        Name="Seta 2",
-                        Image = "http://placehold.it/300x300"
-                    },
-                    new Seta
-                    {
-                        Name="Seta 3",
-                        Image = "http://placehold.it/300x300"
-                    },
-                    new Seta
-                    {
-                        Name="Seta 4",
-                        Image = "http://placehold.it/300x300"
-                    },
-                };
-            }
-
-        }
-
+     
 
         Seta[] _setas;
         public Seta[] Setas
