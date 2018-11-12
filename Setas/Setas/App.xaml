@@ -4,5 +4,45 @@
              x:Class="Setas.App">
     <Application.Resources>
 
+        <Color x:Key="Color1">#AD7045</Color>
+        <Color x:Key="Color2">#884C3D</Color>
+        <Color x:Key="Color3">#4C1326</Color>
+        <Color x:Key="Color4">#997E81</Color>
+        <Color x:Key="Color5">#D1B794</Color>
+
+        <!--Apply Montserrrat to all labels by default-->
+        <Style TargetType="Label">
+            <Setter Property="FontFamily">
+                <OnPlatform x:TypeArguments="x:String" >
+                    <On Platform="Android" Value="Montserrat-Regular.ttf#Montserrat"/>
+                </OnPlatform>
+            </Setter>
+        </Style>
+
+
+        <Style x:Key="Heading1" TargetType="Label">
+            <Setter Property="TextColor" Value="#4C1326" />
+            <Setter Property="FontFamily">
+                <OnPlatform x:TypeArguments="x:String" >
+                    <On Platform="Android" Value="LibreBaskerville-Regular.ttf#LibreBaskerville"/>
+                </OnPlatform>
+            </Setter>
+        </Style>
+        
+
+
+
+
+        <Style x:Key="BtnRounded" TargetType="Button">
+            <Setter Property="FontFamily">
+                <OnPlatform x:TypeArguments="x:String" >
+                    <On Platform="Android" Value="fa-solid.otf#Font Awesome 5 Free Solid"/>
+                </OnPlatform>
+            </Setter>
+            <Setter Property="FontSize">42</Setter>
+            <Setter Property="WidthRequest">100</Setter>
+            <Setter Property="HeightRequest">100</Setter>
+            <Setter Property="BorderRadius">50</Setter>
+        </Style>
     </Application.Resources>
 </Application>

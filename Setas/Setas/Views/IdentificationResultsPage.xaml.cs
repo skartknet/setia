@@ -13,39 +13,9 @@ namespace Setas
         ResultsViewModel vm;
 
         internal IdentificationResultsPage()
-        {
-            if (DesignMode.IsDesignModeEnabled)
-            {
-                var _vm = new ResultsViewModel
-                {
-                    FirstResult = new Prediction
-                    {
-                        TagName = "Seta 1",
-                        Probability = 55.5f
-                    },
-                    SecondaryResults = new Prediction[]
-                    {
-                        new Prediction
-                        {
-                            TagName ="Seta 2",
-                            Probability = 55.5f
-                        },
-                        new Prediction
-                        {
-                            TagName ="Seta 3",
-                            Probability = 38f
-                        },
-                        new Prediction
-                        {
-                            TagName ="Seta 4",
-                            Probability = 10f
-                        }
-                    }
-                };
-            }
+        {            
 
             InitializeComponent();
-            BindingContext = vm;
 
         }
 
@@ -54,6 +24,8 @@ namespace Setas
             : this()
         {
             vm = _vm;
+            BindingContext = vm;
+
         }
     }
 }

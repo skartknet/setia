@@ -20,12 +20,14 @@ namespace Setas
         }
         private async void CameraButton_Clicked(object sender, EventArgs e)
         {
+
             var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions() { });
 
             if (photo != null)
             {
-                ((Button)sender).Text = "Analizando...";
-     
+                StatusLabel.IsVisible = true;
+
+
                 var fileStream = photo.GetStream();
 
                 PredictionResponse result = null;
@@ -48,7 +50,8 @@ namespace Setas
                     return photo.GetStream();
                 });
 
-                ((Button)sender).Text = "Hacer foto";
+
+                StatusLabel.IsVisible = false;
 
                 var vm = new ResultsViewModel
                 {

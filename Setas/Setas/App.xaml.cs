@@ -10,42 +10,17 @@ namespace Setas
 
     public partial class App : Application
     {
-        public static Prediction FirstPrediction { get; set; }
-        public static IEnumerable<Prediction> SecondaryPredictions { get; set; }
         public static ImageSource SourceImage { get; set; }
 
         public App()
         {
-            if (DesignMode.IsDesignModeEnabled)
-            {
-
-                FirstPrediction = new Prediction
-                {
-                    TagName = "Predi1",
-                    Probability = 55.5f
-                };
-                SecondaryPredictions = new Prediction[]
-                {
-                    new Prediction
-                    {
-                        TagName ="Predi1",
-                        Probability = 55.5f
-                    },
-                    new Prediction
-                    {
-                        TagName ="Predi1",
-                        Probability = 38f
-                    },
-                    new Prediction
-                    {
-                        TagName ="Predi1",
-                        Probability = 10f
-                    }
-                };
-            }
+           
 
             InitializeComponent();
-            MainPage = new SetasNavigationPage(new IdentificationPage());
+            MainPage = new MainPage
+            {
+                
+            };
 
 
         }
