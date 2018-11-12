@@ -1,4 +1,5 @@
 ﻿using Setas.Models;
+
 using System.ComponentModel;
 using Xamarin.Forms;
 
@@ -7,17 +8,6 @@ namespace Setas.ViewModels
     class ResultsViewModel : INotifyPropertyChanged
     {
      
-
-        Seta[] _setas;
-        public Seta[] Setas
-        {
-            get => _setas;
-            set
-            {
-                _setas = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Setas"));
-            }
-        }
 
 
         Prediction _firstResult;

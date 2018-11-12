@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Setas.Views.MushroomDetail"
+             Title="{Binding Name}"
+             Padding="10">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Image  HeightRequest="125"
+                            WidthRequest="125"
+                            Source="caesarea12.jpg"
+                            Aspect="AspectFill"/>
+                                                   
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                
+                    <Label Text="Nombre popular" Grid.Row="0" Grid.Column="0"/>
+                    <Label Text="{Binding Name}" Grid.Row="0" Grid.Column="1"/>
+                    <Label Text="Interes Gastronomico" Grid.Row="1" Grid.Column="0"/>
+                    <Label Text="{Binding Name}" Grid.Row="1" Grid.Column="1"/>
+                </Grid>
+            </StackLayout>
+
+            <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
+            <Label Text="Amanita Muscaria" Style="{StaticResource Paragraph}"/>
+
+            <Label Text="Confusiones" Style="{StaticResource Heading2}"/>
+            <Label Text="Se parece al AGARICUS BRUNNESCENS (champiñón cultivado) y al AGARICUS BISPORUS. Desde su descubrimiento en occidente, se le ha ido asignando a diferentes Géneros (Agaricus, Armillaria, Lepiota, Pleurotus)."
+                   Style="{StaticResource Paragraph}"/>
+
+            <Label Text="Habitat" Style="{StaticResource Heading2}"/>
+            <Label Text="Saprofita la madera del árbol Shii. Es originario de Oriente."
+                   Style="{StaticResource Paragraph}"/>
+
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

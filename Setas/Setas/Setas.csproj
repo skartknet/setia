@@ -29,6 +29,9 @@
     <Compile Update="Views\CatalogueMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\MushroomDetail.xaml.cs">
+      <DependentUpon>MushroomDetail.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -41,10 +44,13 @@
     <EmbeddedResource Update="Views\CatalogueMaster.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Dictionary.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\IdentificationResultsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ItemDetail.xaml">
+    <EmbeddedResource Update="Views\MushroomDetail.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\MainPage.xaml">

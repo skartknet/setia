@@ -8,14 +8,14 @@ namespace Setas.Services
 {
 
 
-    class PredictionService
+    public class PredictionService
     {
 
 
         private const string predictionKey = "d6443721d97b46479be1634493aa83e2";
         private const string url = "https://southcentralus.api.cognitive.microsoft.com/customvision/v2.0/Prediction/2e7aba89-bdde-479f-9b27-be098914db6a/image";
 
-        internal static async Task<PredictionResponse> Analyse(byte[] byteData)
+        public static async Task<PredictionResponse> Analyse(byte[] byteData)
         {
 
             using (var client = new HttpClient())

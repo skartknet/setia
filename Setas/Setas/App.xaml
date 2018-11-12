@@ -21,12 +21,21 @@
 
 
         <Style x:Key="Heading1" TargetType="Label">
+            <Setter Property="FontSize" Value="Large"/>
             <Setter Property="TextColor" Value="#4C1326" />
             <Setter Property="FontFamily">
                 <OnPlatform x:TypeArguments="x:String" >
                     <On Platform="Android" Value="LibreBaskerville-Regular.ttf#LibreBaskerville"/>
                 </OnPlatform>
             </Setter>
+        </Style>
+
+        <Style x:Key="Heading2" TargetType="Label" BasedOn="{StaticResource Heading1}">
+            <Setter Property="FontSize" Value="Medium"/>
+        </Style>
+
+        <Style x:Key="Paragraph" TargetType="Label">
+            <Setter Property="Margin" Value="0,0,0,15"/>
         </Style>
         
 

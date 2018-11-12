@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Setas.Models
+namespace Setas.ViewModels
 {
-    class Seta
+    public class MushroomDetailViewModel
     {
         public string Name { get; set; }
-        public string Image { get; set; }
+        public string PopularNames { get; set; }
     }
 }

@@ -1,6 +1,5 @@
-﻿using Setas.Models;
-using Setas.ViewModels;
-
+﻿using Setas.ViewModels;
+using Setas.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -26,6 +25,17 @@ namespace Setas
             vm = _vm;
             BindingContext = vm;
 
+        }
+
+        private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            var model = new MushroomDetailViewModel()
+            {
+                Name = "Lentinus edodes",
+                PopularNames = "Shiitake"
+            };
+
+            Navigation.PushAsync(new MushroomDetail(model));
         }
     }
 }

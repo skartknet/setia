@@ -1,6 +1,4 @@
-﻿using Setas.Models;
-using Setas.Views;
-using System.Collections.Generic;
+﻿using Setas.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

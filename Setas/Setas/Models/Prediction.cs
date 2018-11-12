@@ -1,5 +1,4 @@
-﻿using Xamarin.Forms;
-
+﻿
 namespace Setas.Models
 {
     public class Prediction
@@ -9,9 +8,6 @@ namespace Setas.Models
         public string TagName { get; set; }
         public float Probability { get; set; }
 
-        //Item details
-        public string Name { get; set; }
-        public string PopularName { get; set; }
-        public ImageSource Image { get; set; }
+        public Mushroom Mushroom { get; set; }
     }
 }

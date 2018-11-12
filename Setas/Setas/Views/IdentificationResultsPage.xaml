@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Setas.IdentificationResultsPage"
              xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-             xmlns:models="clr-namespace:Setas.Models"
+             xmlns:models="clr-namespace:Setas.Core.Models;assembly=Setas.Core"
                BackgroundColor="{StaticResource Color5}"
              Title="Result"
              Padding="10">
@@ -39,18 +39,19 @@
 
             <!--Secondary results-->
             <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}" FontSize="24" Margin="0,20,0,0"/>
-            <ListView                     
-                      SeparatorColor="{StaticResource Color4}"
-                      RowHeight="100"                   
-                      >
+            <ListView SeparatorColor="{StaticResource Color4}"
+                      RowHeight="100"
+                      SelectionMode="None"
+                      ItemTapped="ListView_ItemTapped"
+                      IsPullToRefreshEnabled="False">
 
                 <!--<ListView Header="Otros posibles resultados"
                       ItemsSource="{Binding SecondaryResults}">-->
-                <ListView.ItemsSource>
+                <!--<ListView.ItemsSource>
                     <x:Array Type="{x:Type models:Prediction}">
                         <models:Prediction Name="Amanita Muscaria"
                                            PopularName="Masdd"
-                                           Probability="34.5" />
+                                           Probability="34.5"/>
                         <models:Prediction Name="Amanita Muscaria"
                                            PopularName="Masdd"
                                            Probability="34.5"/>
@@ -76,7 +77,7 @@
                                            PopularName="Masdd"
                                            Probability="34.5"/>
                     </x:Array>
-                </ListView.ItemsSource>
+                </ListView.ItemsSource>-->
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

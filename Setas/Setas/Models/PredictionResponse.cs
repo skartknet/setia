@@ -3,7 +3,7 @@
 namespace Setas.Models
 {
  
-    class PredictionResponse
+    public class PredictionResponse
     {
         public string Id { get; set; }
         public string Project { get; set; }
