@@ -49,9 +49,9 @@ namespace Setas.Core.Models
 		/// Class
 		///</summary>
 		[ImplementPropertyType("class")]
-		public IEnumerable<string> Class
+		public string Class
 		{
-			get { return this.GetPropertyValue<IEnumerable<string>>("class"); }
+			get { return this.GetPropertyValue<string>("class"); }
 		}
 
 		///<summary>
@@ -73,15 +73,6 @@ namespace Setas.Core.Models
 		}
 
 		///<summary>
-		/// Cooking Interest
-		///</summary>
-		[ImplementPropertyType("cookingInterest")]
-		public IEnumerable<IPublishedContent> CookingInterest
-		{
-			get { return this.GetPropertyValue<IEnumerable<IPublishedContent>>("cookingInterest"); }
-		}
-
-		///<summary>
 		/// Description
 		///</summary>
 		[ImplementPropertyType("description")]
@@ -94,9 +85,9 @@ namespace Setas.Core.Models
 		/// Family
 		///</summary>
 		[ImplementPropertyType("family")]
-		public IEnumerable<string> Family
+		public string Family
 		{
-			get { return this.GetPropertyValue<IEnumerable<string>>("family"); }
+			get { return this.GetPropertyValue<string>("family"); }
 		}
 
 		///<summary>
@@ -121,9 +112,9 @@ namespace Setas.Core.Models
 		/// Order
 		///</summary>
 		[ImplementPropertyType("order")]
-		public IEnumerable<string> Order
+		public string Order
 		{
-			get { return this.GetPropertyValue<IEnumerable<string>>("order"); }
+			get { return this.GetPropertyValue<string>("order"); }
 		}
 
 		///<summary>
@@ -148,9 +139,9 @@ namespace Setas.Core.Models
 		/// Subclass
 		///</summary>
 		[ImplementPropertyType("subclass")]
-		public IEnumerable<string> Subclass
+		public string Subclass
 		{
-			get { return this.GetPropertyValue<IEnumerable<string>>("subclass"); }
+			get { return this.GetPropertyValue<string>("subclass"); }
 		}
 
 		///<summary>

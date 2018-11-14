@@ -50,6 +50,9 @@
     <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="Bogus, Version=22.0.8.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Bogus.22.0.8\lib\net40\Bogus.dll</HintPath>
+    </Reference>
     <Reference Include="businesslogic, Version=1.0.6879.21987, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.4\lib\net45\businesslogic.dll</HintPath>
     </Reference>
@@ -137,6 +140,9 @@
     </Reference>
     <Reference Include="MiniProfiler, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b44f9351044011a3, processorArchitecture=MSIL">
       <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MvdDonk.Umbraco.TestContent, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvdDonk.Umbraco.TestContent.Core.0.4.0\lib\net45\MvdDonk.Umbraco.TestContent.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.12\lib\net45\MySql.Data.dll</HintPath>
@@ -255,6 +261,13 @@
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.controller.js" />
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.htm" />
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.resource.js" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\CreateTestContent.controller.js" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\CreateTestContent.html" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\CreateTestContent.resource.js" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\CreateTestContentDialog.controller.js" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\CreateTestContentDialog.html" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\lang\en-US.xml" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\styles.css" />
     <Content Include="config\grid.editors.config.js" />
     <Content Include="config\Lang\cs-CZ.user.xml" />
     <Content Include="config\Lang\da-DK.user.xml" />
@@ -279,6 +292,9 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\ContentApiController.cs" />
+    <Compile Include="Api\SetiaMapper.cs" />
+    <Compile Include="Api\Models\Mushroom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +321,7 @@
     <Content Include="config\BackOfficeTours\getting-started.json" />
     <Content Include="config\applications.config" />
     <Content Include="config\404handlers.config" />
+    <Content Include="App_Plugins\MvdDonk.Umbraco.TestContent\package.manifest" />
     <None Include="packages.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Partials\Grid\Editors\Textstring.cshtml" />
@@ -329,9 +346,9 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Setas.Core\Setas.Core.csproj">
+    <ProjectReference Include="..\Setas.Core\Setas.Website.Core.csproj">
       <Project>{024b0bcd-a178-45a5-afb2-3c9c0381602d}</Project>
-      <Name>Setas.Core</Name>
+      <Name>Setas.Website.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

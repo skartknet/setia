@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Setas", "Setas\Setas\Setas.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Website", "Setas.Website\Setas.Website.csproj", "{91296349-935C-4112-9AC1-574D243EDCB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Core", "Setas.Core\Setas.Core.csproj", "{024B0BCD-A178-45A5-AFB2-3C9C0381602D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Website.Core", "Setas.Core\Setas.Website.Core.csproj", "{024B0BCD-A178-45A5-AFB2-3C9C0381602D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
