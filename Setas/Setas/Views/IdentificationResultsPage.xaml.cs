@@ -1,4 +1,5 @@
-﻿using Setas.ViewModels;
+﻿using Setas.Models;
+using Setas.ViewModels;
 using Setas.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -12,7 +13,7 @@ namespace Setas
         ResultsViewModel vm;
 
         internal IdentificationResultsPage()
-        {            
+        {
 
             InitializeComponent();
 
@@ -29,11 +30,7 @@ namespace Setas
 
         private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var model = new MushroomDetailViewModel()
-            {
-                Name = "Lentinus edodes",
-                PopularNames = "Shiitake"
-            };
+            var model = new MushroomDetailViewModel((Prediction)e.Item);
 
             Navigation.PushAsync(new MushroomDetail(model));
         }

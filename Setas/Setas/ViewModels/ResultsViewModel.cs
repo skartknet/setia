@@ -10,8 +10,8 @@ namespace Setas.ViewModels
      
 
 
-        Prediction _firstResult;
-        public Prediction FirstResult
+        Mushroom _firstResult;
+        public Mushroom FirstResult
         {
             get => _firstResult;
             set
@@ -24,8 +24,8 @@ namespace Setas.ViewModels
             }
         }
 
-        Prediction[] _secondaryResults;
-        public Prediction[] SecondaryResults
+        Mushroom[] _secondaryResults;
+        public Mushroom[] SecondaryResults
         {
             get => _secondaryResults;
             set

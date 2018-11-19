@@ -1,11 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Setas.ViewModels"
              x:Class="Setas.Views.MushroomDetail"
-             Title="{Binding Name}"
+             Title="{Binding Mushroom.Name}"
              Padding="10">
+    <ContentPage.BindingContext>
+        <local:MushroomDetailViewModel/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <StackLayout>
+        <ScrollView>
+        <StackLayout BindingContext="{Binding Mushroom}">
             <StackLayout Orientation="Horizontal">
                 <Image  HeightRequest="125"
                             WidthRequest="125"
@@ -30,17 +35,17 @@
             </StackLayout>
 
             <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
-            <Label Text="Amanita Muscaria" Style="{StaticResource Paragraph}"/>
+            <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>
 
             <Label Text="Confusiones" Style="{StaticResource Heading2}"/>
-            <Label Text="Se parece al AGARICUS BRUNNESCENS (champiñón cultivado) y al AGARICUS BISPORUS. Desde su descubrimiento en occidente, se le ha ido asignando a diferentes Géneros (Agaricus, Armillaria, Lepiota, Pleurotus)."
+            <Label Text="{Binding Confusion}"
                    Style="{StaticResource Paragraph}"/>
 
             <Label Text="Habitat" Style="{StaticResource Heading2}"/>
-            <Label Text="Saprofita la madera del árbol Shii. Es originario de Oriente."
+            <Label Text="{Binding Habitat}"
                    Style="{StaticResource Paragraph}"/>
 
-
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

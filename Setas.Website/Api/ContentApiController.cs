@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Setas.Core.Binding;
 using Setas.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http.ModelBinding;
 using Umbraco.Web;
 using Umbraco.Web.WebApi;
@@ -14,7 +17,7 @@ namespace Setas.Website.Api
 {
     public class ContentController : UmbracoApiController
     {
-        public IEnumerable<ApiModels.Mushroom> GetMushrooms([ModelBinder(typeof(CommaDelimitedArrayModelBinder))] int[] contentIds)
+        public HttpResponseMessage GetMushrooms([ModelBinder(typeof(CommaDelimitedArrayModelBinder))] int[] contentIds)
         {
 
             var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
@@ -30,8 +33,40 @@ namespace Setas.Website.Api
                 items = catalogue.Children().OfType<Mushroom>();
             }
 
-            return Mapper.Map<IEnumerable<ApiModels.Mushroom>>(items);
 
+            IEnumerable<ApiModels.Mushroom> itemsMapped = null;
+
+            try
+            {
+                itemsMapped = Mapper.Map<IEnumerable<ApiModels.Mushroom>>(items);
+            }catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error mapping models");
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, itemsMapped);
+
+        }
+
+        public HttpResponseMessage GetMushroom(int id)
+        {
+            var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
+            var item  = catalogue.Children(n => n.Id == id).OfType<Mushroom>();
+
+            if (item == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Item not found.");
+
+            ApiModels.Mushroom itemMapped = null;
+            try
+            {
+                itemMapped = Mapper.Map<ApiModels.Mushroom>(item);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error mapping model");
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, itemMapped);
+            
         }
 
 

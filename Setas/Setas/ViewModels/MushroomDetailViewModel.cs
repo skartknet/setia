@@ -1,12 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Setas.Models;
+using System.ComponentModel;
 
 namespace Setas.ViewModels
 {
-    public class MushroomDetailViewModel
+    public class MushroomDetailViewModel : INotifyPropertyChanged
     {
-        public string Name { get; set; }
-        public string PopularNames { get; set; }
+        public Mushroom Mushroom { get; set; }
+
+        public MushroomDetailViewModel()
+        {
+
+        }
+
+        public MushroomDetailViewModel(Mushroom item)
+        {
+            Mushroom = item;
+        }
+
+        public MushroomDetailViewModel(Prediction item)
+        {
+
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

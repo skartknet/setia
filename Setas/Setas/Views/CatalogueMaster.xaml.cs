@@ -52,5 +52,10 @@ namespace Setas.Views
             }
             #endregion
         }
+
+        private void MenuItemsListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            Navigation.PushAsync(new CatalogueDetail());
+        }
     }
 }

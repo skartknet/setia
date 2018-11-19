@@ -38,4 +38,12 @@ namespace Setas
             // Handle when your app resumes
         }
     }
+
+
+
+    public enum SettingsDataType
+    {
+        Internal,
+        External
+    }
 }

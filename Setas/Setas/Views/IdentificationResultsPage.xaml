@@ -1,20 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Setas.IdentificationResultsPage"
-             xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
-             xmlns:models="clr-namespace:Setas.Core.Models;assembly=Setas.Core"
+             x:Class="Setas.IdentificationResultsPage"             
+             xmlns:models="clr-namespace:Setas.ViewModels"
                BackgroundColor="{StaticResource Color5}"
              Title="Result"
              Padding="10">
 
+    <ContentPage.BindingContext>
+        <models:ResultsViewModel/>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
 
         <StackLayout>
-            <!--<StackLayout BackgroundColor="Green" Padding="10" BindingContext="{Binding FirstResult}}">
+            <StackLayout BackgroundColor="Green" Padding="10" BindingContext="{Binding FirstResult}">
                 <Image  HeightRequest="200" />
                 <Label Text="{Binding Title}" TextColor="black" />
-            </StackLayout>-->
+            </StackLayout>
 
             <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
                          Orientation="Horizontal">
@@ -43,41 +45,9 @@
                       RowHeight="100"
                       SelectionMode="None"
                       ItemTapped="ListView_ItemTapped"
-                      IsPullToRefreshEnabled="False">
+                      IsPullToRefreshEnabled="False"
+                      ItemsSource="{Binding SecondaryResults}">
 
-                <!--<ListView Header="Otros posibles resultados"
-                      ItemsSource="{Binding SecondaryResults}">-->
-                <!--<ListView.ItemsSource>
-                    <x:Array Type="{x:Type models:Prediction}">
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5"/>
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5"/>
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5"/>
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5" />
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5"/>
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5"/>
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5" />
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5"/>
-                        <models:Prediction Name="Amanita Muscaria"
-                                           PopularName="Masdd"
-                                           Probability="34.5"/>
-                    </x:Array>
-                </ListView.ItemsSource>-->
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -88,7 +58,7 @@
                                         Source="caesarea12.jpg"
                                         Aspect="AspectFill"/>
                                 <StackLayout Spacing="0">
-                                    <Label Text="Amanita" Style="{StaticResource Heading1}" />
+                                    <Label Text="{Binding }" Style="{StaticResource Heading1}" />
                                     <Label Text="Amanitacus" FontSize="10" TextColor="Black" />
                                 </StackLayout>
                                 <StackLayout VerticalOptions="Center" 

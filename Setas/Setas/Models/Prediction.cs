@@ -5,7 +5,7 @@ namespace Setas.Models
     {
         //Prediction details
         public string TagId { get; set; }
-        public string TagName { get; set; }
+        public string Tag { get; set; }
         public float Probability { get; set; }
 
         public Mushroom Mushroom { get; set; }

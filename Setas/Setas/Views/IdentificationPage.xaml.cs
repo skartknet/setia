@@ -53,6 +53,9 @@ namespace Setas
 
                 StatusLabel.IsVisible = false;
 
+
+                var fresult = ExternalDataService.Instance.GetMushroomsAsync()
+
                 var vm = new ResultsViewModel
                 {
                     FirstResult = result.Predictions.First(),
