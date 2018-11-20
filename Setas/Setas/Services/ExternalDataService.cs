@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Setas.Services
 {
@@ -13,32 +14,7 @@ namespace Setas.Services
     {
 
         readonly Uri baseUrl = new Uri("http://172.17.198.145:5000/umbraco/api/");
-        private static readonly object padlock = new object();
-
-        private static ExternalDataService _instance;
-
-        public static ExternalDataService Instance
-        {
-            get
-            {
-                lock (padlock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new ExternalDataService();
-                    }
-                    return _instance;
-                }
-            }
-        }
-
-
-        private ExternalDataService()
-        {
-
-        }
-      
-
+     
 
         public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(params int[] ids)
         {
@@ -47,9 +23,13 @@ namespace Setas.Services
                 var uri = new Uri(baseUrl, "content/GetMushrooms");
                 var items = Enumerable.Empty<Mushroom>();
 
+                var query = HttpUtility.ParseQueryString(string.Empty);
+                query["ids"] = string.Join(",", ids);
+
+
                 try
                 {
-                    var response = await client.GetAsync(uri);
+                    var response = await client.GetAsync(uri + "?" + query.ToString());
 
 
                     if (response.IsSuccessStatusCode)

@@ -7,11 +7,15 @@ namespace Setas.ViewModels
 {
     class ResultsViewModel : INotifyPropertyChanged
     {
-     
+
+        public ResultsViewModel()
+        {
+
+        }
 
 
-        Mushroom _firstResult;
-        public Mushroom FirstResult
+        Prediction _firstResult;
+        public Prediction FirstResult
         {
             get => _firstResult;
             set
@@ -19,22 +23,27 @@ namespace Setas.ViewModels
                 if (_firstResult != value)
                 {
                     _firstResult = value;
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("FirstResult"));
+                    OnPropertyChanged("FirstResult");
                 }
             }
         }
 
-        Mushroom[] _secondaryResults;
-        public Mushroom[] SecondaryResults
+        Prediction[] _secondaryResults;
+        public Prediction[] SecondaryResults
         {
             get => _secondaryResults;
             set
             {
                 _secondaryResults = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SecondaryResults"));
+                OnPropertyChanged("SecondaryResults");
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }

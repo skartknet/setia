@@ -1,4 +1,7 @@
-﻿using Setas.Views;
+﻿using Setas.Enums;
+using Setas.Services;
+using Setas.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,14 +13,25 @@ namespace Setas
     {
         public static ImageSource SourceImage { get; set; }
 
+
+        public readonly SettingsDataType dataServiceType;
+
+
         public App()
         {
-           
+
+            if (!Properties.ContainsKey("dataType") || !Enum.TryParse(this.Properties["dataType"].ToString(), out dataServiceType))
+            {
+                Properties["dataType"] = SettingsDataType.External;
+                dataServiceType = SettingsDataType.External;
+            }
+
+            DependencyContainer.Register(this);
 
             InitializeComponent();
             MainPage = new MainPage
             {
-                
+
             };
 
 
@@ -41,9 +55,4 @@ namespace Setas
 
 
 
-    public enum SettingsDataType
-    {
-        Internal,
-        External
-    }
 }

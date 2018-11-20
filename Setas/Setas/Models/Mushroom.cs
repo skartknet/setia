@@ -6,7 +6,7 @@ namespace Setas.Models
 {
     public class Mushroom
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Order { get; set; }
         public string PopularNames { get; set; }

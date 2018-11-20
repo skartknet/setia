@@ -2,17 +2,20 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"   
             x:Class="Setas.IdentificationPage"
-            xmlns:local="clr-namespace:Setas"
+            xmlns:local="clr-namespace:Setas.ViewModels"
             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
              BackgroundColor="{StaticResource Color5}"
             Title="Identificar Hongo" 
              Padding="10, 20">
+    <ContentPage.BindingContext>
+        <local:IdentificationViewModel/>
+    </ContentPage.BindingContext>
     <StackLayout VerticalOptions="Fill">
         <StackLayout Orientation="Horizontal"
                      VerticalOptions="CenterAndExpand"
                      HorizontalOptions="Center">
             <Button Text="&#xf030;"
-                    Clicked="CameraButton_Clicked"
+                    Command="{Binding IdentifyCommand}"
                     VerticalOptions="CenterAndExpand"               
                     Style="{StaticResource BtnRounded }"
                     android:Button.UseDefaultPadding="true"
@@ -20,15 +23,14 @@
 
             </Button>
             <Button Text="&#xf03e;"
-                    Clicked="CameraButton_Clicked"
+                    Command="{Binding IdentifyCommand}"
                     VerticalOptions="CenterAndExpand"
                     Style="{StaticResource BtnRounded }"
                     android:Button.UseDefaultPadding="true"
                     android:Button.UseDefaultShadow="true">
             </Button>
         </StackLayout>
-        <Label x:Name="StatusLabel"
-               Text="Identificando..." IsVisible="False"
+        <Label Text="Identificando..." IsVisible="{Binding IsIdentifying}"
                HorizontalOptions="Center"
                VerticalOptions="StartAndExpand"/>
 

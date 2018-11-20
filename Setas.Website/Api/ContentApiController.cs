@@ -17,16 +17,16 @@ namespace Setas.Website.Api
 {
     public class ContentController : UmbracoApiController
     {
-        public HttpResponseMessage GetMushrooms([ModelBinder(typeof(CommaDelimitedArrayModelBinder))] int[] contentIds)
+        public HttpResponseMessage GetMushrooms([ModelBinder(typeof(CommaDelimitedArrayModelBinder))] int[] ids)
         {
 
             var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
 
             var items = Enumerable.Empty<Mushroom>();
 
-            if (contentIds != null && contentIds.Any())
+            if (ids != null && ids.Any())
             {
-                items = catalogue.Children(n => contentIds.Contains(n.Id)).OfType<Mushroom>();
+                items = catalogue.Children(n => ids.Contains(n.Id)).OfType<Mushroom>();
             }
             else
             {

@@ -10,15 +10,15 @@ namespace Setas.ViewModels
     public class MushroomsListingViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Mushroom> Mushrooms { get; set; }
-        public IDataService _DataService { get; }
+        private IDataService _dataService { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
 
 
-        public MushroomsListingViewModel(IDataService _dataService)
+        public MushroomsListingViewModel(IDataService dataService)
         {
-            _DataService = _dataService;
+            _dataService = dataService;
         }
 
         public void GetListingAsync()

@@ -1,16 +1,19 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Setas.Helpers
 {
-    static class Predictions
+    public static class Predictions
     {
         public static int TagToItemId(string tag)
         {
-            var id = JArray.Parse("["+ tag + "]")[0].Value<int>();
+            int id = 0;
+            try
+            {
+                id = JArray.Parse("[" + tag + "]")[0].Value<int>();
+            }
+            catch (Exception ex)
+            { }
 
             return id;
         }

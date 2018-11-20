@@ -15,25 +15,26 @@
         <StackLayout>
             <StackLayout BackgroundColor="Green" Padding="10" BindingContext="{Binding FirstResult}">
                 <Image  HeightRequest="200" />
-                <Label Text="{Binding Title}" TextColor="black" />
+                <Label Text="{Binding Mushroom.Name}" TextColor="black" />
             </StackLayout>
 
             <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
-                         Orientation="Horizontal">
+                         Orientation="Horizontal"
+                         BindingContext="{Binding FirstResult}">
 
                 <Image  HeightRequest="95"
                         WidthRequest="95"
                         Source="caesarea12.jpg"
                         Aspect="AspectFill"/>
                 <StackLayout>
-                    <Label Text="Amanita" Style="{StaticResource Heading1}" FontSize="18" TextColor="White" />
-                    <Label Text="Amanitacus" FontSize="14" TextColor="White" />
+                    <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" FontSize="18" TextColor="White" />
+                    <Label Text="{Binding Mushroom.Name}" FontSize="14" TextColor="White" />
                 </StackLayout>
                 <StackLayout VerticalOptions="Center" 
                              HorizontalOptions="EndAndExpand"
                              Spacing="0">
                     <Label Text="Probabilidad" FontSize="10" TextColor="White" />
-                    <Label Text="55%" FontSize="27"  TextColor="White"
+                    <Label Text="{Binding Probability, StringFormat='.{0}%'}" FontSize="27"  TextColor="White"
                        HorizontalOptions="EndAndExpand"/>
                 </StackLayout>
 
@@ -58,14 +59,14 @@
                                         Source="caesarea12.jpg"
                                         Aspect="AspectFill"/>
                                 <StackLayout Spacing="0">
-                                    <Label Text="{Binding }" Style="{StaticResource Heading1}" />
-                                    <Label Text="Amanitacus" FontSize="10" TextColor="Black" />
+                                    <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" />
+                                    <Label Text="{Binding Mushroom.Name}" FontSize="10" TextColor="Black" />
                                 </StackLayout>
                                 <StackLayout VerticalOptions="Center" 
                                              HorizontalOptions="EndAndExpand"
                                              Spacing="0">
                                     <Label Text="Probabilidad" FontSize="6" />
-                                    <Label Text="55%" FontSize="15" 
+                                    <Label Text="{Binding Probability, StringFormat='.{0}%'}" FontSize="15" 
                                             HorizontalOptions="EndAndExpand"/>
                                 </StackLayout>
                             </StackLayout>

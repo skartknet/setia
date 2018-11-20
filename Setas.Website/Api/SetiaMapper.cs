@@ -17,7 +17,10 @@ namespace Setas.Website.Api
         public override void ConfigureMappings(IConfiguration config, ApplicationContext applicationContext)
         {
             config.CreateMap<Mushroom, ApiModels.Mushroom>()
-                .ForMember(n=>n.Images, exp=>exp.ResolveUsing(p=>((Mushroom) p).Images.Select(img=>img.Url)));
+                .ForMember(n=>n.Images, exp=>exp.ResolveUsing(p=>p.Images != null && p.Images.Any()? 
+                                                                 p.Images.Select(img=>img.Url) :
+                                                                 null))
+                .ForMember(n=>n.PopularNames, exp=>exp.ResolveUsing(p => ((Mushroom)p).PopularNames.ToArray()));
         }
     }
 }

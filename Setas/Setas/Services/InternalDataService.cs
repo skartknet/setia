@@ -1,55 +1,58 @@
 ﻿using Newtonsoft.Json;
 using Setas.Models;
+using SQLite;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Setas.Services
 {
-
+    //Instantiated as Single Instance by Autofac.
     public class InternalDataService : IDataService
-    {
-
-        readonly Uri baseUrl = new Uri("http://172.17.198.145:5000/umbraco/api/");
-        private static readonly object padlock = new object();
-
-        private static InternalDataService _instance;
-
-        public static InternalDataService Instance
-        {
+    {        
+        static SQLiteAsyncConnection _database;
+        private SQLiteAsyncConnection Database {
             get
             {
-                lock (padlock)
+                if(_database == null)
                 {
-                    if (_instance == null)
-                    {
-                        _instance = new InternalDataService();
-                    }
-                    return _instance;
+                    this.CreateDatabase(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "MushroomsDb.db3"));
                 }
+
+                return _database;
             }
-        }
+        };
 
-
-        private InternalDataService()
+        private void CreateDatabase(string dbPath)
         {
-
+            _database = new SQLiteAsyncConnection(dbPath);
+            _database.CreateTableAsync<Mushroom>().Wait();
         }
-      
-
 
         public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(params int[] ids)
         {
-            throw new NotImplementedException();
+            IEnumerable<Mushroom> items = null;
+
+            if (ids.Any())
+            {
+                items = await _database.Table<Mushroom>().Where(m=>ids.Contains(m.Id)).ToListAsync();
+            }
+            else
+            {
+                items = await _database.Table<Mushroom>().ToListAsync();
+            }
+
+
+            return items;
         }
 
 
         public async Task<Mushroom> GetMushroomAsync(int id)
         {
-            throw new NotImplementedException();
-
+            return await _database.Table<Mushroom>().FirstOrDefaultAsync(m => m.Id == id);
         }
     }
 }

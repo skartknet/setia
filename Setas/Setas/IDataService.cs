@@ -10,7 +10,7 @@ namespace Setas
     public interface IDataService
     {        
 
-        Task<IEnumerable<Mushroom>> GetMushroomsAsync(params int[] ids);
+        Task<IEnumerable<Mushroom>> GetMushroomsAsync(params int[] ids);        
 
         Task<Mushroom> GetMushroomAsync(int id);
     }

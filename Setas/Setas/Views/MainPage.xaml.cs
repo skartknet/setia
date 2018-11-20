@@ -1,4 +1,7 @@
 ﻿
+using Autofac;
+using Setas.Services;
+using Setas.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
@@ -17,21 +20,29 @@ namespace Setas.Views
                          .SetBarItemColor(Color.FromRgb(173, 112, 69))
                          .SetBarSelectedItemColor(Color.Red);
 
-            var identifierNavigation = new NavigationPage(new IdentificationPage());
-            identifierNavigation.Title = "Identificación";
-            identifierNavigation.Icon = "eyeIcon.png";
+            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+            {
+                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IDataService>(), Navigation);
 
-            var catalogueNavigation = new NavigationPage(new CatalogueMaster());
-            catalogueNavigation.Title = "Catálogo";
-            catalogueNavigation.Icon = "listIcon.png";
+                var identifierNavigation = new NavigationPage(new IdentificationPage(identificationViewModel))
+                {
+                    Title = "Identificación",
+                    Icon = "eyeIcon.png"
+                };
 
-            var dictionaryPage = new Dictionary();
-            dictionaryPage.Title = "Diccionario";
-            dictionaryPage.Icon = "dictionaryIcon.png";
+                var catalogueNavigation = new NavigationPage(new CatalogueMaster());
+                catalogueNavigation.Title = "Catálogo";
+                catalogueNavigation.Icon = "listIcon.png";
 
-            Children.Add(identifierNavigation);
-            Children.Add(catalogueNavigation);
-            Children.Add(dictionaryPage);
+                var dictionaryPage = new Dictionary();
+                dictionaryPage.Title = "Diccionario";
+                dictionaryPage.Icon = "dictionaryIcon.png";
+
+                Children.Add(identifierNavigation);
+                Children.Add(catalogueNavigation);
+                Children.Add(dictionaryPage);
+            }
+
 
         }
     }
