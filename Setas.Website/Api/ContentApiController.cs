@@ -51,7 +51,7 @@ namespace Setas.Website.Api
         public HttpResponseMessage GetMushroom(int id)
         {
             var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
-            var item  = catalogue.Children(n => n.Id == id).OfType<Mushroom>();
+            var item  = catalogue.FirstChild<Mushroom>(n => n.Id == id);
 
             if (item == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Item not found.");
 

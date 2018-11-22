@@ -12,12 +12,14 @@ namespace Setas.ViewModels
     public class IdentificationViewModel : INotifyPropertyChanged
     {
 
-        private IDataService _dataService { get; }
-        private INavigation _navigation { get; }
+        private IDataService _dataService;
+
+        private IPredictionService _predictionService;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ICommand IdentifyCommand { get; set; }
+        public INavigation Navigation { get; set; }
 
 
         private bool _isIdentifying;
@@ -39,10 +41,11 @@ namespace Setas.ViewModels
 
         }
 
-        public IdentificationViewModel(IDataService dataService, INavigation navigation)
+        public IdentificationViewModel(IDataService dataService, IPredictionService predictionService)
         {
             _dataService = dataService;
-            _navigation = navigation;
+            _predictionService = predictionService;
+
             IdentifyCommand = new Command(IdentificationProcess);
         }
 
@@ -62,7 +65,7 @@ namespace Setas.ViewModels
                 try
                 {
 
-                    result = await PredictionService.Analyse(StreamToBytes(fileStream));
+                    result = await _predictionService.Analyse(StreamToBytes(fileStream));
                 }
                 catch (Exception ex)
                 {
@@ -79,22 +82,23 @@ namespace Setas.ViewModels
 
                 IsIdentifying = false;
 
-                await GoToResultPage(result);
+                var vm = await CreateResultViewModel(result);
+                await Navigation.PushAsync(new IdentificationResultsPage(vm));
             }
         }
 
-        private async System.Threading.Tasks.Task GoToResultPage(PredictionResponse result)
+        private async System.Threading.Tasks.Task<ResultsViewModel> CreateResultViewModel(PredictionResponse result)
         {
             var firstResultPrediction = result.Predictions.FirstOrDefault();
-            firstResultPrediction.Mushroom = await _dataService.GetMushroomAsync(Helpers.Predictions.TagToItemId(firstResultPrediction.Tag));
+            firstResultPrediction.Mushroom = await _dataService.GetMushroomAsync(Helpers.Predictions.TagToItemId(firstResultPrediction.TagName));
 
 
             var secondaryResultsPredictions = result.Predictions.Skip(1).ToArray();
-            var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.Tag)).ToArray());
+            var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray());
 
             foreach (var item in secondaryResultsPredictions)
             {
-                item.Mushroom = secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.Tag));
+                item.Mushroom = secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName));
             }
 
 
@@ -104,7 +108,7 @@ namespace Setas.ViewModels
                 SecondaryResults = secondaryResultsPredictions.ToArray()
             };
 
-            await _navigation.PushAsync(new IdentificationResultsPage(vm));
+            return vm;
         }
 
         private byte[] StreamToBytes(Stream stream)

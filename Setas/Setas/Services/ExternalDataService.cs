@@ -54,10 +54,11 @@ namespace Setas.Services
             {
                 var uri = new Uri(baseUrl, "content/GetMushroom");
                 Mushroom item = null;
+      
 
                 try
                 {
-                    var response = await client.GetAsync(uri);
+                    var response = await client.GetAsync(uri + "?id=" + id);
 
 
                     if (response.IsSuccessStatusCode)
@@ -73,6 +74,11 @@ namespace Setas.Services
 
                 return item;
             }
+        }
+
+        public Task InsertMushroomsAsync(IEnumerable<Mushroom> sourceItems)
+        {
+            throw new NotImplementedException();
         }
     }
 }

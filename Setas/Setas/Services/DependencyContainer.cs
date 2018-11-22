@@ -24,6 +24,9 @@ namespace Setas.Services
                     break;
             }
 
+
+            builder.RegisterType<PredictionService>().As<IPredictionService>().SingleInstance();
+
             Container = builder.Build();
         }
     }
