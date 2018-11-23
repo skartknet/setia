@@ -1,16 +1,27 @@
 ﻿using Setas.Models;
-
+using Setas.Views;
 using System.ComponentModel;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Setas.ViewModels
 {
     class ResultsViewModel : INotifyPropertyChanged
     {
+        public ICommand NavToItemDetailsCommand { get; set; }
+
+        public INavigation Navigation { get; set; }
+
 
         public ResultsViewModel()
         {
+            NavToItemDetailsCommand = new Command<Mushroom>(NavToItemDetails);
+        }
 
+        void NavToItemDetails(Mushroom mushroom)
+        {
+            var model = new MushroomDetailViewModel(mushroom);
+            Navigation.PushAsync(new MushroomDetail(model));
         }
 
 
@@ -44,6 +55,5 @@ namespace Setas.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

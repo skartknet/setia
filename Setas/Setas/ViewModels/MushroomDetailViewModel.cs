@@ -16,11 +16,7 @@ namespace Setas.ViewModels
         {
             Mushroom = item;
         }
-
-        public MushroomDetailViewModel(Prediction item)
-        {
-
-        }
+  
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

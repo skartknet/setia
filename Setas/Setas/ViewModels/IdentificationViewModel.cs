@@ -1,9 +1,15 @@
-﻿using Setas.Models;
+﻿using Acr.UserDialogs;
+using Microsoft.AppCenter.Crashes;
+using Plugin.Media;
+using Plugin.Media.Abstractions;
+using Setas.Models;
 using Setas.Services;
 using System;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -18,8 +24,26 @@ namespace Setas.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ICommand IdentifyCommand { get; set; }
-        public INavigation Navigation { get; set; }
+        public ICommand TakePhoto { get; }
+
+        public ICommand PickPhoto { get; }
+
+        public INavigation Navigation { get; set; }        
+
+        public bool IsTakePhotoSupported
+        {
+            get
+            {
+                return CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported;
+            }
+        }
+        public bool IsPickPhotoSupported
+        {
+            get
+            {
+                return CrossMedia.Current.IsPickPhotoSupported;
+            }
+        }
 
 
         private bool _isIdentifying;
@@ -37,78 +61,131 @@ namespace Setas.ViewModels
         }
 
         public IdentificationViewModel()
-        {
-
-        }
+        { }
 
         public IdentificationViewModel(IDataService dataService, IPredictionService predictionService)
         {
             _dataService = dataService;
             _predictionService = predictionService;
 
-            IdentifyCommand = new Command(IdentificationProcess);
+
+            TakePhoto = new Command(TakePhotoProcess);
+            PickPhoto = new Command(PickPhotoProcess);
         }
 
-        private async void IdentificationProcess()
+        private async void TakePhotoProcess(object obj)
         {
-            var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions() { });
+            var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
+            {
+                PhotoSize = PhotoSize.MaxWidthHeight,
+                MaxWidthHeight = 1000,
+                CompressionQuality = 80
+            });
 
             if (photo != null)
             {
-                IsIdentifying = true;
+                await IdentifyImage(photo);
+            }
+        }
+
+        private async void PickPhotoProcess(object obj)
+        {
+            var photo = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+            {
+                PhotoSize = PhotoSize.MaxWidthHeight,
+                MaxWidthHeight = 1000,
+                CompressionQuality = 80
+            });
 
 
-                var fileStream = photo.GetStream();
+            if (photo != null)
+            {
+                await IdentifyImage(photo);
+            }
+        }
 
-                PredictionResponse result = null;
+        private async Task IdentifyImage(MediaFile image)
+        {
+            //TODO: return null exception and pick it up for AppCenter and display Userdialog (https://github.com/aritchie/userdialogs/blob/master/docs/progress.md)
 
-                try
-                {
+            if (image == null) return;
 
-                    result = await _predictionService.Analyse(StreamToBytes(fileStream));
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Error getting prediction", ex);
-                }
+            IsIdentifying = true;
+
+            var fileStream = image.GetStream();
+
+            PredictionResponse result = null;
+
+            try
+            {
+
+                result = await _predictionService.Analyse(StreamToBytes(fileStream));
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+                await UserDialogs.Instance.AlertAsync("Error analizando imagen. No se pudo conectar con el servicio.", "Error");
+            }
 
 
 
-                App.SourceImage = ImageSource.FromStream(() =>
-                {
-                    return photo.GetStream();
-                });
+            App.SourceImage = ImageSource.FromStream(() =>
+            {
+                return image.GetStream();
+            });
 
 
-                IsIdentifying = false;
 
-                var vm = await CreateResultViewModel(result);
+            var vm = await CreateResultViewModel(result);
+
+            if (vm != null)
+            {
                 await Navigation.PushAsync(new IdentificationResultsPage(vm));
             }
+
+            IsIdentifying = false;
+
         }
 
         private async System.Threading.Tasks.Task<ResultsViewModel> CreateResultViewModel(PredictionResponse result)
         {
-            var firstResultPrediction = result.Predictions.FirstOrDefault();
-            firstResultPrediction.Mushroom = await _dataService.GetMushroomAsync(Helpers.Predictions.TagToItemId(firstResultPrediction.TagName));
 
+            var vm = new ResultsViewModel();
 
-            var secondaryResultsPredictions = result.Predictions.Skip(1).ToArray();
-            var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray());
-
-            foreach (var item in secondaryResultsPredictions)
+            try
             {
-                item.Mushroom = secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName));
+                var firstResultPrediction = result.Predictions.FirstOrDefault();
+                var rId = Helpers.Predictions.TagToItemId(firstResultPrediction.TagName);
+                firstResultPrediction.Mushroom = await _dataService.GetMushroomAsync(rId);
+
+
+                var secondaryResultsPredictions = result.Predictions.Skip(1).ToArray();
+                var rIds = secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray();
+                var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(rIds);
+
+                foreach (var item in secondaryResultsPredictions)
+                {
+                    item.Mushroom = secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName));
+                }
+
+
+                vm.FirstResult = firstResultPrediction;
+                vm.SecondaryResults = secondaryResultsPredictions.ToArray();
+
+            }
+            catch (WebException ex)
+            {
+                Crashes.TrackError(ex);
+                await UserDialogs.Instance.AlertAsync("Error conectando a servicio de datos.", "Error");
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex);
+                await UserDialogs.Instance.AlertAsync("Error de datos.", "Error");
             }
 
-
-            var vm = new ResultsViewModel
-            {
-                FirstResult = firstResultPrediction,
-                SecondaryResults = secondaryResultsPredictions.ToArray()
-            };
-
             return vm;
+
         }
 
         private byte[] StreamToBytes(Stream stream)

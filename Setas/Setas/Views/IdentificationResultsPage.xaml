@@ -13,29 +13,32 @@
     <ContentPage.Content>
 
         <StackLayout>
-            <StackLayout BackgroundColor="Green" Padding="10" BindingContext="{Binding FirstResult}">
-                <Image  HeightRequest="200" />
-                <Label Text="{Binding Mushroom.Name}" TextColor="black" />
-            </StackLayout>
+
+            <Label Text="Resultado" Style="{StaticResource Heading1}"/>
 
             <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
-                         Orientation="Horizontal"
-                         BindingContext="{Binding FirstResult}">
+                         Orientation="Horizontal">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding NavToItemDetailsCommand}"
+                                          CommandParameter="{Binding FirstResult.Mushroom}"/>
+                </StackLayout.GestureRecognizers>
 
                 <Image  HeightRequest="95"
                         WidthRequest="95"
                         Source="caesarea12.jpg"
-                        Aspect="AspectFill"/>
-                <StackLayout>
-                    <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" FontSize="18" TextColor="White" />
-                    <Label Text="{Binding Mushroom.Name}" FontSize="14" TextColor="White" />
+                        Aspect="AspectFill">
+                    
+                </Image>
+                <StackLayout BindingContext="{Binding FirstResult}">
+                            <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" FontSize="18" TextColor="White" />
+                            <Label Text="{Binding Mushroom.Name}" FontSize="14" TextColor="White" />
                 </StackLayout>
                 <StackLayout VerticalOptions="Center" 
-                             HorizontalOptions="EndAndExpand"
-                             Spacing="0">
+                        HorizontalOptions="EndAndExpand"
+                        Spacing="0">
                     <Label Text="Probabilidad" FontSize="10" TextColor="White" />
-                    <Label Text="{Binding Probability, StringFormat='.{0}%'}" FontSize="27"  TextColor="White"
-                       HorizontalOptions="EndAndExpand"/>
+                    <Label Text="{Binding FirstResult.ProbabilityAsPercentage}" FontSize="27"  TextColor="White"
+                HorizontalOptions="EndAndExpand"/>
                 </StackLayout>
 
             </StackLayout>
@@ -66,7 +69,7 @@
                                              HorizontalOptions="EndAndExpand"
                                              Spacing="0">
                                     <Label Text="Probabilidad" FontSize="6" />
-                                    <Label Text="{Binding Probability, StringFormat='.{0}%'}" FontSize="15" 
+                                    <Label Text="{Binding ProbabilityAsPercentage}" FontSize="15" 
                                             HorizontalOptions="EndAndExpand"/>
                                 </StackLayout>
                             </StackLayout>

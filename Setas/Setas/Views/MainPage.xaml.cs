@@ -22,7 +22,7 @@ namespace Setas.Views
 
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
-                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IDataService>(), Navigation);
+                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IDataService>(), scope.Resolve<IPredictionService>());
 
                 var identifierNavigation = new NavigationPage(new IdentificationPage(identificationViewModel))
                 {

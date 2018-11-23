@@ -1,8 +1,10 @@
-﻿using Android.App;
+﻿using Acr.UserDialogs;
+using Android.App;
 using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Widget;
+using Xamarin.Forms;
 
 namespace Setas.Droid
 {
@@ -16,6 +18,8 @@ namespace Setas.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
+
+            UserDialogs.Init(() => (Activity)Instance);
 
             base.OnCreate(bundle);
             Instance = this;

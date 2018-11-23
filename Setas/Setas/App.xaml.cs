@@ -1,4 +1,7 @@
-﻿using Setas.Enums;
+﻿using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Setas.Enums;
 using Setas.Services;
 using Setas.Views;
 using System;
@@ -39,7 +42,8 @@ namespace Setas
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            AppCenter.Start("android=86311dca-ab38-41be-bf0d-77b43d392cd4;",
+                   typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()

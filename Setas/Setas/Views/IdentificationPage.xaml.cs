@@ -16,6 +16,8 @@ namespace Setas
         public IdentificationPage(IdentificationViewModel vm)
         {         
             _vm = vm;
+            vm.Navigation = this.Navigation;
+
             InitializeComponent();
 
             BindingContext = vm;

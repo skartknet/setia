@@ -15,19 +15,21 @@
                      VerticalOptions="CenterAndExpand"
                      HorizontalOptions="Center">
             <Button Text="&#xf030;"
-                    Command="{Binding IdentifyCommand}"
+                    Command="{Binding TakePhoto}"
                     VerticalOptions="CenterAndExpand"               
                     Style="{StaticResource BtnRounded }"
                     android:Button.UseDefaultPadding="true"
-                    android:Button.UseDefaultShadow="true">
-
+                    android:Button.UseDefaultShadow="true"
+                    IsVisible="{Binding IsTakePhotoSupported}">
+                    
             </Button>
             <Button Text="&#xf03e;"
-                    Command="{Binding IdentifyCommand}"
+                    Command="{Binding PickPhoto}"
                     VerticalOptions="CenterAndExpand"
                     Style="{StaticResource BtnRounded }"
                     android:Button.UseDefaultPadding="true"
-                    android:Button.UseDefaultShadow="true">
+                    android:Button.UseDefaultShadow="true"
+                     IsVisible="{Binding IsPickPhotoSupported}">
             </Button>
         </StackLayout>
         <Label Text="Identificando..." IsVisible="{Binding IsIdentifying}"
