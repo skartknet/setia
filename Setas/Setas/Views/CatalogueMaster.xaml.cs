@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Setas.Common.Enums;
-using Setas.Services;
+﻿using Setas.Common.Enums;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -54,14 +52,6 @@ namespace Setas.Views
             #endregion
         }
 
-        async void MenuItemsListView_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
-            {
-                var catalogueDetail = new CatalogueDetail(scope.Resolve<IInternalDataService>(), ((CatalogueMenuItem)e.Item).Id);
 
-                await Navigation.PushAsync(catalogueDetail);
-            }
-        }
     }
 }

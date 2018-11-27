@@ -6,11 +6,5 @@
   <MasterDetailPage.Master>
     <pages:CatalogueMaster x:Name="MasterPage" />
   </MasterDetailPage.Master>
-  <MasterDetailPage.Detail>
-    <NavigationPage>
-      <x:Arguments>
-        <pages:CatalogueDetail />
-      </x:Arguments>
-    </NavigationPage>
-  </MasterDetailPage.Detail>
+
 </MasterDetailPage>

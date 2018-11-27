@@ -3,32 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Setas.Views.CatalogueMaster"
              Title="Master">
-  <StackLayout>
-    <ListView x:Name="MenuItemsListView"
-              SeparatorVisibility="None"
-              HasUnevenRows="true"
-              ItemsSource="{Binding MenuItems}"
-              ItemTapped="MenuItemsListView_ItemTapped">
-      <ListView.Header>
-        <Grid BackgroundColor="#03A9F4">
-
-          <Label
-              Text="AppName"
-              Style="{StaticResource Heading1}"/>
-        </Grid>
-      </ListView.Header>
-      <ListView.ItemTemplate>
-        <DataTemplate>
-          <ViewCell>
-            <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-              <Label VerticalOptions="FillAndExpand" 
-                    VerticalTextAlignment="Center" 
-                    Text="{Binding Title}" 
-                    FontSize="24"/>
-            </StackLayout>
-          </ViewCell>
-        </DataTemplate>
-      </ListView.ItemTemplate>
-    </ListView>
-  </StackLayout>
+  <ContentView Padding="15">
+    <StackLayout >
+      <ListView x:Name="MenuItemsListView"
+                SeparatorVisibility="None"
+                HasUnevenRows="true"
+                ItemsSource="{Binding MenuItems}">
+        <ListView.Header>          
+            <Label
+                Text="Filtro"
+                Style="{StaticResource Heading1}"
+                />          
+        </ListView.Header>
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <ViewCell>
+              <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand">
+                <Label VerticalOptions="FillAndExpand" 
+                      VerticalTextAlignment="Center" 
+                      Text="{Binding Title}" 
+                      FontSize="18"/>
+              </StackLayout>
+            </ViewCell>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </StackLayout>
+  </ContentView>
 </ContentPage>

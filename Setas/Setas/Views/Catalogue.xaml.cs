@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Autofac;
+using Setas.Services;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -16,21 +13,28 @@ namespace Setas.Views
         {
             InitializeComponent();
             MasterPage.ListView.ItemSelected += ListView_ItemSelected;
+
+            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+            {
+                Detail = new NavigationPage(new CatalogueDetail(scope.Resolve<IInternalDataService>(), null));
+            }
         }
 
         private void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var item = e.SelectedItem as CatalogueMenuItem;
-            if (item == null)
-                return;
+            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+            {
+                if (e.SelectedItem != null)
+                {
+                    var catalogueDetail = new CatalogueDetail(scope.Resolve<IInternalDataService>(), ((CatalogueMenuItem)e.SelectedItem).Id);
 
-            var page = (Page)Activator.CreateInstance(item.TargetType);
-            page.Title = item.Title;
+                    Detail = new NavigationPage(catalogueDetail);
+                    IsPresented = false;
 
-            Detail = new NavigationPage(page);
-            IsPresented = false;
+                    MasterPage.ListView.SelectedItem = null;
+                }
+            }
 
-            MasterPage.ListView.SelectedItem = null;
         }
     }
 }

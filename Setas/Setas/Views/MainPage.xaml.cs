@@ -30,7 +30,7 @@ namespace Setas.Views
                     Icon = "eyeIcon.png"
                 };
 
-                var catalogueNavigation = new NavigationPage(new Catalogue());
+                var catalogueNavigation = new Catalogue();
                 catalogueNavigation.Title = "Catálogo";
                 catalogueNavigation.Icon = "listIcon.png";
 

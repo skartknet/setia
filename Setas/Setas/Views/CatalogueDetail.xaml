@@ -2,18 +2,33 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Setas.Views.CatalogueDetail"
-             Title="Detail">
+             Title="Catálogo">
  
     <StackLayout Padding="10">
-        <ListView x:Name="DetailsList"
-                >
+        <ListView SeparatorColor="{StaticResource Color4}"
+                      RowHeight="100"
+                      SelectionMode="None"
+                      ItemTapped="ListView_ItemTapped"
+                      IsPullToRefreshEnabled="False"
+                      x:Name="DetailsList">
+
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="asdasdasd"/>
+                    <ViewCell>
+                        <StackLayout Padding="10, 10"
+                                        Orientation="Horizontal">
+                            <Image  HeightRequest="55"
+                                        WidthRequest="75"
+                                        Source="caesarea12.jpg"
+                                        Aspect="AspectFill"/>
+                            <StackLayout Spacing="0">
+                                <Label Text="{Binding Name}" Style="{StaticResource Heading1}" />
+                                <Label Text="{Binding Name}" FontSize="10" TextColor="Black" />
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            
         </ListView>
-        
     </StackLayout>
 </ContentPage>

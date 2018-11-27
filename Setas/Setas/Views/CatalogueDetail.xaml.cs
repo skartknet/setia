@@ -3,6 +3,7 @@ using Setas.Common.Models;
 using Setas.Services;
 using Setas.ViewModels;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,17 +14,11 @@ namespace Setas.Views
     public partial class CatalogueDetail : ContentPage
     {        
 
-        public IEnumerable<Mushroom> Mushrooms;
+        public ObservableCollection<Mushroom> Mushrooms;
 
         public IInternalDataService _dataService { get; }
 
-        public CatalogueDetail()
-        {
-            InitializeComponent();
 
-
-
-        }
 
         public CatalogueDetail(IInternalDataService dataService, Edible? edible)
         {
@@ -31,21 +26,23 @@ namespace Setas.Views
 
             Task.Run(async () =>
             {
-                Mushrooms = await _dataService.GetMushroomsAsync(new SearchOptions
+                Mushrooms = new ObservableCollection<Mushroom>(await _dataService.GetMushroomsAsync(new SearchOptions
                 {
                     Edible = edible
-                });
+                }));
+                
+            }).Wait();
 
-                DetailsList.ItemsSource = Mushrooms;
-            });
+            InitializeComponent();
 
+            DetailsList.ItemsSource = Mushrooms;
 
         }
 
-        private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var vm = new MushroomDetailViewModel((Mushroom)e.Item);
-            Navigation.PushAsync(new MushroomDetail(vm));
+            await Navigation.PushAsync(new MushroomDetail(vm));
         }
     }
 }
