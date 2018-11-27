@@ -1,4 +1,5 @@
-﻿using Setas.Models;
+﻿using Setas.Common.Models;
+using Setas.Models;
 using Setas.Views;
 using System.ComponentModel;
 using System.Windows.Input;

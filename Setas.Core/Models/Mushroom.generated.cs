@@ -73,6 +73,15 @@ namespace Setas.Core.Models
 		}
 
 		///<summary>
+		/// Cooking Interest
+		///</summary>
+		[ImplementPropertyType("cookingInterest")]
+		public nuPickers.Picker CookingInterest
+		{
+			get { return this.GetPropertyValue<nuPickers.Picker>("cookingInterest"); }
+		}
+
+		///<summary>
 		/// Description
 		///</summary>
 		[ImplementPropertyType("description")]

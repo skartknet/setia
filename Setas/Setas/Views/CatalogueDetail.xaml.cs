@@ -1,8 +1,9 @@
-﻿using Autofac;
-using Setas.Models;
+﻿using Setas.Common.Enums;
+using Setas.Common.Models;
 using Setas.Services;
 using Setas.ViewModels;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,17 +11,35 @@ namespace Setas.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CatalogueDetail : ContentPage
-    {
+    {        
+
+        public IEnumerable<Mushroom> Mushrooms;
+
+        public IInternalDataService _dataService { get; }
+
         public CatalogueDetail()
         {
             InitializeComponent();
 
-            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+
+
+        }
+
+        public CatalogueDetail(IInternalDataService dataService, Edible? edible)
+        {
+            _dataService = dataService;
+
+            Task.Run(async () =>
             {
-                var vm = new MushroomsListingViewModel(scope.Resolve<IDataService>());
-                BindingContext = vm;
-                vm.GetListingAsync();
-            }
+                Mushrooms = await _dataService.GetMushroomsAsync(new SearchOptions
+                {
+                    Edible = edible
+                });
+
+                DetailsList.ItemsSource = Mushrooms;
+            });
+
+
         }
 
         private void ListView_ItemTapped(object sender, ItemTappedEventArgs e)

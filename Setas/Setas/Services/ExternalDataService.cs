@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Setas.Models;
+using Setas.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,26 +10,22 @@ using System.Web;
 namespace Setas.Services
 {
 
-    public class ExternalDataService : IDataService
+    public class ExternalDataService : IExternalDataService
     {
 
         readonly Uri baseUrl = new Uri("http://172.17.198.145:5000/umbraco/api/");
      
 
-        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(params int[] ids)
+        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync()
         {
             using (HttpClient client = new HttpClient())
             {
-                var uri = new Uri(baseUrl, "content/GetMushrooms");
+                var uri = new Uri(baseUrl, "setas/GetMushrooms");
                 var items = Enumerable.Empty<Mushroom>();
-
-                var query = HttpUtility.ParseQueryString(string.Empty);
-                query["ids"] = string.Join(",", ids);
-
 
                 try
                 {
-                    var response = await client.GetAsync(uri + "?" + query.ToString());
+                    var response = await client.GetAsync(uri);
 
 
                     if (response.IsSuccessStatusCode)
@@ -48,23 +44,21 @@ namespace Setas.Services
         }
 
 
-        public async Task<Mushroom> GetMushroomAsync(int id)
+        public async Task<Configuration> GetConfigurationAsync()
         {
-            using(HttpClient client = new HttpClient())
+            Configuration configuration = null;
+            using(var client = new HttpClient())
             {
-                var uri = new Uri(baseUrl, "content/GetMushroom");
-                Mushroom item = null;
-      
-
+                var uri = new Uri(baseUrl, "setas/GetConfiguration");
                 try
                 {
-                    var response = await client.GetAsync(uri + "?id=" + id);
+                    var response = await client.GetAsync(uri);
 
 
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        item = JsonConvert.DeserializeObject<Mushroom>(content);
+                        configuration = JsonConvert.DeserializeObject<Configuration>(content);
                     }
                 }
                 catch (Exception ex)
@@ -72,13 +66,9 @@ namespace Setas.Services
                     throw ex;
                 }
 
-                return item;
             }
-        }
 
-        public Task InsertMushroomsAsync(IEnumerable<Mushroom> sourceItems)
-        {
-            throw new NotImplementedException();
+            return configuration;
         }
     }
 }

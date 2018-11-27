@@ -7,8 +7,8 @@
     <ProjectGuid>{024B0BCD-A178-45A5-AFB2-3C9C0381602D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Setas.Core</RootNamespace>
-    <AssemblyName>Setas.Core</AssemblyName>
+    <RootNamespace>Setas.Website.Core</RootNamespace>
+    <AssemblyName>Setas.Website.Core</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -196,6 +196,9 @@
     <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
       <HintPath>..\packages\UmbracoCms.Core.7.12.4\lib\net45\TidyNet.dll</HintPath>
     </Reference>
+    <Reference Include="uComponents.nuPickers, Version=1.7.0.300, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\nuPickers.1.7.0\lib\net45\uComponents.nuPickers.dll</HintPath>
+    </Reference>
     <Reference Include="umbraco, Version=1.0.6879.21989, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.4\lib\net45\umbraco.dll</HintPath>
     </Reference>
@@ -227,7 +230,6 @@
   <ItemGroup>
     <Compile Include="Binding\CommaDelimitedArrayModelBinder.cs" />
     <Compile Include="Models\Catalogue.generated.cs" />
-    <Compile Include="Models\CookingInterestItem.generated.cs" />
     <Compile Include="Models\File.generated.cs" />
     <Compile Include="Models\Folder.generated.cs" />
     <Compile Include="Models\Image.generated.cs" />
@@ -248,6 +250,12 @@
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.controller.js" />
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.htm" />
     <Content Include="App_Plugins\ModelsBuilder\modelsbuilder.resource.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Setas.Common\Setas.Common.csproj">
+      <Project>{67608141-0e1a-4a6c-b4b4-d2c5ee946805}</Project>
+      <Name>Setas.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />

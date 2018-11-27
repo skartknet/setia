@@ -18,7 +18,7 @@ namespace Setas.ViewModels
     public class IdentificationViewModel : INotifyPropertyChanged
     {
 
-        private IDataService _dataService;
+        private IInternalDataService _dataService;
 
         private IPredictionService _predictionService;
 
@@ -63,7 +63,7 @@ namespace Setas.ViewModels
         public IdentificationViewModel()
         { }
 
-        public IdentificationViewModel(IDataService dataService, IPredictionService predictionService)
+        public IdentificationViewModel(IInternalDataService dataService, IPredictionService predictionService)
         {
             _dataService = dataService;
             _predictionService = predictionService;
@@ -106,6 +106,7 @@ namespace Setas.ViewModels
 
         private async Task IdentifyImage(MediaFile image)
         {
+            //TODO: Apply permissions recommendations: https://github.com/jamesmontemagno/MediaPlugin#permission-recommendations
             //TODO: return null exception and pick it up for AppCenter and display Userdialog (https://github.com/aritchie/userdialogs/blob/master/docs/progress.md)
 
             if (image == null) return;
@@ -161,7 +162,7 @@ namespace Setas.ViewModels
 
                 var secondaryResultsPredictions = result.Predictions.Skip(1).ToArray();
                 var rIds = secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray();
-                var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(rIds);
+                var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(null, rIds);
 
                 foreach (var item in secondaryResultsPredictions)
                 {

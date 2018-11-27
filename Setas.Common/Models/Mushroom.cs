@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SQLite;
 
-namespace Setas.Models
+namespace Setas.Common.Models
 {
     public class Mushroom
     {
+        [PrimaryKey]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Order { get; set; }
@@ -20,6 +19,6 @@ namespace Setas.Models
         public string Description { get; set; }
         public string Family { get; set; }
         public string Habitat { get; set; }
-        public string[] Images { get; set; }
+        public string Images { get; set; }
     }
 }

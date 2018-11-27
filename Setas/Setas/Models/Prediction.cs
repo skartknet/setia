@@ -1,4 +1,5 @@
 ﻿
+using Setas.Common.Models;
 using System.Globalization;
 
 namespace Setas.Models

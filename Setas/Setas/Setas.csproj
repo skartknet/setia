@@ -10,6 +10,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE;GORILLA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +23,10 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
     <PackageReference Include="Xam.Plugin.Media" Version="4.0.1.5" />
     <PackageReference Include="Xamarin.Forms" Version="3.3.0.967583" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Setas.Common\Setas.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

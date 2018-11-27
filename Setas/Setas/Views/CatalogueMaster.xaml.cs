@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Autofac;
+using Setas.Common.Enums;
+using Setas.Services;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -28,19 +25,23 @@ namespace Setas.Views
         class CatalogueMasterViewModel : INotifyPropertyChanged
         {
             public ObservableCollection<CatalogueMenuItem> MenuItems { get; set; }
-            
+
             public CatalogueMasterViewModel()
             {
                 MenuItems = new ObservableCollection<CatalogueMenuItem>(new[]
                 {
-                    new CatalogueMenuItem { Id = 0, Title = "Page 1" },
-                    new CatalogueMenuItem { Id = 1, Title = "Page 2" },
-                    new CatalogueMenuItem { Id = 2, Title = "Page 3" },
-                    new CatalogueMenuItem { Id = 3, Title = "Page 4" },
-                    new CatalogueMenuItem { Id = 4, Title = "Page 5" },
+                    new CatalogueMenuItem { Id = Edible.BuenComestible, Title = "Buen Comestible" },
+                    new CatalogueMenuItem { Id = Edible.Toxica, Title = "Tóxica" },
+                    new CatalogueMenuItem { Id = Edible.SinInteres, Title = "Sin Interés" },
+                    new CatalogueMenuItem { Id = Edible.ComestibleConPrecaucion, Title = "Comestible Con Precaución" },
+                    new CatalogueMenuItem { Id = Edible.ComestiblePeroPeligrosa, Title = "Comestible Pero Peligrosa" },
+                    new CatalogueMenuItem { Id = Edible.ComestibleCalidadMedia, Title = "Comestible Calidad Media" },
+                    new CatalogueMenuItem { Id = Edible.ComestibleBajaCalidad, Title = "Comestible Baja Calidad" },
+                    new CatalogueMenuItem { Id = Edible.PosibleToxico, Title = "Posible Tóxico" },
+                    new CatalogueMenuItem { Id = Edible.NoComestible, Title = "No Comestible" },
                 });
             }
-            
+
             #region INotifyPropertyChanged Implementation
             public event PropertyChangedEventHandler PropertyChanged;
             void OnPropertyChanged([CallerMemberName] string propertyName = "")
@@ -53,9 +54,14 @@ namespace Setas.Views
             #endregion
         }
 
-        private void MenuItemsListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        async void MenuItemsListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            Navigation.PushAsync(new CatalogueDetail());
+            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+            {
+                var catalogueDetail = new CatalogueDetail(scope.Resolve<IInternalDataService>(), ((CatalogueMenuItem)e.Item).Id);
+
+                await Navigation.PushAsync(catalogueDetail);
+            }
         }
     }
 }

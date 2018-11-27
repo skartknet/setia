@@ -22,7 +22,7 @@ namespace Setas.Views
 
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
-                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IDataService>(), scope.Resolve<IPredictionService>());
+                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IInternalDataService>(), scope.Resolve<IPredictionService>());
 
                 var identifierNavigation = new NavigationPage(new IdentificationPage(identificationViewModel))
                 {
@@ -30,7 +30,7 @@ namespace Setas.Views
                     Icon = "eyeIcon.png"
                 };
 
-                var catalogueNavigation = new NavigationPage(new CatalogueMaster());
+                var catalogueNavigation = new NavigationPage(new Catalogue());
                 catalogueNavigation.Title = "Catálogo";
                 catalogueNavigation.Icon = "listIcon.png";
 

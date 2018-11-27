@@ -52,6 +52,9 @@
     <PackageReference Include="Acr.UserDialogs">
       <Version>7.0.1</Version>
     </PackageReference>
+    <PackageReference Include="UXDivers.GorillaPlayer.SDK.AutoConfig">
+      <Version>1.5.0-Beta4</Version>
+    </PackageReference>
     <PackageReference Include="Xam.Plugin.Media">
       <Version>4.0.1.5</Version>
     </PackageReference>

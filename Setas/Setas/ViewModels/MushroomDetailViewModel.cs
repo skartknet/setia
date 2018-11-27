@@ -1,4 +1,4 @@
-﻿using Setas.Models;
+﻿using Setas.Common.Models;
 using System.ComponentModel;
 
 namespace Setas.ViewModels

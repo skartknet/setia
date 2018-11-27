@@ -224,6 +224,9 @@
     <Reference Include="TidyNet, Version=1.0.0.0, Culture=neutral">
       <HintPath>..\packages\UmbracoCms.Core.7.12.4\lib\net45\TidyNet.dll</HintPath>
     </Reference>
+    <Reference Include="uComponents.nuPickers, Version=1.7.0.300, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\nuPickers.1.7.0\lib\net45\uComponents.nuPickers.dll</HintPath>
+    </Reference>
     <Reference Include="umbraco, Version=1.0.6879.21989, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.12.4\lib\net45\umbraco.dll</HintPath>
     </Reference>
@@ -292,9 +295,8 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Api\ContentApiController.cs" />
+    <Compile Include="Api\SetasApiController.cs" />
     <Compile Include="Api\SetiaMapper.cs" />
-    <Compile Include="Api\Models\Mushroom.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +348,10 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Setas.Common\Setas.Common.csproj">
+      <Project>{67608141-0e1a-4a6c-b4b4-d2c5ee946805}</Project>
+      <Name>Setas.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Setas.Core\Setas.Website.Core.csproj">
       <Project>{024b0bcd-a178-45a5-afb2-3c9c0381602d}</Project>
       <Name>Setas.Website.Core</Name>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Setas.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Setas.Views
         {
             TargetType = typeof(CatalogueDetail);
         }
-        public int Id { get; set; }
+        public Edible Id { get; set; }
         public string Title { get; set; }
 
         public Type TargetType { get; set; }

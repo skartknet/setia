@@ -1,39 +1,37 @@
-﻿using Newtonsoft.Json;
-using Setas.Models;
+﻿using Microsoft.AppCenter.Crashes;
+using Setas.Common.Models;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Setas.Services
 {
     //Instantiated as Single Instance by Autofac.
-    public class InternalDataService : IDataService
+    public class InternalDataService : IInternalDataService
     {
         const string DBNAME = "MushroomsDb.db3";
 
         readonly string DBPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DBNAME);
 
-        static SQLiteAsyncConnection _database;
-        private SQLiteAsyncConnection Database {
-            get
-            {
-                if(_database == null)
-                {
-                    if (!File.Exists(DBPATH))
-                    {
-                        this.CreateDatabase(DBPATH);
-                    }
-                    else
-                    {
-                        this.OpenDatabase(DBPATH);
-                    }
-                }
+        private static SQLiteAsyncConnection _database;
 
-                return _database;
+        public InternalDataService()
+        {
+            OpenDatabase(DBPATH);
+            var dataTable = _database.GetTableInfoAsync("Mushroom").Result;
+            if (dataTable.Count == 0)
+            {
+                try
+                {
+                    this.CreateDatabaseStructure(DBPATH);
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex);
+                }
             }
         }
 
@@ -42,38 +40,52 @@ namespace Setas.Services
             _database = new SQLiteAsyncConnection(dbPath);
         }
 
-        private void CreateDatabase(string dbPath)
-        {            
-            _database = new SQLiteAsyncConnection(dbPath);
+        private void CreateDatabaseStructure(string dbPath)
+        {
             _database.CreateTableAsync<Mushroom>().Wait();
+            _database.CreateTableAsync<Configuration>().Wait();
+
         }
 
-        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(params int[] ids)
-        {
-            IEnumerable<Mushroom> items = null;
 
-            if (ids.Any())
+        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options, params int[] ids)
+        {
+
+            if (ids != null && ids.Any())
             {
-                items = await _database.Table<Mushroom>().Where(m=>ids.Contains(m.Id)).ToListAsync();
+                return await _database.Table<Mushroom>().Where(m => ids.Contains(m.Id)).ToListAsync();
             }
             else
             {
-                items = await _database.Table<Mushroom>().ToListAsync();
+                return await _database.Table<Mushroom>().ToListAsync();
             }
 
-
-            return items;
         }
 
 
-        public async Task<Mushroom> GetMushroomAsync(int id)
+        public Task<Mushroom> GetMushroomAsync(int id)
         {
-            return await _database.Table<Mushroom>().FirstOrDefaultAsync(m => m.Id == id);
+            return _database.Table<Mushroom>().FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task InsertMushroomsAsync(IEnumerable<Mushroom> items)
         {
-            await _database.InsertOrReplaceAsync(items);
+            foreach (var item in items)
+            {
+                await this.InsertMushroomAsync(item);
+            }
         }
+
+        public Task InsertMushroomAsync(Mushroom item)
+        {
+            return _database.InsertOrReplaceAsync(item);
+        }
+
+        public Task<Configuration> GetConfigurationAsync()
+        {
+            return _database.Table<Configuration>().FirstOrDefaultAsync();
+        }
+
+
     }
 }

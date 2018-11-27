@@ -1,10 +1,11 @@
-﻿using Microsoft.AppCenter;
+﻿using Autofac;
+using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Setas.Enums;
 using Setas.Services;
 using Setas.Views;
-using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -23,11 +24,6 @@ namespace Setas
         public App()
         {
 
-            if (!Properties.ContainsKey("dataType") || !Enum.TryParse(this.Properties["dataType"].ToString(), out dataServiceType))
-            {
-                Properties["dataType"] = SettingsDataType.External;
-                dataServiceType = SettingsDataType.External;
-            }
 
             DependencyContainer.Register(this);
 
@@ -44,6 +40,12 @@ namespace Setas
         {
             AppCenter.Start("android=86311dca-ab38-41be-bf0d-77b43d392cd4;",
                    typeof(Analytics), typeof(Crashes));
+
+            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+            {
+                var syncingService = scope.Resolve<ISyncingDataService>();
+                Task.Run(async () => await syncingService.SyncDataAsync());
+            }
         }
 
         protected override void OnSleep()
@@ -53,7 +55,12 @@ namespace Setas
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+            {
+                var syncingService = scope.Resolve<ISyncingDataService>();
+
+                Task.Run(async () => await syncingService.SyncDataAsync());
+            }
         }
     }
 

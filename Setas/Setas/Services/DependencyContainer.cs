@@ -11,18 +11,11 @@ namespace Setas.Services
         {
             var builder = new ContainerBuilder();
 
-            switch (app.dataServiceType)
-            {
-                case SettingsDataType.Internal:
-                    builder.RegisterType<InternalDataService>().As<IDataService>().SingleInstance();
-                    break;
-                case SettingsDataType.External:
-                    builder.RegisterType<ExternalDataService>().As<IDataService>().SingleInstance();
-                    break;
-                default:
-                    builder.RegisterType<ExternalDataService>().As<IDataService>().SingleInstance();
-                    break;
-            }
+            builder.RegisterType<ExternalDataService>().As<IExternalDataService>().SingleInstance();
+            builder.RegisterType<InternalDataService>().As<IInternalDataService>().SingleInstance();
+
+            builder.RegisterType<SyncingDataService>().As<ISyncingDataService>().SingleInstance();
+
 
 
             builder.RegisterType<PredictionService>().As<IPredictionService>().SingleInstance();

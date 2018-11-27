@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Setas.Views.CatalogueDetail"
              Title="Detail">
+ 
     <StackLayout Padding="10">
-        <ListView ItemsSource="{Binding Mushrooms}"
-                  ItemTapped="ListView_ItemTapped">
+        <ListView x:Name="DetailsList"
+                >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Name}"/>
+                    <TextCell Text="asdasdasd"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
             
