@@ -28,6 +28,7 @@ namespace Setas.Views
             {
                 MenuItems = new ObservableCollection<CatalogueMenuItem>(new[]
                 {
+                    new CatalogueMenuItem { Id = null, Title = "Todas" },
                     new CatalogueMenuItem { Id = Edible.BuenComestible, Title = "Buen Comestible" },
                     new CatalogueMenuItem { Id = Edible.Toxica, Title = "Tóxica" },
                     new CatalogueMenuItem { Id = Edible.SinInteres, Title = "Sin Interés" },

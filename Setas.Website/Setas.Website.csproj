@@ -297,6 +297,7 @@
   <ItemGroup>
     <Compile Include="Api\SetasApiController.cs" />
     <Compile Include="Api\SetiaMapper.cs" />
+    <Compile Include="ContentEventHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -23,6 +23,12 @@ namespace Setas.Services
             _target = target;
         }
 
+
+        public void SyncData()
+        {
+            Task.Run(async () => await this.SyncDataAsync()).Wait();
+        }
+
         /// <summary>
         /// Syncs internal data with external API
         /// </summary>
@@ -31,32 +37,44 @@ namespace Setas.Services
             var intConfiguration = await _target.GetConfigurationAsync();
             _lastContentSync = intConfiguration?.LatestContentUpdate;
 
-            if (!_lastContentSync.HasValue)
+            if (_lastContentSync == null || !_lastContentSync.HasValue)
             {
                 //First run of App, DB doesn't exist
 
-                bool didAppCrash = await Crashes.HasCrashedInLastSessionAsync();
+                await InitContent();
+            }
+            else
+            {
+                await UpdateContent();
+            }
+        }
 
-                if (didAppCrash)
-                {
-                    await UserDialogs.Instance.AlertAsync("Parece que hubo un error creando la base de datos. Vamos a intentar otra vez....");
-                }
+        private async Task InitContent()
+        {
+            bool didAppCrash = await Crashes.HasCrashedInLastSessionAsync();
 
-                try
-                {
-                    var sourceItems = await _source.GetMushroomsAsync();
-                    await _target.InsertMushroomsAsync(sourceItems);
-                }
-                catch (Exception ex)
-                {
-                    //we can't run the App without data
-                    await UserDialogs.Instance.AlertAsync("No se pudo descargar el contenido por primera vez. La app no se puede ejecutar.");
-                    Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
-
-                    throw new Exception(); //to terminate app
-                }
+            if (didAppCrash)
+            {
+                await UserDialogs.Instance.AlertAsync("Parece que hubo un error creando la base de datos. Vamos a intentar otra vez....");
             }
 
+            try
+            {
+                var sourceItems = await _source.GetMushroomsAsync();
+                await _target.InsertMushroomsAsync(sourceItems);
+            }
+            catch (Exception ex)
+            {
+                //we can't run the App without data
+                await UserDialogs.Instance.AlertAsync("No se pudo descargar el contenido por primera vez. La app no se puede ejecutar.");
+                Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
+
+                throw new Exception("Error initialising content"); 
+            }
+        }
+
+        private async Task UpdateContent()
+        {
             try
             {
                 //get external configuration
@@ -72,6 +90,7 @@ namespace Setas.Services
                 Crashes.TrackError(new Exception("Error getting external configuration", ex));
             }
 
+            //we update
             if (_lastContentUpdate > _lastContentSync)
             {
                 //Internal DB out of date
@@ -80,6 +99,7 @@ namespace Setas.Services
                 {
                     var sourceItems = await _source.GetMushroomsAsync();
                     await _target.InsertMushroomsAsync(sourceItems);
+                    await _target.SetContentUpdatedAsync();
                 }
                 catch (Exception ex)
                 {
@@ -87,7 +107,5 @@ namespace Setas.Services
                 }
             }
         }
-
-
     }
 }

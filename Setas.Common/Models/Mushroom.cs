@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using Setas.Common.Enums;
+using SQLite;
 
 namespace Setas.Common.Models
 {
@@ -15,7 +16,7 @@ namespace Setas.Common.Models
         public string Synonyms { get; set; }
         public string Confusion { get; set; }
         public string CookingInstructions { get; set; }
-        public string CookingInterest { get; set; }
+        public Edible CookingInterest { get; set; }
         public string Description { get; set; }
         public string Family { get; set; }
         public string Habitat { get; set; }

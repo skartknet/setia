@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Setas.Services
 {
-    interface ISyncingDataService
+    public interface ISyncingDataService
     {
+        void SyncData();
         Task SyncDataAsync();
     }
 }

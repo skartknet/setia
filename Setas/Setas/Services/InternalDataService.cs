@@ -1,5 +1,4 @@
-﻿using Microsoft.AppCenter.Crashes;
-using Setas.Common.Models;
+﻿using Setas.Common.Models;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -14,52 +13,63 @@ namespace Setas.Services
     {
         const string DBNAME = "MushroomsDb.db3";
 
-        readonly string DBPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DBNAME);
+        readonly string DBPATH = Path.Combine("/data/user/0/com.companyname.Setas/databases", DBNAME);
 
-        private static SQLiteAsyncConnection _database;
+        private static SQLiteAsyncConnection _database;        
+
+
+        public bool IsContextReady { get; set; }
 
         public InternalDataService()
-        {
-            OpenDatabase(DBPATH);
+        {            
+
+            OpenDatabase();
             var dataTable = _database.GetTableInfoAsync("Mushroom").Result;
             if (dataTable.Count == 0)
             {
-                try
-                {
-                    this.CreateDatabaseStructure(DBPATH);
-                }
-                catch (Exception ex)
-                {
-                    Crashes.TrackError(ex);
-                }
+                CreateDatabaseStructure();
+            }            
+        }
+
+        private void OpenDatabase()
+        {
+            _database = new SQLiteAsyncConnection(DBPATH);
+        }
+
+     
+
+        private void CreateDatabaseStructure()
+        {
+            try
+            {
+                _database.CreateTableAsync<Mushroom>().Wait();
+                _database.CreateTableAsync<Configuration>().Wait();
             }
-        }
-
-        private void OpenDatabase(string dbPath)
-        {
-            _database = new SQLiteAsyncConnection(dbPath);
-        }
-
-        private void CreateDatabaseStructure(string dbPath)
-        {
-            _database.CreateTableAsync<Mushroom>().Wait();
-            _database.CreateTableAsync<Configuration>().Wait();
+            catch (Exception ex)
+            {
+                throw new Exception("Error creating Database", ex);
+            }
 
         }
+
+
 
 
         public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options, params int[] ids)
         {
+            AsyncTableQuery<Mushroom> result = _database.Table<Mushroom>();
 
             if (ids != null && ids.Any())
             {
-                return await _database.Table<Mushroom>().Where(m => ids.Contains(m.Id)).ToListAsync();
-            }
-            else
-            {
-                return await _database.Table<Mushroom>().ToListAsync();
+                result = result.Where(m => ids.Contains(m.Id));
             }
 
+            if (options.Edible.HasValue)
+            {
+                result = result.Where(m => m.CookingInterest == options.Edible);
+            }
+
+            return await result.ToListAsync(); ;
         }
 
 
@@ -86,6 +96,26 @@ namespace Setas.Services
             return _database.Table<Configuration>().FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Sets the Lastest Updated Content Datetime to now
+        /// </summary>
+        /// <returns></returns>
+        public async Task SetContentUpdatedAsync()
+        {
+            Configuration config = await GetConfigurationAsync();
+            if (config != null)
+            {
+                config.LatestContentUpdate = DateTime.UtcNow;
+            }
+            else
+            {
+                config = new Configuration()
+                {
+                    LatestContentUpdate = DateTime.UtcNow
+                };
+            }
 
+            await _database.InsertOrReplaceAsync(config);
+        }
     }
 }

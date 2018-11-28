@@ -1,10 +1,11 @@
-﻿using Autofac;
+﻿using Acr.UserDialogs;
+using Autofac;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Setas.Enums;
 using Setas.Services;
 using Setas.Views;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -18,22 +19,19 @@ namespace Setas
         public static ImageSource SourceImage { get; set; }
 
 
-        public readonly SettingsDataType dataServiceType;
+        public static IInternalDataService DataService { get; set; }
 
 
         public App()
         {
-
-
             DependencyContainer.Register(this);
+        }
 
+        private void InitApp()
+        {
             InitializeComponent();
             MainPage = new MainPage
-            {
-
-            };
-
-
+            { };
         }
 
         protected override void OnStart()
@@ -43,8 +41,24 @@ namespace Setas
 
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
-                var syncingService = scope.Resolve<ISyncingDataService>();
-                Task.Run(async () => await syncingService.SyncDataAsync());
+                if (DataService == null)
+                {
+                    try
+                    {
+                        DataService = scope.Resolve<IInternalDataService>();
+
+                        var syncingService = scope.Resolve<ISyncingDataService>();
+                        syncingService.SyncData();
+
+                        InitApp();
+                    }
+                    catch (Exception ex)
+                    {
+                        UserDialogs.Instance.Alert("Error iniciando base de datos.");
+                    }
+                }
+
+
             }
         }
 
@@ -57,9 +71,11 @@ namespace Setas
         {
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
+                DataService = scope.Resolve<IInternalDataService>();
+
                 var syncingService = scope.Resolve<ISyncingDataService>();
 
-                Task.Run(async () => await syncingService.SyncDataAsync());
+                Task.Run(async () => await syncingService.SyncDataAsync()).Wait();
             }
         }
     }

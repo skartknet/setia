@@ -12,11 +12,10 @@ namespace Setas.Views
     {
         public CatalogueMenuItem()
         {
-            TargetType = typeof(CatalogueDetail);
+          
         }
-        public Edible Id { get; set; }
+        public Edible? Id { get; set; }
         public string Title { get; set; }
 
-        public Type TargetType { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Setas.Common.Models
 {
+    
     public class Configuration
     {
         public DateTime LatestContentUpdate { get; set; }

@@ -13,11 +13,7 @@ namespace Setas.Services
 
             builder.RegisterType<ExternalDataService>().As<IExternalDataService>().SingleInstance();
             builder.RegisterType<InternalDataService>().As<IInternalDataService>().SingleInstance();
-
             builder.RegisterType<SyncingDataService>().As<ISyncingDataService>().SingleInstance();
-
-
-
             builder.RegisterType<PredictionService>().As<IPredictionService>().SingleInstance();
 
             Container = builder.Build();
