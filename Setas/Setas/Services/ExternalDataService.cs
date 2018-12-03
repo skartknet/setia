@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Setas.Services
 {
@@ -13,25 +12,24 @@ namespace Setas.Services
     public class ExternalDataService : IExternalDataService
     {
 
-        readonly Uri baseUrl = new Uri("http://172.17.198.145:5000/umbraco/api/");
-     
+        readonly Uri baseUrl = new Uri(App.ExternalService, "/umbraco/api/");
 
-        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync()
+
+        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync()
         {
             using (HttpClient client = new HttpClient())
             {
                 var uri = new Uri(baseUrl, "setas/GetMushrooms");
-                var items = Enumerable.Empty<Mushroom>();
+                var items = Enumerable.Empty<MushroomData>();
 
                 try
                 {
                     var response = await client.GetAsync(uri);
 
-
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        items = JsonConvert.DeserializeObject<List<Mushroom>>(content);
+                        items = JsonConvert.DeserializeObject<List<MushroomData>>(content);
                     }
                 }
                 catch (Exception ex)
@@ -47,7 +45,7 @@ namespace Setas.Services
         public async Task<Configuration> GetConfigurationAsync()
         {
             Configuration configuration = null;
-            using(var client = new HttpClient())
+            using (var client = new HttpClient())
             {
                 var uri = new Uri(baseUrl, "setas/GetConfiguration");
                 try

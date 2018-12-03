@@ -1,5 +1,5 @@
-﻿using Acr.UserDialogs;
-using Microsoft.AppCenter.Crashes;
+﻿using Microsoft.AppCenter.Crashes;
+using Setas.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,54 +23,50 @@ namespace Setas.Services
             _target = target;
         }
 
-
-        public void SyncData()
-        {
-            Task.Run(async () => await this.SyncDataAsync()).Wait();
-        }
-
         /// <summary>
         /// Syncs internal data with external API
         /// </summary>
         public async Task SyncDataAsync()
         {
-            var intConfiguration = await _target.GetConfigurationAsync();
+            Configuration intConfiguration = null;
+            try
+            {
+                intConfiguration = await _target.GetConfigurationAsync();
+            }
+            catch
+            { }
+
             _lastContentSync = intConfiguration?.LatestContentUpdate;
 
             if (_lastContentSync == null || !_lastContentSync.HasValue)
             {
-                //First run of App, DB doesn't exist
-
-                await InitContent();
+                try
+                {
+                    await InitContent();
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
+                    throw ex;
+                }
             }
             else
             {
-                await UpdateContent();
+                try
+                {
+                    await UpdateContent();
+                }
+                catch { Crashes.TrackError(new Exception("Error getting external configuration")); }
             }
         }
 
+
         private async Task InitContent()
         {
-            bool didAppCrash = await Crashes.HasCrashedInLastSessionAsync();
 
-            if (didAppCrash)
-            {
-                await UserDialogs.Instance.AlertAsync("Parece que hubo un error creando la base de datos. Vamos a intentar otra vez....");
-            }
+            var sourceItems = await _source.GetMushroomsAsync();
+            await _target.InsertMushroomsAsync(sourceItems);
 
-            try
-            {
-                var sourceItems = await _source.GetMushroomsAsync();
-                await _target.InsertMushroomsAsync(sourceItems);
-            }
-            catch (Exception ex)
-            {
-                //we can't run the App without data
-                await UserDialogs.Instance.AlertAsync("No se pudo descargar el contenido por primera vez. La app no se puede ejecutar.");
-                Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
-
-                throw new Exception("Error initialising content"); 
-            }
         }
 
         private async Task UpdateContent()

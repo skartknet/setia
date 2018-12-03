@@ -13,36 +13,47 @@ namespace Setas.Services
     {
         const string DBNAME = "MushroomsDb.db3";
 
-        readonly string DBPATH = Path.Combine("/data/user/0/com.companyname.Setas/databases", DBNAME);
+        readonly string DBPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DBNAME);
 
-        private static SQLiteAsyncConnection _database;        
+        private static SQLiteAsyncConnection _database;
 
-
-        public bool IsContextReady { get; set; }
 
         public InternalDataService()
-        {            
+        {
 
             OpenDatabase();
+
+#if DEBUG
+            Task.Run(async () => await _database.DropTableAsync<MushroomData>()).Wait();
+#endif
+
+
+
             var dataTable = _database.GetTableInfoAsync("Mushroom").Result;
             if (dataTable.Count == 0)
             {
                 CreateDatabaseStructure();
-            }            
+            }
         }
 
         private void OpenDatabase()
         {
-            _database = new SQLiteAsyncConnection(DBPATH);
+            try
+            {
+                _database = new SQLiteAsyncConnection(DBPATH);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error creating Database", ex);
+            }
         }
 
-     
 
         private void CreateDatabaseStructure()
         {
             try
             {
-                _database.CreateTableAsync<Mushroom>().Wait();
+                _database.CreateTableAsync<MushroomData>().Wait();
                 _database.CreateTableAsync<Configuration>().Wait();
             }
             catch (Exception ex)
@@ -55,9 +66,9 @@ namespace Setas.Services
 
 
 
-        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options, params int[] ids)
+        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params int[] ids)
         {
-            AsyncTableQuery<Mushroom> result = _database.Table<Mushroom>();
+            AsyncTableQuery<MushroomData> result = _database.Table<MushroomData>();
 
             if (ids != null && ids.Any())
             {
@@ -69,16 +80,18 @@ namespace Setas.Services
                 result = result.Where(m => m.CookingInterest == options.Edible);
             }
 
-            return await result.ToListAsync(); ;
+
+
+            return await result.ToListAsync();
         }
 
 
-        public Task<Mushroom> GetMushroomAsync(int id)
+        public Task<MushroomData> GetMushroomAsync(int id)
         {
-            return _database.Table<Mushroom>().FirstOrDefaultAsync(m => m.Id == id);
+            return _database.Table<MushroomData>().FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task InsertMushroomsAsync(IEnumerable<Mushroom> items)
+        public async Task InsertMushroomsAsync(IEnumerable<MushroomData> items)
         {
             foreach (var item in items)
             {
@@ -86,7 +99,7 @@ namespace Setas.Services
             }
         }
 
-        public Task InsertMushroomAsync(Mushroom item)
+        public Task InsertMushroomAsync(MushroomData item)
         {
             return _database.InsertOrReplaceAsync(item);
         }

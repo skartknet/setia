@@ -1,18 +1,19 @@
 ﻿using Setas.Common.Models;
+using Setas.Models;
 using System.ComponentModel;
 
 namespace Setas.ViewModels
 {
     public class MushroomDetailViewModel : INotifyPropertyChanged
     {
-        public Mushroom Mushroom { get; set; }
+        public MushroomDisplayModel Mushroom { get; set; }
 
         public MushroomDetailViewModel()
         {
 
         }
 
-        public MushroomDetailViewModel(Mushroom item)
+        public MushroomDetailViewModel(MushroomDisplayModel item)
         {
             Mushroom = item;
         }

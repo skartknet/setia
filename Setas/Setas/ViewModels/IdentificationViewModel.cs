@@ -28,7 +28,7 @@ namespace Setas.ViewModels
 
         public ICommand PickPhoto { get; }
 
-        public INavigation Navigation { get; set; }        
+        public INavigation Navigation { get; set; }
 
         public bool IsTakePhotoSupported
         {
@@ -157,8 +157,9 @@ namespace Setas.ViewModels
             {
                 var firstResultPrediction = result.Predictions.FirstOrDefault();
                 var rId = Helpers.Predictions.TagToItemId(firstResultPrediction.TagName);
-                firstResultPrediction.Mushroom = await _dataService.GetMushroomAsync(rId);
 
+
+                firstResultPrediction.Mushroom = new MushroomDisplayModel(await _dataService.GetMushroomAsync(rId));
 
                 var secondaryResultsPredictions = result.Predictions.Skip(1).ToArray();
                 var rIds = secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray();
@@ -166,7 +167,7 @@ namespace Setas.ViewModels
 
                 foreach (var item in secondaryResultsPredictions)
                 {
-                    item.Mushroom = secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName));
+                    item.Mushroom = secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName)) as MushroomDisplayModel;
                 }
 
 

@@ -36,18 +36,19 @@ namespace Setas.Website.Api
                 items = catalogue.Children().OfType<CoreModels.Mushroom>();
             }
 
-            if(edible != null)
+            if (edible != null)
             {
                 items = items.Where(m => ((Edible)m.CookingInterest.SavedValue) == edible);
             }
 
 
-            IEnumerable<ApiModels.Mushroom> itemsMapped = null;
+            IEnumerable<ApiModels.MushroomData> itemsMapped = null;
 
             try
             {
-                itemsMapped = Mapper.Map<IEnumerable<ApiModels.Mushroom>>(items);
-            }catch(Exception ex)
+                itemsMapped = Mapper.Map<IEnumerable<ApiModels.MushroomData>>(items);
+            }
+            catch (Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Error mapping models");
             }
@@ -59,14 +60,14 @@ namespace Setas.Website.Api
         public HttpResponseMessage GetMushroom(int id)
         {
             var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
-            var item  = catalogue.FirstChild<CoreModels.Mushroom>(n => n.Id == id);
+            var item = catalogue.FirstChild<CoreModels.Mushroom>(n => n.Id == id);
 
             if (item == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Item not found.");
 
-            ApiModels.Mushroom itemMapped = null;
+            ApiModels.MushroomData itemMapped = null;
             try
             {
-                itemMapped = Mapper.Map<ApiModels.Mushroom>(item);
+                itemMapped = Mapper.Map<ApiModels.MushroomData>(item);
             }
             catch (Exception ex)
             {
@@ -74,7 +75,7 @@ namespace Setas.Website.Api
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, itemMapped);
-            
+
         }
 
         public HttpResponseMessage GetConfiguration()

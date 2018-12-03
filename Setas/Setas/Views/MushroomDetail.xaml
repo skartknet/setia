@@ -14,7 +14,7 @@
             <StackLayout Orientation="Horizontal">
                 <Image  HeightRequest="125"
                             WidthRequest="125"
-                            Source="caesarea12.jpg"
+                            Source="{Binding ImageSource}"
                             Aspect="AspectFill"/>
                                                    
                 <Grid>

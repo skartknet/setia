@@ -16,10 +16,10 @@ namespace Setas.ViewModels
 
         public ResultsViewModel()
         {
-            NavToItemDetailsCommand = new Command<Mushroom>(NavToItemDetails);
+            NavToItemDetailsCommand = new Command<MushroomDisplayModel>(NavToItemDetails);
         }
 
-        void NavToItemDetails(Mushroom mushroom)
+        void NavToItemDetails(MushroomDisplayModel mushroom)
         {
             var model = new MushroomDetailViewModel(mushroom);
             Navigation.PushAsync(new MushroomDetail(model));

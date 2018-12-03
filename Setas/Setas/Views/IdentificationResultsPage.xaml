@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Setas.IdentificationResultsPage"             
+             x:Class="Setas.IdentificationResultsPage"                  
              xmlns:models="clr-namespace:Setas.ViewModels"
                BackgroundColor="{StaticResource Color5}"
              Title="Result"
@@ -24,8 +24,8 @@
                 </StackLayout.GestureRecognizers>
 
                 <Image  HeightRequest="95"
-                        WidthRequest="95"
-                        Source="caesarea12.jpg"
+                        WidthRequest="95"                       
+                        Source="{Binding FirstResult.Mushroom.ImageSource}"
                         Aspect="AspectFill">
                     
                 </Image>

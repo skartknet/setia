@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace Setas.Droid
 {
-    [Activity(Label = "Phoneword", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true,
+    [Activity(Label = "Setia", Icon = "@drawable/setia_logo", Theme = "@style/MainTheme", MainLauncher = true,
               ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {

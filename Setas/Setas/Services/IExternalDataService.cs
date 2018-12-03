@@ -8,7 +8,7 @@ namespace Setas.Services
     public interface IExternalDataService
     {        
 
-        Task<IEnumerable<Mushroom>> GetMushroomsAsync();
+        Task<IEnumerable<MushroomData>> GetMushroomsAsync();
 
         Task<Configuration> GetConfigurationAsync();
     }

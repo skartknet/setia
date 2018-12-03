@@ -10,7 +10,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>TRACE;GORILLA</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;GORILLA</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

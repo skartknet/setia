@@ -3,7 +3,8 @@ using SQLite;
 
 namespace Setas.Common.Models
 {
-    public class Mushroom
+    [Table("Mushroom")]
+    public class MushroomData
     {
         [PrimaryKey]
         public int Id { get; set; }
@@ -20,6 +21,6 @@ namespace Setas.Common.Models
         public string Description { get; set; }
         public string Family { get; set; }
         public string Habitat { get; set; }
-        public string Images { get; set; }
+        public string Image { get; set; }
     }
 }

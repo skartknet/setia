@@ -17,7 +17,7 @@ namespace Setas
     public partial class App : Application
     {
         public static ImageSource SourceImage { get; set; }
-
+        public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
 
         public static IInternalDataService DataService { get; set; }
 
@@ -43,19 +43,25 @@ namespace Setas
             {
                 if (DataService == null)
                 {
-                    try
-                    {
-                        DataService = scope.Resolve<IInternalDataService>();
 
-                        var syncingService = scope.Resolve<ISyncingDataService>();
-                        syncingService.SyncData();
+                    DataService = scope.Resolve<IInternalDataService>();
 
-                        InitApp();
-                    }
-                    catch (Exception ex)
+                    var syncingService = scope.Resolve<ISyncingDataService>();
+                    Task.Run(async () =>
                     {
-                        UserDialogs.Instance.Alert("Error iniciando base de datos.");
-                    }
+                        try
+                        {
+                            await syncingService.SyncDataAsync();
+                            InitApp();
+
+                        }
+                        catch (Exception ex)
+                        {
+                            UserDialogs.Instance.Alert("Error initialising database.");
+                        }
+                    }).Wait();
+
+
                 }
 
 

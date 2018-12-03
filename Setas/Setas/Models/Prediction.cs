@@ -1,5 +1,4 @@
 ﻿
-using Setas.Common.Models;
 using System.Globalization;
 
 namespace Setas.Models
@@ -19,6 +18,6 @@ namespace Setas.Models
             }
         }
 
-        public Mushroom Mushroom { get; set; }
+        public MushroomDisplayModel Mushroom { get; set; }
     }
 }

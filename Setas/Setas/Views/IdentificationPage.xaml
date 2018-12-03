@@ -4,9 +4,9 @@
             x:Class="Setas.IdentificationPage"
             xmlns:local="clr-namespace:Setas.ViewModels"
             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-             BackgroundColor="{StaticResource Color5}"
             Title="Identificar Hongo" 
-             Padding="10, 20">
+             Padding="10, 20"
+             BackgroundImage="bg1.jpg">
     <ContentPage.BindingContext>
         <local:IdentificationViewModel/>
     </ContentPage.BindingContext>
@@ -14,22 +14,20 @@
         <StackLayout Orientation="Horizontal"
                      VerticalOptions="CenterAndExpand"
                      HorizontalOptions="Center">
-            <Button Text="&#xf030;"
+            <Button Text="Hacer foto"
                     Command="{Binding TakePhoto}"
                     VerticalOptions="CenterAndExpand"               
-                    Style="{StaticResource BtnRounded }"
                     android:Button.UseDefaultPadding="true"
                     android:Button.UseDefaultShadow="true"
                     IsVisible="{Binding IsTakePhotoSupported}">
                     
             </Button>
-            <Button Text="&#xf03e;"
+            <Button Text="Seleccionar foto"
                     Command="{Binding PickPhoto}"
                     VerticalOptions="CenterAndExpand"
-                    Style="{StaticResource BtnRounded }"
                     android:Button.UseDefaultPadding="true"
                     android:Button.UseDefaultShadow="true"
-                     IsVisible="{Binding IsPickPhotoSupported}">
+                    IsVisible="{Binding IsPickPhotoSupported}">
             </Button>
         </StackLayout>
         <Label Text="Identificando..." IsVisible="{Binding IsIdentifying}"
