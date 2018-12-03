@@ -2,6 +2,7 @@
 using Microsoft.AppCenter.Crashes;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
+using Setas.Common.Models;
 using Setas.Models;
 using Setas.Services;
 using System;
@@ -163,11 +164,11 @@ namespace Setas.ViewModels
 
                 var secondaryResultsPredictions = result.Predictions.Skip(1).ToArray();
                 var rIds = secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray();
-                var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(null, rIds);
+                var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(new SearchOptions(), rIds);
 
                 foreach (var item in secondaryResultsPredictions)
                 {
-                    item.Mushroom = secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName)) as MushroomDisplayModel;
+                    item.Mushroom = new MushroomDisplayModel(secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName)));
                 }
 
 

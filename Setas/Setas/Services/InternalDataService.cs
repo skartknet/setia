@@ -68,6 +68,11 @@ namespace Setas.Services
 
         public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params int[] ids)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
             AsyncTableQuery<MushroomData> result = _database.Table<MushroomData>();
 
             if (ids != null && ids.Any())

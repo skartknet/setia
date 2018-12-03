@@ -19,7 +19,7 @@
                                         Orientation="Horizontal">
                             <Image  HeightRequest="55"
                                         WidthRequest="75"
-                                        Source="caesarea12.jpg"
+                                        Source="{Binding ImageSource}"
                                         Aspect="AspectFill"/>
                             <StackLayout Spacing="0">
                                 <Label Text="{Binding Name}" Style="{StaticResource Heading1}" />

@@ -30,19 +30,26 @@ namespace Setas
         private void InitApp()
         {
             InitializeComponent();
-            MainPage = new MainPage
-            { };
+            MainPage = new MainPage();
         }
 
         protected override void OnStart()
         {
+
             AppCenter.Start("android=86311dca-ab38-41be-bf0d-77b43d392cd4;",
                    typeof(Analytics), typeof(Crashes));
 
+            InitDatabase();
+        }
+
+        private void InitDatabase()
+        {
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
                 if (DataService == null)
                 {
+                    UserDialogs.Instance.Alert("Iniciando base de datos...");
+
 
                     DataService = scope.Resolve<IInternalDataService>();
 
@@ -57,14 +64,12 @@ namespace Setas
                         }
                         catch (Exception ex)
                         {
-                            UserDialogs.Instance.Alert("Error initialising database.");
+                            await UserDialogs.Instance.AlertAsync("Error iniciando base de datos.");
                         }
                     }).Wait();
 
 
                 }
-
-
             }
         }
 
@@ -75,14 +80,7 @@ namespace Setas
 
         protected override void OnResume()
         {
-            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
-            {
-                DataService = scope.Resolve<IInternalDataService>();
-
-                var syncingService = scope.Resolve<ISyncingDataService>();
-
-                Task.Run(async () => await syncingService.SyncDataAsync()).Wait();
-            }
+            InitDatabase();
         }
     }
 
