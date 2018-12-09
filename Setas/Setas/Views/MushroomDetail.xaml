@@ -34,6 +34,8 @@
                 </Grid>
             </StackLayout>
 
+                
+            
             <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
             <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>
 

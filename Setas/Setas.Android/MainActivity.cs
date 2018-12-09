@@ -1,16 +1,13 @@
-﻿using Acr.UserDialogs;
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
-using Android.Graphics;
 using Android.OS;
-using Android.Widget;
-using Xamarin.Forms;
 
 namespace Setas.Droid
 {
-    [Activity(Label = "Setia", Icon = "@drawable/setia_logo", Theme = "@style/MainTheme", MainLauncher = true,
+    [Activity(Label = "Setia", Icon = "@drawable/setia_logo", Theme = "@style/splashscreen", MainLauncher = true,
               ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public partial class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         internal static MainActivity Instance { get; private set; }
 
@@ -19,10 +16,11 @@ namespace Setas.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            UserDialogs.Init(() => (Activity)Instance);
+            UserDialogs.Init(this);
 
+            base.Window.RequestFeature(Android.Views.WindowFeatures.ActionBar);
+            base.SetTheme(Resource.Style.MainTheme);
             base.OnCreate(bundle);
-            Instance = this;
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
 

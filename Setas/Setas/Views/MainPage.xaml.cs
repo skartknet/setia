@@ -34,13 +34,13 @@ namespace Setas.Views
                 catalogueNavigation.Title = "Catálogo";
                 catalogueNavigation.Icon = "listIcon.png";
 
-                var dictionaryPage = new Dictionary();
-                dictionaryPage.Title = "Diccionario";
-                dictionaryPage.Icon = "dictionaryIcon.png";
+                //var dictionaryPage = new Dictionary();
+                //dictionaryPage.Title = "Diccionario";
+                //dictionaryPage.Icon = "dictionaryIcon.png";
 
                 Children.Add(identifierNavigation);
                 Children.Add(catalogueNavigation);
-                Children.Add(dictionaryPage);
+                //Children.Add(dictionaryPage);
             }
 
 

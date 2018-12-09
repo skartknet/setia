@@ -4,11 +4,25 @@
              x:Class="Setas.App">
     <Application.Resources>
 
-        <Color x:Key="Color1">#AD7045</Color>
-        <Color x:Key="Color2">#884C3D</Color>
-        <Color x:Key="Color3">#4C1326</Color>
-        <Color x:Key="Color4">#997E81</Color>
-        <Color x:Key="Color5">#D1B794</Color>
+        <Color x:Key="Color1">#ed5b01</Color>
+        <Color x:Key="Color2">#ffaf06</Color>
+        <Color x:Key="Color3">#6b4b00</Color>
+        <Color x:Key="Color4">#ed5b01</Color>
+        <Color x:Key="Color5">#101010</Color>
+
+       
+
+        <Style TargetType="Button">
+            <Setter Property="FontFamily">
+                <OnPlatform x:TypeArguments="x:String" >
+                    <On Platform="Android" Value="LibreBaskerville-Regular.ttf#LibreBaskerville"/>
+                </OnPlatform>
+            </Setter>
+            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource Color2}"/>
+            <Setter Property="BorderRadius" Value="20"/>
+
+        </Style>
 
         <!--Apply Montserrrat to all labels by default-->
         <Style TargetType="Label">
@@ -17,41 +31,53 @@
                     <On Platform="Android" Value="Montserrat-Regular.ttf#Montserrat"/>
                 </OnPlatform>
             </Setter>
+            <Setter Property="TextColor" Value="{StaticResource Color5}"/>
         </Style>
-
-
+        
         <Style x:Key="Heading1" TargetType="Label">
             <Setter Property="FontSize" Value="Large"/>
-            <Setter Property="TextColor" Value="#4C1326" />
+            <Setter Property="TextColor" Value="{StaticResource Color5}" />
             <Setter Property="FontFamily">
                 <OnPlatform x:TypeArguments="x:String" >
-                    <On Platform="Android" Value="LibreBaskerville-Regular.ttf#LibreBaskerville"/>
+                    <On Platform="Android" Value="LibreBaskerville-Bold.ttf#LibreBaskerville"/>
                 </OnPlatform>
             </Setter>
         </Style>
 
         <Style x:Key="Heading2" TargetType="Label" BasedOn="{StaticResource Heading1}">
-            <Setter Property="FontSize" Value="Medium"/>
+            <Setter Property="FontSize" Value="20"/>
         </Style>
 
-        <Style x:Key="Paragraph" TargetType="Label">
-            <Setter Property="Margin" Value="0,0,0,15"/>
-        </Style>
-        
 
-
-
-
-        <Style x:Key="BtnRounded" TargetType="Button">
+        <Style x:Key="EdibleIcon" TargetType="Label">
             <Setter Property="FontFamily">
                 <OnPlatform x:TypeArguments="x:String" >
                     <On Platform="Android" Value="fa-solid.otf#Font Awesome 5 Free Solid"/>
                 </OnPlatform>
             </Setter>
-            <Setter Property="FontSize">42</Setter>
-            <Setter Property="WidthRequest">100</Setter>
-            <Setter Property="HeightRequest">100</Setter>
-            <Setter Property="BorderRadius">50</Setter>
+            <Setter Property="FontSize">28</Setter>
         </Style>
+
+        <Style x:Key="SafeIcon" BasedOn="{StaticResource EdibleIcon}" TargetType="Label">
+            <Setter Property="Text" Value="&#xf00c;"/>
+            <Setter Property="TextColor" Value="Green"/>
+        </Style>
+
+        <Style x:Key="DangerIcon" BasedOn="{StaticResource EdibleIcon}" TargetType="Label">
+            <Setter Property="Text" Value="&#xf714;"/>
+            <Setter Property="TextColor" Value="Tomato"/>
+        </Style>
+
+        <Style x:Key="WarningIcon" BasedOn="{StaticResource EdibleIcon}" TargetType="Label">
+            <Setter Property="Text" Value="&#xf071;"/>
+            <Setter Property="TextColor" Value="Orange"/>
+        </Style>
+
+        <Style x:Key="Paragraph" TargetType="Label">
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="FontSize" Value="Medium"/>
+        </Style>
+        
+
     </Application.Resources>
 </Application>

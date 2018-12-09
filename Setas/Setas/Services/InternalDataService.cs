@@ -1,4 +1,5 @@
 ﻿using Setas.Common.Models;
+using Setas.Models;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,8 @@ namespace Setas.Services
             OpenDatabase();
 
 #if DEBUG
-            Task.Run(async () => await _database.DropTableAsync<MushroomData>()).Wait();
+            //Task.Run(async () => await _database.DropTableAsync<MushroomData>()).Wait();
+            //Task.Run(async ()=>await this.SetContentUpdatedAsync()).Wait();
 #endif
 
 
@@ -111,7 +113,7 @@ namespace Setas.Services
 
         public Task<Configuration> GetConfigurationAsync()
         {
-            return _database.Table<Configuration>().FirstOrDefaultAsync();
+            return _database.Table<ConfigurationData>().FirstOrDefaultAsync();
         }
 
         /// <summary>

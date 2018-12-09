@@ -230,6 +230,7 @@
   <ItemGroup>
     <Compile Include="Binding\CommaDelimitedArrayModelBinder.cs" />
     <Compile Include="Models\Catalogue.generated.cs" />
+    <Compile Include="Models\Data\SiteConfigurationData.cs" />
     <Compile Include="Models\File.generated.cs" />
     <Compile Include="Models\Folder.generated.cs" />
     <Compile Include="Models\Image.generated.cs" />

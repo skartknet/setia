@@ -12,13 +12,16 @@ namespace Setas.Services
     public class ExternalDataService : IExternalDataService
     {
 
-        readonly Uri baseUrl = new Uri(App.ExternalService, "/umbraco/api/");
+        readonly Uri baseUrl = new Uri(App.ExternalService, App.ApiBase);
 
 
         public async Task<IEnumerable<MushroomData>> GetMushroomsAsync()
         {
             using (HttpClient client = new HttpClient())
             {
+                client.Timeout = new TimeSpan(0, 0, 10);
+
+
                 var uri = new Uri(baseUrl, "setas/GetMushrooms");
                 var items = Enumerable.Empty<MushroomData>();
 
@@ -47,6 +50,9 @@ namespace Setas.Services
             Configuration configuration = null;
             using (var client = new HttpClient())
             {
+                client.Timeout = new TimeSpan(0, 0, 10);
+
+
                 var uri = new Uri(baseUrl, "setas/GetConfiguration");
                 try
                 {

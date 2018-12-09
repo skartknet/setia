@@ -17,7 +17,8 @@ namespace Setas
     public partial class App : Application
     {
         public static ImageSource SourceImage { get; set; }
-        public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
+        public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
+        public static string ApiBase = "/umbraco/api/";
 
         public static IInternalDataService DataService { get; set; }
 
@@ -27,11 +28,6 @@ namespace Setas
             DependencyContainer.Register(this);
         }
 
-        private void InitApp()
-        {
-            InitializeComponent();
-            MainPage = new MainPage();
-        }
 
         protected override void OnStart()
         {
@@ -42,22 +38,32 @@ namespace Setas
             InitDatabase();
         }
 
+
+        protected override void OnSleep()
+        {
+            // Handle when your app sleeps
+        }
+
+        protected override void OnResume()
+        {            
+        }
+
         private void InitDatabase()
         {
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
                 if (DataService == null)
                 {
-                    UserDialogs.Instance.Alert("Iniciando base de datos...");
-
-
-                    DataService = scope.Resolve<IInternalDataService>();
-
-                    var syncingService = scope.Resolve<ISyncingDataService>();
+                    //UserDialogs.Instance.Loading("Iniciando base de datos...", null, null, true, MaskType.Clear));
+                 
                     Task.Run(async () =>
                     {
                         try
                         {
+                            DataService = scope.Resolve<IInternalDataService>();
+
+                            var syncingService = scope.Resolve<ISyncingDataService>();
+
                             await syncingService.SyncDataAsync();
                             InitApp();
 
@@ -73,14 +79,15 @@ namespace Setas
             }
         }
 
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
+        
 
-        protected override void OnResume()
+
+        private void InitApp()
         {
-            InitDatabase();
+            UserDialogs.Instance.HideLoading();
+
+            InitializeComponent();
+            MainPage = new MainPage();
         }
     }
 

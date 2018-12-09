@@ -4,35 +4,44 @@
             x:Class="Setas.IdentificationPage"
             xmlns:local="clr-namespace:Setas.ViewModels"
             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-            Title="Identificar Hongo" 
-             Padding="10, 20"
-             BackgroundImage="bg1.jpg">
+            Title="Identificar Hongo"
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.BindingContext>
         <local:IdentificationViewModel/>
     </ContentPage.BindingContext>
-    <StackLayout VerticalOptions="Fill">
-        <StackLayout Orientation="Horizontal"
-                     VerticalOptions="CenterAndExpand"
-                     HorizontalOptions="Center">
-            <Button Text="Hacer foto"
-                    Command="{Binding TakePhoto}"
-                    VerticalOptions="CenterAndExpand"               
-                    android:Button.UseDefaultPadding="true"
-                    android:Button.UseDefaultShadow="true"
-                    IsVisible="{Binding IsTakePhotoSupported}">
-                    
-            </Button>
-            <Button Text="Seleccionar foto"
-                    Command="{Binding PickPhoto}"
-                    VerticalOptions="CenterAndExpand"
-                    android:Button.UseDefaultPadding="true"
-                    android:Button.UseDefaultShadow="true"
-                    IsVisible="{Binding IsPickPhotoSupported}">
-            </Button>
-        </StackLayout>
-        <Label Text="Identificando..." IsVisible="{Binding IsIdentifying}"
+    
+
+    <AbsoluteLayout VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand">
+        <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            Source="bg1.png" Aspect="AspectFill"/>
+        <StackLayout Padding="20,10" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+            <Label Text="Analizar Imagen" Style="{StaticResource Heading1}" HorizontalOptions="Center" Margin="10,0"/>
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Button Text="Hacer foto"
+                        Command="{Binding TakePhoto}"
+                        VerticalOptions="CenterAndExpand"               
+                        android:Button.UseDefaultPadding="true"
+                        android:Button.UseDefaultShadow="true"
+                        IsVisible="{Binding IsTakePhotoSupported}"                        
+                        HeightRequest="100"
+                        Opacity="0.9"                        >
+
+                </Button>
+                <Button Text="Seleccionar foto"
+                        Command="{Binding PickPhoto}"
+                        VerticalOptions="CenterAndExpand"
+                        android:Button.UseDefaultPadding="true"
+                        android:Button.UseDefaultShadow="true"
+                        IsVisible="{Binding IsPickPhotoSupported}"                         
+                        HeightRequest="100"
+                        Opacity="0.9">
+                </Button>
+            </StackLayout>
+            <Label Text="Identificando..." IsVisible="{Binding IsIdentifying}"
                HorizontalOptions="Center"
                VerticalOptions="StartAndExpand"/>
 
-    </StackLayout>
+        </StackLayout>
+    </AbsoluteLayout>
 </ContentPage>

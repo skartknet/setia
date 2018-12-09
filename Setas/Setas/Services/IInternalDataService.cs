@@ -10,6 +10,11 @@ namespace Setas.Services
         Task<MushroomData> GetMushroomAsync(int id);
         Task<Configuration> GetConfigurationAsync();
         Task InsertMushroomsAsync(IEnumerable<MushroomData> sourceItems);
+
+        /// <summary>
+        /// Sets the content updated date to Now
+        /// </summary>
+        /// <returns></returns>
         Task SetContentUpdatedAsync();
     }
 }

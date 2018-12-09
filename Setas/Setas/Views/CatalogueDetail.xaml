@@ -10,22 +10,43 @@
                       SelectionMode="None"
                       ItemTapped="ListView_ItemTapped"
                       IsPullToRefreshEnabled="False"
-                      x:Name="DetailsList">
+                      x:Name="DetailsList"
+                    HasUnevenRows="True">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Padding="10, 10"
-                                        Orientation="Horizontal">
+                        
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="5" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
                             <Image  HeightRequest="55"
                                         WidthRequest="75"
                                         Source="{Binding ImageSource}"
-                                        Aspect="AspectFill"/>
-                            <StackLayout Spacing="0">
-                                <Label Text="{Binding Name}" Style="{StaticResource Heading1}" />
-                                <Label Text="{Binding Name}" FontSize="10" TextColor="Black" />
-                            </StackLayout>
-                        </StackLayout>
+                                        Aspect="AspectFill"
+                                        Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" />
+
+                            <Label Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" VerticalOptions="StartAndExpand" Text="{Binding Name}" Style="{StaticResource Heading1}" />
+                            <Label  Grid.Row="2" Grid.Column="2" Text="{Binding Name}" VerticalOptions="Start"  />
+                            
+                            <Label  Grid.Row="3" Grid.Column="2"  Text="{Binding CookingInterest}" VerticalOptions="CenterAndExpand"/>
+
+                            <Label  Grid.Row="2" Grid.Column="3" Grid.RowSpan="2"  Style="{StaticResource DangerIcon}"
+                                    VerticalOptions="CenterAndExpand"
+                                    HorizontalOptions="End" />
+                          
+                        </Grid>
+
+
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

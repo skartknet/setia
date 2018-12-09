@@ -1,4 +1,5 @@
 ﻿using Setas.Common.Models;
+using Setas.Website.Core.Models.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,17 +24,17 @@ namespace Setas.Website
         {
             //TODO: move this to a service
             var database = ApplicationContext.Current.DatabaseContext.Database;
-            var config = database.FirstOrDefault<Configuration>(new Sql().Select("*").From("SetasConfiguration"));
+            var config = database.FirstOrDefault<SiteConfigurationData>(new Sql().Select("*").From("SetasConfiguration").Where("alias = 'LatestContentUpdate'"));
             if (config == null)
             {
-                database.Insert("SetasConfiguration", "Id", new Configuration
+                database.Insert("SetasConfiguration", "Id", new SiteConfigurationData
                 {
-                    LatestContentUpdate = DateTime.UtcNow
+                    Value = DateTime.UtcNow.ToString()
                 });
             }
             else
             {
-                config.LatestContentUpdate = DateTime.UtcNow;
+                config.Value = DateTime.UtcNow.ToString();
                 database.Update("SetasConfiguration", "Id", config);
             }
         }

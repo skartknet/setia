@@ -12,10 +12,10 @@ namespace Setas.Services
         private IInternalDataService _target { get; }
 
         //stores the date time when the external db was updated.
-        private DateTime? _lastContentUpdate;
+        private DateTime? _externalContentUpdatedOn;
 
         //stores the date time when the internal db was updated.
-        private DateTime? _lastContentSync;
+        private DateTime? _internalContentUpdatedOn;
 
         public SyncingDataService(IExternalDataService source, IInternalDataService target)
         {
@@ -36,9 +36,9 @@ namespace Setas.Services
             catch
             { }
 
-            _lastContentSync = intConfiguration?.LatestContentUpdate;
+            _internalContentUpdatedOn = intConfiguration?.LatestContentUpdate;
 
-            if (_lastContentSync == null || !_lastContentSync.HasValue)
+            if (_internalContentUpdatedOn == null || !_internalContentUpdatedOn.HasValue)
             {
                 try
                 {
@@ -56,7 +56,7 @@ namespace Setas.Services
                 {
                     await UpdateContent();
                 }
-                catch { Crashes.TrackError(new Exception("Error getting external configuration")); }
+                catch { Crashes.TrackError(new Exception("Error updating content.")); }
             }
         }
 
@@ -66,6 +66,7 @@ namespace Setas.Services
 
             var sourceItems = await _source.GetMushroomsAsync();
             await _target.InsertMushroomsAsync(sourceItems);
+            await _target.SetContentUpdatedAsync();
 
         }
 
@@ -78,7 +79,7 @@ namespace Setas.Services
 
                 if (extConfiguration != null)
                 {
-                    _lastContentUpdate = extConfiguration.LatestContentUpdate;
+                    _externalContentUpdatedOn = extConfiguration.LatestContentUpdate;
                 }
             }
             catch (Exception ex)
@@ -87,7 +88,7 @@ namespace Setas.Services
             }
 
             //we update
-            if (_lastContentUpdate > _lastContentSync)
+            if (_externalContentUpdatedOn.HasValue && _externalContentUpdatedOn > _internalContentUpdatedOn)
             {
                 //Internal DB out of date
 
