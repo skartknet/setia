@@ -3,6 +3,7 @@ using Setas.Common.Enums;
 using Setas.Common.Models;
 using Setas.Core.Binding;
 using Setas.Core.Models;
+using Setas.Website.Core.Models.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +83,7 @@ namespace Setas.Website.Api
         {
             var database = DatabaseContext.Database;
 
-            var config = database.FirstOrDefault<Configuration>(new Sql().Select("*").From("SetasConfiguration"));
+            var config = database.FirstOrDefault<ConfigurationData>(new Sql().Select("*").From(Setas.Website.Core.Constants.ConfigurationTableName));
 
             return Request.CreateResponse(config);
         }

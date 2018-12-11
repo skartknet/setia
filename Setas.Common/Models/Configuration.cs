@@ -9,6 +9,6 @@ namespace Setas.Common.Models
     
     public class Configuration
     {
-        public DateTime LatestContentUpdate { get; set; }
+        public DateTime? LatestContentUpdate { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Setas.Common.Models;
+using Setas.Enums;
 using System;
 
 namespace Setas.Models
@@ -31,7 +32,7 @@ namespace Setas.Models
                 return image;
             }
         }
-        public string EdibleOverview
+        public EdibleTopClassEnum EdibleOverview
         {
             get
             {
@@ -40,19 +41,51 @@ namespace Setas.Models
                     case Common.Enums.Edible.BuenComestible:
                     case Common.Enums.Edible.ComestibleBajaCalidad:
                     case Common.Enums.Edible.ComestibleCalidadMedia:
-                        return "Comestible";
+                        return EdibleTopClassEnum.Safe;
                     case Common.Enums.Edible.Toxica:
-                        return "Toxica";
+                        return EdibleTopClassEnum.Toxic;
                     case Common.Enums.Edible.SinInteres:
-                        return "Sin interes";
+                        return EdibleTopClassEnum.NoInterest;
                     case Common.Enums.Edible.PosibleToxico:
                     case Common.Enums.Edible.ComestibleConPrecaucion:
                     case Common.Enums.Edible.ComestiblePeroPeligrosa:
                     case Common.Enums.Edible.NoComestible:
-                        return "Precaucion";
+                        return EdibleTopClassEnum.Warning;
                     default:
-                        return String.Empty;
+                        return EdibleTopClassEnum.Warning;
                 }
+            }
+        }
+
+        public bool IsToxic
+        {
+            get
+            {
+                return EdibleOverview == EdibleTopClassEnum.Toxic;
+            }
+        }
+
+        public bool IsNoInterest
+        {
+            get
+            {
+                return EdibleOverview == EdibleTopClassEnum.NoInterest;
+            }
+        }
+
+        public bool IsSafe
+        {
+            get
+            {
+                return EdibleOverview == EdibleTopClassEnum.Safe;
+            }
+        }
+
+        public bool IsWarning
+        {
+            get
+            {
+                return EdibleOverview == EdibleTopClassEnum.Warning;
             }
         }
     }

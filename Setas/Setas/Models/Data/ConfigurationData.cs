@@ -1,12 +1,12 @@
 ﻿
 using SQLite;
 
-namespace Setas.Website.Core.Models.Data
+namespace Setas.Models.Data
 {
     [Table("Configuration")]
-    public class SiteConfigurationData
+    public class ConfigurationData
     {
-        [PrimaryKey, AutoIncrement)]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Alias { get; set; }
         public string Value { get; set; }

@@ -1,5 +1,8 @@
-﻿using Setas.Common.Models;
-using Setas.Models;
+﻿using Acr.UserDialogs;
+using Microsoft.AppCenter.Crashes;
+using Setas.Common;
+using Setas.Common.Models;
+using Setas.Models.Data;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -21,22 +24,19 @@ namespace Setas.Services
 
         public InternalDataService()
         {
-
-            OpenDatabase();
+            if (_database == null)
+            {
+                OpenDatabase();
+            }
 
 #if DEBUG
-            //Task.Run(async () => await _database.DropTableAsync<MushroomData>()).Wait();
-            //Task.Run(async ()=>await this.SetContentUpdatedAsync()).Wait();
+            //File.Delete(DBPATH);      
+            
 #endif
 
-
-
-            var dataTable = _database.GetTableInfoAsync("Mushroom").Result;
-            if (dataTable.Count == 0)
-            {
-                CreateDatabaseStructure();
-            }
+            CreateDatabaseStructure();
         }
+
 
         private void OpenDatabase()
         {
@@ -46,7 +46,10 @@ namespace Setas.Services
             }
             catch (Exception ex)
             {
+                Crashes.TrackError(ex);
+                UserDialogs.Instance.Alert("Error creating database");
                 throw new Exception("Error creating Database", ex);
+
             }
         }
 
@@ -56,7 +59,18 @@ namespace Setas.Services
             try
             {
                 _database.CreateTableAsync<MushroomData>().Wait();
-                _database.CreateTableAsync<Configuration>().Wait();
+                _database.CreateTableAsync<ConfigurationData>().Wait();
+
+                var configElements = new List<ConfigurationData>()
+                {
+                    new ConfigurationData
+                    {
+                        Alias = Constants.ContentUpdatedPropertyAlias,
+                        Value = null
+                    }
+                };
+
+                _database.InsertAllAsync(configElements);
             }
             catch (Exception ex)
             {
@@ -64,9 +78,6 @@ namespace Setas.Services
             }
 
         }
-
-
-
 
         public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params int[] ids)
         {
@@ -111,10 +122,34 @@ namespace Setas.Services
             return _database.InsertOrReplaceAsync(item);
         }
 
-        public Task<Configuration> GetConfigurationAsync()
+        public async Task<Configuration> GetConfigurationAsync()
         {
-            return _database.Table<ConfigurationData>().FirstOrDefaultAsync();
+            var config = new Configuration();
+            try
+            {
+                var data = await _database.Table<ConfigurationData>().ToListAsync();
+                if (DateTime.TryParse(data.FirstOrDefault(r => r.Alias == Constants.ContentUpdatedPropertyAlias).Value.ToString(), out DateTime _lastUpdate))
+                {
+                    config.LatestContentUpdate = _lastUpdate;
+                }
+            }
+            catch
+            {
+                //table empty
+            }
+
+            return config;
         }
+
+
+        private async Task<IEnumerable<ConfigurationData>> GetConfigurationDataAsync()
+        {
+            var data = await _database.Table<ConfigurationData>().ToListAsync();
+            return data;
+        }
+
+
+
 
         /// <summary>
         /// Sets the Lastest Updated Content Datetime to now
@@ -122,20 +157,27 @@ namespace Setas.Services
         /// <returns></returns>
         public async Task SetContentUpdatedAsync()
         {
-            Configuration config = await GetConfigurationAsync();
-            if (config != null)
+            var config = await GetConfigurationDataAsync();
+            var lstUpdateData = config.FirstOrDefault(n => n.Alias == Constants.ContentUpdatedPropertyAlias);
+
+
+            if (lstUpdateData != null)
             {
-                config.LatestContentUpdate = DateTime.UtcNow;
+                lstUpdateData.Value = DateTime.UtcNow.ToString();
+                await _database.InsertOrReplaceAsync(lstUpdateData);
+
             }
             else
             {
-                config = new Configuration()
+                ConfigurationData d = new ConfigurationData
                 {
-                    LatestContentUpdate = DateTime.UtcNow
+                    Alias = Constants.ContentUpdatedPropertyAlias,
+                    Value = DateTime.UtcNow.ToString()
                 };
+                await _database.InsertOrReplaceAsync(d);
+
             }
 
-            await _database.InsertOrReplaceAsync(config);
         }
     }
 }

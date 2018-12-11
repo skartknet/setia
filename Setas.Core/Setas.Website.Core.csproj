@@ -229,6 +229,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\CommaDelimitedArrayModelBinder.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Models\Catalogue.generated.cs" />
     <Compile Include="Models\Data\SiteConfigurationData.cs" />
     <Compile Include="Models\File.generated.cs" />

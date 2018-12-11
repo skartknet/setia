@@ -1,6 +1,7 @@
 ﻿using Setas.Common.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Setas.Models.Data;
 
 namespace Setas.Services
 {

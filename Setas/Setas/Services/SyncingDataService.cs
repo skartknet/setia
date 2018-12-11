@@ -8,19 +8,16 @@ namespace Setas.Services
 {
     class SyncingDataService : ISyncingDataService
     {
-        private IExternalDataService _source { get; }
-        private IInternalDataService _target { get; }
+        private IExternalDataService _remoteStorage { get; }
+        private IInternalDataService _localStorage { get; }
 
-        //stores the date time when the external db was updated.
-        private DateTime? _externalContentUpdatedOn;
-
-        //stores the date time when the internal db was updated.
-        private DateTime? _internalContentUpdatedOn;
+        //TODO: move configData to static App property
+        private Configuration _localConfig;
 
         public SyncingDataService(IExternalDataService source, IInternalDataService target)
         {
-            _source = source;
-            _target = target;
+            _remoteStorage = source;
+            _localStorage = target;
         }
 
         /// <summary>
@@ -28,35 +25,34 @@ namespace Setas.Services
         /// </summary>
         public async Task SyncDataAsync()
         {
-            Configuration intConfiguration = null;
             try
             {
-                intConfiguration = await _target.GetConfigurationAsync();
-            }
-            catch
-            { }
+                _localConfig = await _localStorage.GetConfigurationAsync();
 
-            _internalContentUpdatedOn = intConfiguration?.LatestContentUpdate;
-
-            if (_internalContentUpdatedOn == null || !_internalContentUpdatedOn.HasValue)
-            {
-                try
+                if (_localConfig.LatestContentUpdate == null || !_localConfig.LatestContentUpdate.HasValue)
                 {
-                    await InitContent();
+                    try
+                    {
+                        await InitContent();
+                    }
+                    catch (Exception ex)
+                    {
+                        Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
+                        throw ex;
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
-                    throw ex;
+                    try
+                    {
+                        await UpdateContent();
+                    }
+                    catch { Crashes.TrackError(new Exception("Error updating content.")); }
                 }
             }
-            else
+            catch(Exception ex)
             {
-                try
-                {
-                    await UpdateContent();
-                }
-                catch { Crashes.TrackError(new Exception("Error updating content.")); }
+                Crashes.TrackError(new Exception("Error retrieving configuration."));
             }
         }
 
@@ -64,45 +60,34 @@ namespace Setas.Services
         private async Task InitContent()
         {
 
-            var sourceItems = await _source.GetMushroomsAsync();
-            await _target.InsertMushroomsAsync(sourceItems);
-            await _target.SetContentUpdatedAsync();
+            var sourceItems = await _remoteStorage.GetMushroomsAsync();
+            await _localStorage.InsertMushroomsAsync(sourceItems);
+            await _localStorage.SetContentUpdatedAsync();
 
         }
 
         private async Task UpdateContent()
         {
-            try
-            {
-                //get external configuration
-                var extConfiguration = await _source.GetConfigurationAsync();
+            //if the sync period hasn't been reached we don't sync.
+            if (_localConfig.LatestContentUpdate.Value.Add(App.SyncPeriod) < DateTime.Today) return;
 
-                if (extConfiguration != null)
-                {
-                    _externalContentUpdatedOn = extConfiguration.LatestContentUpdate;
-                }
-            }
-            catch (Exception ex)
-            {
-                Crashes.TrackError(new Exception("Error getting external configuration", ex));
-            }
+            var extConfig = await _remoteStorage.GetConfigurationAsync();
 
             //we update
-            if (_externalContentUpdatedOn.HasValue && _externalContentUpdatedOn > _internalContentUpdatedOn)
+            if (_localConfig.LatestContentUpdate.HasValue && extConfig.LatestContentUpdate.Value > _localConfig.LatestContentUpdate.Value)
             {
                 //Internal DB out of date
-
                 try
                 {
-                    var sourceItems = await _source.GetMushroomsAsync();
-                    await _target.InsertMushroomsAsync(sourceItems);
-                    await _target.SetContentUpdatedAsync();
+                    var sourceItems = await _remoteStorage.GetMushroomsAsync();
+                    await _localStorage.InsertMushroomsAsync(sourceItems);
+                    await _localStorage.SetContentUpdatedAsync();
                 }
                 catch (Exception ex)
                 {
                     Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "updating db" } });
                 }
             }
-        }
+        }    
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="Models\Mushroom.cs" />
     <Compile Include="Models\SearchOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetiaConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
