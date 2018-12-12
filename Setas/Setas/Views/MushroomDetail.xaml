@@ -11,30 +11,15 @@
     <ContentPage.Content>
         <ScrollView>
         <StackLayout BindingContext="{Binding Mushroom}">
-            <StackLayout Orientation="Horizontal">
-                <Image  HeightRequest="125"
-                            WidthRequest="125"
-                            Source="{Binding ImageSource}"
-                            Aspect="AspectFill"/>
-                                                   
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                
-                    <Label Text="Nombre popular" Grid.Row="0" Grid.Column="0"/>
-                    <Label Text="{Binding Name}" Grid.Row="0" Grid.Column="1"/>
-                    <Label Text="Interes Gastronomico" Grid.Row="1" Grid.Column="0"/>
-                    <Label Text="{Binding Name}" Grid.Row="1" Grid.Column="1"/>
-                </Grid>
-            </StackLayout>
+            <Label Text="{Binding Name}" Style="{StaticResource Heading1}" />
+            <Image  HeightRequest="125"
+                        WidthRequest="125"
+                        Source="{Binding ImageSource}"
+                        Aspect="AspectFill"/>
 
-                
+            <Label Text="Interés Gastronómico" Style="{StaticResource Heading2}"/>
+                <Label Text="{Binding EdibleAsReadableString}" Style="{StaticResource Paragraph}"/>
+            
             
             <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
             <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>

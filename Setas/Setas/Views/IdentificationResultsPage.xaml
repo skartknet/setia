@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Setas.IdentificationResultsPage"                  
              xmlns:models="clr-namespace:Setas.ViewModels"
-             Title="Result"
+             Title="Resultado"
              Padding="10">
 
     <ContentPage.BindingContext>
@@ -22,44 +22,6 @@
                                           CommandParameter="{Binding FirstResult.Mushroom}"/>
                 </StackLayout.GestureRecognizers>
 
-
-                <!--<Grid VerticalOptions="StartAndExpand" BackgroundColor="Blue">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Image Grid.Column="0" Grid.Row="0"
-                                HeightRequest="95"
-                                WidthRequest="95"                       
-                                Source="{Binding FirstResult.Mushroom.ImageSource}"
-                                Aspect="AspectFill">
-                        </Image>
-                        <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}" BackgroundColor="Black">
-                                    <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
-                                    <Label Text="{Binding Mushroom.CookingInterest}" FontSize="14" TextColor="White" />
-                        </StackLayout>
-                          <StackLayout Grid.Column="2" Grid.Row="0" VerticalOptions="Center" BindingContext="{Binding FirstResult}">
-                            <Label  Style="{StaticResource DangerIcon}"
-                                                    VerticalOptions="StartAndExpand"
-                                                    HorizontalOptions="End"
-                                                    IsVisible="{Binding Mushroom.IsToxic}"/>
-                            <Label  Style="{StaticResource WarningIcon}"
-                                                    VerticalOptions="StartAndExpand"
-                                                    HorizontalOptions="End"
-                                                    IsVisible="{Binding Mushroom.IsWarning}"/>
-                            <Label  Style="{StaticResource SafeIcon}"
-                                                    VerticalOptions="StartAndExpand"
-                                                    HorizontalOptions="End"
-                                                    IsVisible="{Binding Mushroom.IsSafe}"/>
-                            <Label Text="Probabilidad" FontSize="10" TextColor="White" HorizontalOptions="End" LineBreakMode="NoWrap" />
-                            <Label Text="{Binding ProbabilityAsPercentage}" FontSize="27"  TextColor="White" HorizontalOptions="End" LineBreakMode="NoWrap"/>
-                        </StackLayout>
-                </Grid>-->
-
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="95"/>
@@ -77,7 +39,8 @@
                     </Image>
                     <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}">
                         <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
-                        <Label Text="{Binding Mushroom.CookingInterest}" FontSize="14" TextColor="White" />
+                        <Label  Text="Interés Gastronómico:" VerticalOptions="CenterAndExpand"/>
+                        <Label Text="{Binding Mushroom.EdibleAsReadableString}" FontSize="14" TextColor="White" />
                     </StackLayout>
                     <StackLayout Grid.Column="2" Grid.Row="0" BindingContext="{Binding FirstResult}">
                         <Label  Style="{StaticResource DangerIcon}"

@@ -38,7 +38,10 @@
 
                             <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalOptions="StartAndExpand" Text="{Binding Name}" Style="{StaticResource Heading1}" />
 
-                            <Label  Grid.Row="2" Grid.Column="1"  Text="{Binding CookingInterest}" VerticalOptions="CenterAndExpand"/>
+                            <StackLayout Grid.Row="2" Grid.Column="1" >
+                                <Label   Text="Interés Gastronómico:" VerticalOptions="CenterAndExpand"/>
+                                <Label   Text="{Binding EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
+                            </StackLayout>
 
                             <Label  Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"  Style="{StaticResource DangerIcon}"
                                     HorizontalOptions="End"

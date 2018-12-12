@@ -57,6 +57,38 @@ namespace Setas.Models
             }
         }
 
+
+        public string EdibleAsReadableString
+        {
+            get
+            {
+
+                switch (CookingInterest)
+                {
+                    case Common.Enums.Edible.BuenComestible:
+                        return "Comestible";                        
+                    case Common.Enums.Edible.ComestibleBajaCalidad:
+                        return "Comestible Baja Calidad";                        
+                    case Common.Enums.Edible.ComestibleCalidadMedia:
+                        return "Comestible Calidad Media";
+                    case Common.Enums.Edible.Toxica:
+                        return "Tóxica";
+                    case Common.Enums.Edible.SinInteres:
+                        return "Sin Interés";
+                    case Common.Enums.Edible.PosibleToxico:
+                        return "Posible Tóxica";
+                    case Common.Enums.Edible.ComestibleConPrecaucion:
+                        return "Comestible con Precaución";
+                    case Common.Enums.Edible.ComestiblePeroPeligrosa:
+                        return "Comestible pero peligrosa";
+                    case Common.Enums.Edible.NoComestible:
+                        return "No comestible";
+                    default:
+                        return "Desconocido";
+                }
+            }
+        }
+
         public bool IsToxic
         {
             get
