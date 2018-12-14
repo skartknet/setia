@@ -4,7 +4,8 @@
              x:Class="Setas.IdentificationResultsPage"                  
              xmlns:models="clr-namespace:Setas.ViewModels"
              Title="Resultado"
-             Padding="10">
+             Padding="10"
+             BackgroundColor="{StaticResource Color6}">
 
     <ContentPage.BindingContext>
         <models:ResultsViewModel/>
@@ -15,53 +16,60 @@
 
             <Label Text="Resultado" Style="{StaticResource Heading1}"/>
 
-            <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
+                <Frame CornerRadius="5" 
+               HorizontalOptions="Center" 
+               VerticalOptions="Start"
+               HasShadow="True"
+               Padding="0">
+                <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
                          Orientation="Horizontal">
-                <StackLayout.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding NavToItemDetailsCommand}"
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NavToItemDetailsCommand}"
                                           CommandParameter="{Binding FirstResult.Mushroom}"/>
-                </StackLayout.GestureRecognizers>
+                    </StackLayout.GestureRecognizers>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="95"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Image Grid.Column="0" Grid.Row="0"
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="95"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Column="0" Grid.Row="0"
                                 HeightRequest="95"
                                 WidthRequest="95"                       
                                 Source="{Binding FirstResult.Mushroom.ImageSource}"
                                 Aspect="AspectFill">
-                    </Image>
-                    <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}">
-                        <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
-                        <Label  Text="Interés Gastronómico:" VerticalOptions="CenterAndExpand"/>
-                        <Label Text="{Binding Mushroom.EdibleAsReadableString}" FontSize="14" TextColor="White" />
-                    </StackLayout>
-                    <StackLayout Grid.Column="2" Grid.Row="0" BindingContext="{Binding FirstResult}">
-                        <Label  Style="{StaticResource DangerIcon}"
-                                                    VerticalOptions="StartAndExpand"
-                                                    HorizontalOptions="End"
-                                                    IsVisible="{Binding Mushroom.IsToxic}"/>
-                        <Label  Style="{StaticResource WarningIcon}"
-                                                    VerticalOptions="StartAndExpand"
-                                                    HorizontalOptions="End"
-                                                    IsVisible="{Binding Mushroom.IsWarning}"/>
-                        <Label  Style="{StaticResource SafeIcon}"
-                                                    VerticalOptions="StartAndExpand"
-                                                    HorizontalOptions="End"
-                                                    IsVisible="{Binding Mushroom.IsSafe}"/>
-                        <Label Text="Probabilidad:" FontSize="12" TextColor="White" HorizontalOptions="End" />
-                        <Label Text="{Binding ProbabilityAsPercentage}" FontSize="27"  TextColor="White" HorizontalOptions="End"  />
-                    </StackLayout>
-                </Grid>
-            </StackLayout>
+                        </Image>
 
-            <!--Secondary results-->
+                        <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}">
+                            <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
+                            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                                <Label  Style="{StaticResource DangerIcon}"
+                                                        VerticalOptions="StartAndExpand"
+                                                        HorizontalOptions="End"
+                                                        IsVisible="{Binding Mushroom.IsToxic}"/>
+                                <Label  Style="{StaticResource WarningIcon}"
+                                                        VerticalOptions="StartAndExpand"
+                                                        HorizontalOptions="End"
+                                                        IsVisible="{Binding Mushroom.IsWarning}"/>
+                                <Label  Style="{StaticResource SafeIcon}"
+                                                        VerticalOptions="StartAndExpand"
+                                                        HorizontalOptions="End"
+                                                        IsVisible="{Binding Mushroom.IsSafe}"/>
+                                <Label Text="{Binding Mushroom.EdibleAsReadableString}" FontSize="14" TextColor="White" />
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Grid.Column="2" Grid.Row="0" BindingContext="{Binding FirstResult}" VerticalOptions="CenterAndExpand">
+                            <Label Text="Probabilidad:" FontSize="12" TextColor="White" HorizontalOptions="End" />
+                            <Label Text="{Binding ProbabilityAsPercentage}" FontSize="27"  TextColor="White" HorizontalOptions="End"  />
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+                </Frame>
+                <!--Secondary results-->
             <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}" FontSize="24" Margin="0,20,0,0"/>
             <ListView SeparatorColor="{StaticResource Color4}"
                       RowHeight="100"
@@ -81,25 +89,27 @@
                                         Aspect="AspectFill"/>
                                 <StackLayout Spacing="0" HorizontalOptions="StartAndExpand">
                                     <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading2}" />
-                                    <Label  Text="{Binding Mushroom.CookingInterest}" VerticalOptions="CenterAndExpand"/>
+                                    <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                                        <Label  Style="{StaticResource DangerIcon}"
+                                                VerticalOptions="Start"
+                                                HorizontalOptions="End"
+                                                IsVisible="{Binding Mushroom.IsToxic}"/>
+                                        <Label  Style="{StaticResource WarningIcon}"
+                                                VerticalOptions="Start"
+                                                HorizontalOptions="End"
+                                                IsVisible="{Binding Mushroom.IsWarning}"/>
+                                        <Label  Style="{StaticResource SafeIcon}"
+                                                VerticalOptions="Start"
+                                                HorizontalOptions="End"
+                                                IsVisible="{Binding Mushroom.IsSafe}"/>
+                                        <Label  Text="{Binding Mushroom.CookingInterest}" VerticalOptions="CenterAndExpand"/>
+                                    </StackLayout>
                                 </StackLayout>
                                 <StackLayout VerticalOptions="CenterAndExpand" 
                                              HorizontalOptions="End"
                                              Spacing="0">
-                                    <Label  Style="{StaticResource DangerIcon}"
-                                            VerticalOptions="Start"
-                                            HorizontalOptions="End"
-                                            IsVisible="{Binding Mushroom.IsToxic}"/>
-                                    <Label  Style="{StaticResource WarningIcon}"
-                                            VerticalOptions="Start"
-                                            HorizontalOptions="End"
-                                            IsVisible="{Binding Mushroom.IsWarning}"/>
-                                    <Label  Style="{StaticResource SafeIcon}"
-                                            VerticalOptions="Start"
-                                            HorizontalOptions="End"
-                                            IsVisible="{Binding Mushroom.IsSafe}"/>
-                                    <Label Text="Probabilidad" FontSize="10" VerticalOptions="End"/>
-                                    <Label Text="{Binding ProbabilityAsPercentage}" FontSize="16" 
+                                    <Label Text="Probabilidad" FontSize="12" VerticalOptions="End"/>
+                                    <Label Text="{Binding ProbabilityAsPercentage}" FontSize="18" 
                                             HorizontalOptions="End"
                                            VerticalOptions="End"/>
                                 </StackLayout>

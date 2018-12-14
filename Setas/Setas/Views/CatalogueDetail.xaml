@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Setas.Views.CatalogueDetail"
              Title="Catálogo"
-             xmlns:localenums="clr-namespace:Setas.Enums">
+             xmlns:localenums="clr-namespace:Setas.Enums"
+             BackgroundColor="{StaticResource Color6}">
  
     <StackLayout Padding="10">
         <ListView SeparatorColor="{StaticResource Color4}"                      
@@ -26,7 +27,6 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="75"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
 
                             <Image  HeightRequest="75"
@@ -38,23 +38,22 @@
 
                             <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalOptions="StartAndExpand" Text="{Binding Name}" Style="{StaticResource Heading1}" />
 
-                            <StackLayout Grid.Row="2" Grid.Column="1" >
-                                <Label   Text="Interés Gastronómico:" VerticalOptions="CenterAndExpand"/>
-                                <Label   Text="{Binding EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
-                            </StackLayout>
-
-                            <Label  Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"  Style="{StaticResource DangerIcon}"
+                            <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >
+                                <Label     Style="{StaticResource DangerIcon}"
                                     HorizontalOptions="End"
                                     VerticalOptions="Center"
                                     IsVisible="{Binding IsToxic}"/>
-                            <Label  Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"  Style="{StaticResource WarningIcon}"
+                                <Label   Style="{StaticResource WarningIcon}"
                                     HorizontalOptions="End"
                                     VerticalOptions="Center"
                                     IsVisible="{Binding IsWarning}"/>
-                            <Label  Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"  Style="{StaticResource SafeIcon}"
+                                <Label   Style="{StaticResource SafeIcon}"
                                     HorizontalOptions="End"
                                     VerticalOptions="Center"
                                     IsVisible="{Binding IsSafe}"/>
+                                <Label   Text="{Binding EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
+                            </StackLayout>
+             
                         </Grid>
 
 

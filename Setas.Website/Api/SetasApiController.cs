@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.ModelBinding;
+using Umbraco.Core.Models;
 using Umbraco.Core.Persistence;
 using Umbraco.Web;
 using Umbraco.Web.WebApi;
@@ -21,33 +22,34 @@ namespace Setas.Website.Api
 {
     public class SetasController : UmbracoApiController
     {
-        public HttpResponseMessage GetMushrooms([ModelBinder(typeof(CommaDelimitedArrayModelBinder))] int[] ids, Edible? edible = null)
+        public HttpResponseMessage GetMushrooms([ModelBinder(typeof(CommaDelimitedArrayModelBinder))] int[] ids, DateTime? modifiedSince)
         {
 
             var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
 
-            var items = Enumerable.Empty<CoreModels.Mushroom>();
+            var items = Enumerable.Empty<IPublishedContent>();
 
             if (ids != null && ids.Any())
             {
-                items = catalogue.Children(n => ids.Contains(n.Id)).OfType<CoreModels.Mushroom>();
+                items = catalogue.Children(n => ids.Contains(n.Id));
             }
             else
             {
-                items = catalogue.Children().OfType<CoreModels.Mushroom>();
+                items = catalogue.Children();
             }
 
-            if (edible != null)
+            if (modifiedSince.HasValue)
             {
-                items = items.Where(m => ((Edible)m.CookingInterest.SavedValue) == edible);
+                items = items.Where(i => i.UpdateDate >= modifiedSince);
             }
+
 
 
             IEnumerable<ApiModels.MushroomData> itemsMapped = null;
-
+            var mush = items.OfType<Mushroom>();
             try
             {
-                itemsMapped = Mapper.Map<IEnumerable<ApiModels.MushroomData>>(items);
+                itemsMapped = Mapper.Map<IEnumerable<ApiModels.MushroomData>>(mush);
             }
             catch (Exception ex)
             {
@@ -83,9 +85,16 @@ namespace Setas.Website.Api
         {
             var database = DatabaseContext.Database;
 
-            var config = database.FirstOrDefault<ConfigurationData>(new Sql().Select("*").From(Setas.Website.Core.Constants.ConfigurationTableName));
+            var configData = database.Fetch<ConfigurationData>(new Sql().Select("*").From(Setas.Website.Core.Constants.ConfigurationTableName));
 
-            return Request.CreateResponse(config);
+           DateTime.TryParse(configData.FirstOrDefault(n => n.Alias == Setas.Common.Constants.LatestContentUpdatePropertyAlias)?.Value, out DateTime lastestUpdate);
+
+            var configModel = new Configuration
+            {
+                LatestContentUpdate = lastestUpdate
+            };
+
+            return Request.CreateResponse(configModel);
         }
     }
 }

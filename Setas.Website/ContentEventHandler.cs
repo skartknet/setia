@@ -20,12 +20,12 @@ namespace Setas.Website
         {
             //TODO: move this to a service
             var database = ApplicationContext.Current.DatabaseContext.Database;
-            var config = database.FirstOrDefault<ConfigurationData>(new Sql().Select("*").From(Setas.Website.Core.Constants.ConfigurationTableName).Where($"alias = '{Common.Constants.ContentUpdatedPropertyAlias}'"));
+            var config = database.FirstOrDefault<ConfigurationData>(new Sql().Select("*").From(Setas.Website.Core.Constants.ConfigurationTableName).Where($"alias = '{Common.Constants.LatestContentUpdatePropertyAlias}'"));
             if (config == null)
             {
                 database.Insert(new ConfigurationData
                 {
-                    Alias = Common.Constants.ContentUpdatedPropertyAlias,
+                    Alias = Common.Constants.LatestContentUpdatePropertyAlias,
                     Value = DateTime.UtcNow.ToString()
                 });
             }

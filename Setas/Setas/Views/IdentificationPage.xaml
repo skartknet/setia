@@ -17,7 +17,7 @@
             Source="bg1.png" Aspect="AspectFill"/>
         <StackLayout Padding="20,10" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
             <Label Text="Analizar Imagen" Style="{StaticResource Heading1}" HorizontalOptions="Center" Margin="10,0"/>
-            <StackLayout VerticalOptions="CenterAndExpand">
+            <StackLayout VerticalOptions="CenterAndExpand" IsVisible="{Binding IsNotIdentifying}">
                 <Button Text="Hacer foto"
                         Command="{Binding TakePhoto}"
                         VerticalOptions="CenterAndExpand"               

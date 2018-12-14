@@ -9,8 +9,12 @@
         <Color x:Key="Color3">#6b4b00</Color>
         <Color x:Key="Color4">#ed5b01</Color>
         <Color x:Key="Color5">#101010</Color>
+        
+        <!--Light background-->
+        <Color x:Key="Color6">#fff5e0</Color>
 
-       
+
+
 
         <Style TargetType="Button">
             <Setter Property="FontFamily">

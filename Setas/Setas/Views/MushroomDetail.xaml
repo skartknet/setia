@@ -19,9 +19,8 @@
 
             <Label Text="Interés Gastronómico" Style="{StaticResource Heading2}"/>
                 <Label Text="{Binding EdibleAsReadableString}" Style="{StaticResource Paragraph}"/>
-            
-            
-            <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
+
+                <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
             <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>
 
             <Label Text="Confusiones" Style="{StaticResource Heading2}"/>

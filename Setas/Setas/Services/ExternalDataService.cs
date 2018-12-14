@@ -15,7 +15,7 @@ namespace Setas.Services
         readonly Uri baseUrl = new Uri(App.ExternalService, App.ApiBase);
 
 
-        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync()
+        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(DateTime? modifiedSince)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -27,7 +27,7 @@ namespace Setas.Services
 
                 try
                 {
-                    var response = await client.GetAsync(uri);
+                    var response = await client.GetAsync(uri + "?modifiedSince=" + modifiedSince);
 
                     if (response.IsSuccessStatusCode)
                     {

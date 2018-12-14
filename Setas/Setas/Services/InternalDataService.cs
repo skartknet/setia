@@ -65,7 +65,7 @@ namespace Setas.Services
                 {
                     new ConfigurationData
                     {
-                        Alias = Constants.ContentUpdatedPropertyAlias,
+                        Alias = Constants.LatestContentUpdatePropertyAlias,
                         Value = null
                     }
                 };
@@ -128,7 +128,7 @@ namespace Setas.Services
             try
             {
                 var data = await _database.Table<ConfigurationData>().ToListAsync();
-                if (DateTime.TryParse(data.FirstOrDefault(r => r.Alias == Constants.ContentUpdatedPropertyAlias).Value.ToString(), out DateTime _lastUpdate))
+                if (DateTime.TryParse(data.FirstOrDefault(r => r.Alias == Constants.LatestContentUpdatePropertyAlias).Value.ToString(), out DateTime _lastUpdate))
                 {
                     config.LatestContentUpdate = _lastUpdate;
                 }
@@ -158,7 +158,7 @@ namespace Setas.Services
         public async Task SetContentUpdatedAsync()
         {
             var config = await GetConfigurationDataAsync();
-            var lstUpdateData = config.FirstOrDefault(n => n.Alias == Constants.ContentUpdatedPropertyAlias);
+            var lstUpdateData = config.FirstOrDefault(n => n.Alias == Constants.LatestContentUpdatePropertyAlias);
 
 
             if (lstUpdateData != null)
@@ -171,7 +171,7 @@ namespace Setas.Services
             {
                 ConfigurationData d = new ConfigurationData
                 {
-                    Alias = Constants.ContentUpdatedPropertyAlias,
+                    Alias = Constants.LatestContentUpdatePropertyAlias,
                     Value = DateTime.UtcNow.ToString()
                 };
                 await _database.InsertOrReplaceAsync(d);

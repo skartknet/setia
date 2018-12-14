@@ -57,7 +57,16 @@ namespace Setas.ViewModels
                 {
                     _isIdentifying = value;
                     OnPropertyChanged("IsIdentifying");
+                    OnPropertyChanged("IsNotIdentifying");
                 }
+            }
+        }
+
+        public bool IsNotIdentifying
+        {
+            get
+            {
+                return !IsIdentifying;
             }
         }
 
@@ -112,40 +121,44 @@ namespace Setas.ViewModels
 
             if (image == null) return;
 
-            IsIdentifying = true;
-
-            var fileStream = image.GetStream();
-
-            PredictionResponse result = null;
-
-            try
+            using (UserDialogs.Instance.Loading("Analizando..."))
             {
 
-                result = await _predictionService.Analyse(StreamToBytes(fileStream));
+                IsIdentifying = true;
+
+                var fileStream = image.GetStream();
+
+                PredictionResponse result = null;
+
+                try
+                {
+
+                    result = await _predictionService.Analyse(StreamToBytes(fileStream));
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex);
+                    await UserDialogs.Instance.AlertAsync("Error analizando imagen. No se pudo conectar con el servicio.", "Error");
+                }
+
+
+
+                App.SourceImage = ImageSource.FromStream(() =>
+                {
+                    return image.GetStream();
+                });
+
+
+
+                var vm = await CreateResultViewModel(result);
+
+                if (vm != null)
+                {
+                    await Navigation.PushAsync(new IdentificationResultsPage(vm));
+                }
+
+                IsIdentifying = false;
             }
-            catch (Exception ex)
-            {
-                Crashes.TrackError(ex);
-                await UserDialogs.Instance.AlertAsync("Error analizando imagen. No se pudo conectar con el servicio.", "Error");
-            }
-
-
-
-            App.SourceImage = ImageSource.FromStream(() =>
-            {
-                return image.GetStream();
-            });
-
-
-
-            var vm = await CreateResultViewModel(result);
-
-            if (vm != null)
-            {
-                await Navigation.PushAsync(new IdentificationResultsPage(vm));
-            }
-
-            IsIdentifying = false;
 
         }
 

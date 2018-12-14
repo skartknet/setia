@@ -12,6 +12,6 @@ namespace Setas.Common
         /// <summary>
         /// Name of the ContentUpdated property that stores last time the database was updated.
         /// </summary>
-        public const string ContentUpdatedPropertyAlias = "LatestContentUpdate";
+        public const string LatestContentUpdatePropertyAlias = "LatestContentUpdate";
     }
 }

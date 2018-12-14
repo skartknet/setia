@@ -60,7 +60,7 @@ namespace Setas.Services
         private async Task InitContent()
         {
 
-            var sourceItems = await _remoteStorage.GetMushroomsAsync();
+            var sourceItems = await _remoteStorage.GetMushroomsAsync(null);
             await _localStorage.InsertMushroomsAsync(sourceItems);
             await _localStorage.SetContentUpdatedAsync();
 
@@ -69,7 +69,7 @@ namespace Setas.Services
         private async Task UpdateContent()
         {
             //if the sync period hasn't been reached we don't sync.
-            if (_localConfig.LatestContentUpdate.Value.Add(App.SyncPeriod) < DateTime.Today) return;
+            if (_localConfig.LatestContentUpdate.Value.Add(App.SyncPeriod) > DateTime.UtcNow) return;
 
             var extConfig = await _remoteStorage.GetConfigurationAsync();
 
@@ -79,7 +79,7 @@ namespace Setas.Services
                 //Internal DB out of date
                 try
                 {
-                    var sourceItems = await _remoteStorage.GetMushroomsAsync();
+                    var sourceItems = await _remoteStorage.GetMushroomsAsync(_localConfig.LatestContentUpdate.Value);
                     await _localStorage.InsertMushroomsAsync(sourceItems);
                     await _localStorage.SetContentUpdatedAsync();
                 }
