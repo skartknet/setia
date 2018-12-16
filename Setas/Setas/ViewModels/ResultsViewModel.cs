@@ -13,6 +13,11 @@ namespace Setas.ViewModels
 
         public INavigation Navigation { get; set; }
 
+        public bool IsOverProbabilityThreshold { get
+            {
+                return FirstResult != null ? FirstResult.Probability > App.ProbabilityThreshold :  false;
+            }
+        }
 
         public ResultsViewModel()
         {
@@ -36,6 +41,7 @@ namespace Setas.ViewModels
                 {
                     _firstResult = value;
                     OnPropertyChanged("FirstResult");
+                    OnPropertyChanged("IsOverProbabilityThreshold");
                 }
             }
         }

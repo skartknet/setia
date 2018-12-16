@@ -89,7 +89,10 @@ namespace Setas.ViewModels
             {
                 PhotoSize = PhotoSize.MaxWidthHeight,
                 MaxWidthHeight = 1000,
-                CompressionQuality = 80
+                CompressionQuality = 80,
+                AllowCropping = true,
+                Directory = "Setia",
+                SaveToAlbum = true
             });
 
             if (photo != null)
@@ -104,7 +107,7 @@ namespace Setas.ViewModels
             {
                 PhotoSize = PhotoSize.MaxWidthHeight,
                 MaxWidthHeight = 1000,
-                CompressionQuality = 80
+                CompressionQuality = 80                
             });
 
 
@@ -124,7 +127,7 @@ namespace Setas.ViewModels
             using (UserDialogs.Instance.Loading("Analizando..."))
             {
 
-                IsIdentifying = true;
+
 
                 var fileStream = image.GetStream();
 
@@ -157,7 +160,7 @@ namespace Setas.ViewModels
                     await Navigation.PushAsync(new IdentificationResultsPage(vm));
                 }
 
-                IsIdentifying = false;
+    
             }
 
         }

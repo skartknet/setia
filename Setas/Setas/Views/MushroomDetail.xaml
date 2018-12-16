@@ -4,34 +4,35 @@
              xmlns:local="clr-namespace:Setas.ViewModels"
              x:Class="Setas.Views.MushroomDetail"
              Title="{Binding Mushroom.Name}"
-             Padding="10">
+             >
     <ContentPage.BindingContext>
         <local:MushroomDetailViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <ScrollView>
         <StackLayout BindingContext="{Binding Mushroom}">
-            <Label Text="{Binding Name}" Style="{StaticResource Heading1}" />
-            <Image  HeightRequest="125"
+            <Image  HeightRequest="200"
                         WidthRequest="125"
                         Source="{Binding ImageSource}"
                         Aspect="AspectFill"/>
 
-            <Label Text="Interés Gastronómico" Style="{StaticResource Heading2}"/>
-                <Label Text="{Binding EdibleAsReadableString}" Style="{StaticResource Paragraph}"/>
+                <StackLayout Padding="10">
+                    <Label Text="Interés Gastronómico" Style="{StaticResource Heading2}"/>
+                        <Label Text="{Binding EdibleAsReadableString}" Style="{StaticResource Paragraph}"/>
 
-                <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
-            <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>
+                        <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>
 
-            <Label Text="Confusiones" Style="{StaticResource Heading2}"/>
-            <Label Text="{Binding Confusion}"
-                   Style="{StaticResource Paragraph}"/>
+                    <Label Text="Confusiones" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding Confusion}"
+                           Style="{StaticResource Paragraph}"/>
 
-            <Label Text="Habitat" Style="{StaticResource Heading2}"/>
-            <Label Text="{Binding Habitat}"
-                   Style="{StaticResource Paragraph}"/>
+                    <Label Text="Habitat" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding Habitat}"
+                           Style="{StaticResource Paragraph}"/>
+                </StackLayout>
 
-        </StackLayout>
+            </StackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

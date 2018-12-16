@@ -9,7 +9,7 @@
     <ContentPage.BindingContext>
         <local:IdentificationViewModel/>
     </ContentPage.BindingContext>
-    
+
 
     <AbsoluteLayout VerticalOptions="FillAndExpand"
                     HorizontalOptions="FillAndExpand">
@@ -38,10 +38,6 @@
                         Opacity="0.9">
                 </Button>
             </StackLayout>
-            <Label Text="Identificando..." IsVisible="{Binding IsIdentifying}"
-               HorizontalOptions="Center"
-               VerticalOptions="StartAndExpand"/>
-
         </StackLayout>
     </AbsoluteLayout>
 </ContentPage>

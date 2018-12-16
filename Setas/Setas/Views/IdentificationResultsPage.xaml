@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Setas.IdentificationResultsPage"                  
              xmlns:models="clr-namespace:Setas.ViewModels"
+             xmlns:converters="clr-namespace:Setas.Converters"
              Title="Resultado"
              Padding="10"
              BackgroundColor="{StaticResource Color6}">
@@ -16,11 +17,12 @@
 
             <Label Text="Resultado" Style="{StaticResource Heading1}"/>
 
-                <Frame CornerRadius="5" 
-               HorizontalOptions="Center" 
-               VerticalOptions="Start"
-               HasShadow="True"
-               Padding="0">
+            <Frame CornerRadius="5" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Start"
+                   HasShadow="True"
+                   Padding="0"
+                    IsVisible="{Binding IsOverProbabilityThreshold}">
                 <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
                          Orientation="Horizontal">
                     <StackLayout.GestureRecognizers>
@@ -68,8 +70,9 @@
                         </StackLayout>
                     </Grid>
                 </StackLayout>
-                </Frame>
-                <!--Secondary results-->
+            </Frame>
+            <Label Style="{StaticResource Paragraph}" Text="No se encontró resultado" IsVisible="{Binding IsOverProbabilityThreshold, Converter={converters:InverseBoolConverter}"/>
+            <!--Secondary results-->
             <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}" FontSize="24" Margin="0,20,0,0"/>
             <ListView SeparatorColor="{StaticResource Color4}"
                       RowHeight="100"

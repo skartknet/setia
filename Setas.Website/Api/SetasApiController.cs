@@ -44,7 +44,6 @@ namespace Setas.Website.Api
             }
 
 
-
             IEnumerable<ApiModels.MushroomData> itemsMapped = null;
             var mush = items.OfType<Mushroom>();
             try

@@ -58,8 +58,8 @@ namespace Setas.Services
         {
             try
             {
-                _database.CreateTableAsync<MushroomData>().Wait();
-                _database.CreateTableAsync<ConfigurationData>().Wait();
+                _database.CreateTableAsync<MushroomData>();
+                _database.CreateTableAsync<ConfigurationData>();
 
                 var configElements = new List<ConfigurationData>()
                 {
@@ -93,14 +93,14 @@ namespace Setas.Services
                 result = result.Where(m => ids.Contains(m.Id));
             }
 
-            if (options.Edible.HasValue)
+            if (options.Edibles != null && options.Edibles.Any())
             {
-                result = result.Where(m => m.CookingInterest == options.Edible);
+                result = result.Where(m => options.Edibles.Contains(m.CookingInterest));
             }
 
 
 
-            return await result.ToListAsync();
+            return await result.OrderBy(n=>n.Name).ToListAsync();
         }
 
 

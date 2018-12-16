@@ -1,4 +1,5 @@
-﻿using Setas.Models;
+﻿using Acr.UserDialogs;
+using Setas.Models;
 using Setas.ViewModels;
 using Setas.Views;
 using Xamarin.Forms;
@@ -28,6 +29,13 @@ namespace Setas
 
             vm.Navigation = this.Navigation;
             BindingContext = vm;
+
+            UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+            {
+                Title = "Atención",
+                Message = "Nunca comas nada que no conozcas. La tecnología usada en Setia es muy avanzada pero no infalible. Siempre confirma los resultados con un experto.",
+                OkText = "Entendido"              
+            });
 
         }
 

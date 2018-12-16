@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Setas.Common.Enums;
+using Setas.Enums;
 using Setas.Services;
 
 using Xamarin.Forms;
@@ -26,7 +28,10 @@ namespace Setas.Views
             {
                 if (e.SelectedItem != null)
                 {
-                    var catalogueDetail = new CatalogueDetail(scope.Resolve<IInternalDataService>(), ((CatalogueMenuItem)e.SelectedItem).Id);
+
+                    var edibles = GetEdiblesClasses(((CatalogueMenuItem)e.SelectedItem).Value);
+
+                    var catalogueDetail = new CatalogueDetail(scope.Resolve<IInternalDataService>(), edibles);
 
                     Detail = new NavigationPage(catalogueDetail);
                     IsPresented = false;
@@ -35,6 +40,44 @@ namespace Setas.Views
                 }
             }
 
+        }
+
+        //Gets all the classes associated to an edible top classification
+        private Edible[] GetEdiblesClasses(EdibleTopClassEnum? topClass)
+        {
+            if (topClass.HasValue)
+            {
+                switch (topClass)
+                {
+                    case EdibleTopClassEnum.Safe:
+                        return new Edible[]
+                        {
+                            Common.Enums.Edible.BuenComestible,
+                            Common.Enums.Edible.ComestibleBajaCalidad,
+                            Common.Enums.Edible.ComestibleCalidadMedia
+                        };
+                    case EdibleTopClassEnum.NoInterest:
+                        return new Edible[]
+                        {
+                            Common.Enums.Edible.SinInteres
+                        };
+                    case EdibleTopClassEnum.Warning:
+                        return new Edible[]{
+                            Common.Enums.Edible.PosibleToxico,
+                                Common.Enums.Edible.ComestibleConPrecaucion,
+                                Common.Enums.Edible.ComestiblePeroPeligrosa,
+                                Common.Enums.Edible.NoComestible
+                            };
+                    case EdibleTopClassEnum.Toxic:
+                        return new Edible[] { Common.Enums.Edible.Toxica };
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Setas.Common.Enums;
+using Setas.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Setas.Views
         {
           
         }
-        public Edible? Id { get; set; }
+        public EdibleTopClassEnum? Value { get; set; }
         public string Title { get; set; }
 
     }

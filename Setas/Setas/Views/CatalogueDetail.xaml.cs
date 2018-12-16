@@ -21,7 +21,7 @@ namespace Setas.Views
 
 
 
-        public CatalogueDetail(IInternalDataService dataService, Edible? edible)
+        public CatalogueDetail(IInternalDataService dataService, Edible[] edibles)
         {
             _dataService = dataService;
 
@@ -29,7 +29,7 @@ namespace Setas.Views
             {
                 var data = await _dataService.GetMushroomsAsync(new SearchOptions
                 {
-                    Edible = edible
+                    Edibles = edibles
                 });
 
                 Mushrooms = new ObservableCollection<MushroomDisplayModel>(data.Select(m => new MushroomDisplayModel(m)));

@@ -1,4 +1,5 @@
 ﻿using Setas.Common.Enums;
+using Setas.Enums;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -28,16 +29,11 @@ namespace Setas.Views
             {
                 MenuItems = new ObservableCollection<CatalogueMenuItem>(new[]
                 {
-                    new CatalogueMenuItem { Id = null, Title = "Todas" },
-                    new CatalogueMenuItem { Id = Edible.BuenComestible, Title = "Buen Comestible" },
-                    new CatalogueMenuItem { Id = Edible.Toxica, Title = "Tóxica" },
-                    new CatalogueMenuItem { Id = Edible.SinInteres, Title = "Sin Interés" },
-                    new CatalogueMenuItem { Id = Edible.ComestibleConPrecaucion, Title = "Comestible Con Precaución" },
-                    new CatalogueMenuItem { Id = Edible.ComestiblePeroPeligrosa, Title = "Comestible Pero Peligrosa" },
-                    new CatalogueMenuItem { Id = Edible.ComestibleCalidadMedia, Title = "Comestible Calidad Media" },
-                    new CatalogueMenuItem { Id = Edible.ComestibleBajaCalidad, Title = "Comestible Baja Calidad" },
-                    new CatalogueMenuItem { Id = Edible.PosibleToxico, Title = "Posible Tóxico" },
-                    new CatalogueMenuItem { Id = Edible.NoComestible, Title = "No Comestible" },
+                    new CatalogueMenuItem { Value = null, Title = "Todas" },
+                    new CatalogueMenuItem { Value = EdibleTopClassEnum.Safe, Title = "Comestibles" },
+                    new CatalogueMenuItem { Value = EdibleTopClassEnum.Toxic, Title = "Tóxicas" },
+                    new CatalogueMenuItem { Value = EdibleTopClassEnum.Warning, Title = "Precaución" },
+                    new CatalogueMenuItem { Value = EdibleTopClassEnum.NoInterest, Title = "Sin Interés" },               
                 });
             }
 

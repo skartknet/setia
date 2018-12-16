@@ -12,10 +12,6 @@
         
         <!--Light background-->
         <Color x:Key="Color6">#fff5e0</Color>
-
-
-
-
         <Style TargetType="Button">
             <Setter Property="FontFamily">
                 <OnPlatform x:TypeArguments="x:String" >

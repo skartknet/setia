@@ -36,7 +36,7 @@
                                     VerticalOptions="CenterAndExpand"
                                     Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
 
-                            <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" VerticalOptions="StartAndExpand" Text="{Binding Name}" Style="{StaticResource Heading1}" />
+                            <Label Grid.Row="0" Grid.Column="1" VerticalOptions="StartAndExpand" Text="{Binding Name}" Style="{StaticResource Heading1}" />
 
                             <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >
                                 <Label     Style="{StaticResource DangerIcon}"
