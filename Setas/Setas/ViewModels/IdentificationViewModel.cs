@@ -6,6 +6,7 @@ using Setas.Common.Models;
 using Setas.Models;
 using Setas.Services;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -103,18 +104,27 @@ namespace Setas.ViewModels
 
         private async void PickPhotoProcess(object obj)
         {
-            var photo = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+            try
             {
-                PhotoSize = PhotoSize.MaxWidthHeight,
-                MaxWidthHeight = 1000,
-                CompressionQuality = 80                
-            });
+                var photo = await Plugin.Media.CrossMedia.Current.PickPhotoAsync(new PickMediaOptions
+                {
+                    PhotoSize = PhotoSize.MaxWidthHeight,
+                    MaxWidthHeight = 1000,
+                    CompressionQuality = 80
+                });
 
-
-            if (photo != null)
-            {
-                await IdentifyImage(photo);
+                if (photo != null)
+                {
+                    await IdentifyImage(photo);
+                }
             }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+                
+
+            
         }
 
         private async Task IdentifyImage(MediaFile image)
@@ -157,7 +167,7 @@ namespace Setas.ViewModels
 
                 if (vm != null)
                 {
-                    await Navigation.PushAsync(new IdentificationResultsPage(vm));
+                    //await Navigation.PushAsync(new IdentificationResultsPage(vm));
                 }
 
     
@@ -172,13 +182,30 @@ namespace Setas.ViewModels
 
             try
             {
-                var firstResultPrediction = result.Predictions.FirstOrDefault();
-                var rId = Helpers.Predictions.TagToItemId(firstResultPrediction.TagName);
+                var firstResultPrediction = result.Predictions.FirstOrDefault(m=>m.Probability >= App.ProbabilityThreshold);
+
+                IEnumerable<Prediction> secondaryResultsPredictions = Enumerable.Empty<Prediction>();
+
+                if (firstResultPrediction != null)
+                {
+                    var rId = Helpers.Predictions.TagToItemId(firstResultPrediction.TagName);
+                    firstResultPrediction.Mushroom = new MushroomDisplayModel(await _dataService.GetMushroomAsync(rId));
+                    secondaryResultsPredictions = result.Predictions.Skip(1);
+
+                    var hItem = new Models.Data.HistoryItem()
+                    {
+                        TakenOn = DateTime.Now,
+                        MushroomId = firstResultPrediction.Mushroom.Id
+                    };
+
+                    await _dataService.SaveHistoryItemAsync(hItem);
+                }
+                else
+                {
+                    secondaryResultsPredictions = result.Predictions;
+                }
 
 
-                firstResultPrediction.Mushroom = new MushroomDisplayModel(await _dataService.GetMushroomAsync(rId));
-
-                var secondaryResultsPredictions = result.Predictions.Skip(1).ToArray();
                 var rIds = secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray();
                 var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(new SearchOptions(), rIds);
 

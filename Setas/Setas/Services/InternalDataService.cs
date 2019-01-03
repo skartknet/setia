@@ -60,6 +60,8 @@ namespace Setas.Services
             {
                 _database.CreateTableAsync<MushroomData>();
                 _database.CreateTableAsync<ConfigurationData>();
+                _database.CreateTableAsync<HistoryItem>();
+
 
                 var configElements = new List<ConfigurationData>()
                 {
@@ -115,6 +117,16 @@ namespace Setas.Services
             {
                 await this.InsertMushroomAsync(item);
             }
+        }
+
+        public async Task<IEnumerable<HistoryItem>> GetHistoryAsync()
+        {
+            return await _database.QueryAsync<HistoryItem>("SELECT * FROM HistoryItems HI INNER JOIN Mushroom M ON HI.MushroomId = M.Id ORDER BY TakenOn");
+        }
+
+        public async Task SaveHistoryItemAsync(HistoryItem item)
+        {
+            await _database.InsertAsync(item);
         }
 
         public Task InsertMushroomAsync(MushroomData item)

@@ -9,7 +9,9 @@ namespace Setas.Services
     public interface IExternalDataService
     {        
 
-        Task<IEnumerable<MushroomData>> GetMushroomsAsync(DateTime? modifiedSince);
+        Task<IEnumerable<MushroomData>> GetMushroomsAsync(DateTime modifiedSince);
+        Task<IEnumerable<MushroomData>> GetMushroomsAsync();
+
 
         Task<Configuration> GetConfigurationAsync();
     }

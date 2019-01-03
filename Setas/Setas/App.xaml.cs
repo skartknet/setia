@@ -63,18 +63,18 @@ namespace Setas
                 Task.Run(async () =>
                 {
                     try
-                    {                        
+                    {
                         var syncingService = scope.Resolve<ISyncingDataService>();
+                        await syncingService.SyncDataAsync();
 
-                        await syncingService.SyncDataAsync();                        
                         InitApp();
-
-
                     }
                     catch (Exception ex)
                     {
                         await UserDialogs.Instance.AlertAsync("Error iniciando base de datos.");
                     }
+
+
                 }).Wait();
             }
         }

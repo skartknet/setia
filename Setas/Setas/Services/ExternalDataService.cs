@@ -15,19 +15,24 @@ namespace Setas.Services
         readonly Uri baseUrl = new Uri(App.ExternalService, App.ApiBase);
 
 
-        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(DateTime? modifiedSince)
+        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(DateTime modifiedSince)
         {
             using (HttpClient client = new HttpClient())
             {
-                client.Timeout = new TimeSpan(0, 0, 10);
-
-
                 var uri = new Uri(baseUrl, "setas/GetMushrooms");
                 var items = Enumerable.Empty<MushroomData>();
 
                 try
                 {
-                    var response = await client.GetAsync(uri + "?modifiedSince=" + modifiedSince);
+                    HttpResponseMessage response;
+                    if (modifiedSince == DateTime.MinValue)
+                    {
+                        response = await client.GetAsync(uri);
+                    }
+                    else
+                    {
+                        response = await client.GetAsync(uri + "?modifiedSince=" + modifiedSince);
+                    }
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -43,6 +48,12 @@ namespace Setas.Services
                 return items;
             }
         }
+
+        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync()
+        {
+            return await this.GetMushroomsAsync(DateTime.MinValue);
+        }
+
 
 
         public async Task<Configuration> GetConfigurationAsync()

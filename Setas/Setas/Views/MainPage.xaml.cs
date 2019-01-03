@@ -34,6 +34,11 @@ namespace Setas.Views
                 catalogueNavigation.Title = "Catálogo";
                 catalogueNavigation.Icon = "listIcon.png";
 
+                var history = new NavigationPage(new HistoryPage(scope.Resolve<IInternalDataService>()));
+                history.Title = "Historia";
+                catalogueNavigation.Icon = "listIcon.png";
+
+
                 //var dictionaryPage = new Dictionary();
                 //dictionaryPage.Title = "Diccionario";
                 //dictionaryPage.Icon = "dictionaryIcon.png";

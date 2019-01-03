@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Setas.Views.HistoryPage">
+    <StackLayout Padding="10">
+        <ListView SeparatorColor="{StaticResource Color4}"                      
+                      SelectionMode="None"
+                      ItemTapped="ListView_ItemTapped"
+                      IsPullToRefreshEnabled="False"
+                      HasUnevenRows="True"
+                      x:Name="HistoryList">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout>
+                            <Label Text="{Binding TakenOn}"/>
+                            <Grid Padding="0,10" BindingContext="{Binding Mushroom}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="75"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Image  HeightRequest="75"
+                                    WidthRequest="75"
+                                    Source="{Binding ImageSource}"
+                                    Aspect="AspectFill"
+                                    VerticalOptions="CenterAndExpand"
+                                    Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
+
+                            <Label Grid.Row="0" Grid.Column="1" VerticalOptions="StartAndExpand" Text="{Binding Name}" Style="{StaticResource Heading1}" />
+
+                            <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >
+                                <Label     Style="{StaticResource DangerIcon}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding IsToxic}"/>
+                                <Label   Style="{StaticResource WarningIcon}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding IsWarning}"/>
+                                <Label   Style="{StaticResource SafeIcon}"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding IsSafe}"/>
+                                <Label   Text="{Binding EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
+                            </StackLayout>
+
+                        </Grid>
+                        </StackLayout>
+
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

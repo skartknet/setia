@@ -25,7 +25,7 @@
                         android:Button.UseDefaultShadow="true"
                         IsVisible="{Binding IsTakePhotoSupported}"                        
                         HeightRequest="100"
-                        Opacity="0.9"                        >
+                        Opacity="0.9">
 
                 </Button>
                 <Button Text="Seleccionar foto"

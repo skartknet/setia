@@ -60,7 +60,7 @@ namespace Setas.Services
         private async Task InitContent()
         {
 
-            var sourceItems = await _remoteStorage.GetMushroomsAsync(null);
+            var sourceItems = await _remoteStorage.GetMushroomsAsync();
             await _localStorage.InsertMushroomsAsync(sourceItems);
             await _localStorage.SetContentUpdatedAsync();
 
