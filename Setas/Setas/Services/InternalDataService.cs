@@ -4,6 +4,7 @@ using Setas.Common;
 using Setas.Common.Models;
 using Setas.Models.Data;
 using SQLite;
+using SQLiteNetExtensionsAsync.Extensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,7 @@ namespace Setas.Services
             }
 
 #if DEBUG
-            File.Delete(DBPATH);      
+            //File.Delete(DBPATH);      
             
 #endif
 
@@ -121,7 +122,7 @@ namespace Setas.Services
 
         public async Task<IEnumerable<HistoryItem>> GetHistoryAsync()
         {
-            return await _database.QueryAsync<HistoryItem>("SELECT * FROM HistoryItems HI INNER JOIN Mushroom M ON HI.MushroomId = M.Id ORDER BY TakenOn");
+            return await _database.GetAllWithChildrenAsync<HistoryItem>();
         }
 
         public async Task SaveHistoryItemAsync(HistoryItem item)

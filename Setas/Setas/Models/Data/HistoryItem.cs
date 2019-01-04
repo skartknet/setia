@@ -10,13 +10,11 @@ namespace Setas.Models.Data
     {
         public DateTime TakenOn { get; set; }
 
-        [Indexed]
         [ForeignKey(typeof(MushroomData))]
         public int MushroomId { get; set; }
 
-        [ManyToOne("MushroomId", ReadOnly = true)]
+        [ManyToOne(ReadOnly = true)]
         public MushroomData Mushroom { get; set; }
-
 
     }
 }

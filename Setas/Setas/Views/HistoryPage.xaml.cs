@@ -16,19 +16,30 @@ namespace Setas.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class HistoryPage : ContentPage
 	{
+
+
+        private IInternalDataService _dataService { get; }
+
 		public HistoryPage (IInternalDataService dataService)
 		{
-            var history = Task.Run(async () => await dataService.GetHistoryAsync()).Result;
 			InitializeComponent ();
+            _dataService = dataService;
+        }
 
 
-            HistoryList.ItemsSource = history;
-
+        protected override void OnAppearing()
+        {
+            var history = Task.Run(async () => await _dataService.GetHistoryAsync()).Result;
+            HistoryList.ItemsSource =  history.Select(h=>new HistoryItemDisplayModel() {
+                TakenOn= h.TakenOn.ToShortDateString(),
+                MushroomId = h.MushroomId,
+                Mushroom = new MushroomDisplayModel(h.Mushroom)
+            });
         }
 
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var vm = new MushroomDetailViewModel(new MushroomDisplayModel((MushroomData)e.Item));
+            var vm = new MushroomDetailViewModel(new MushroomDisplayModel(((HistoryItemDisplayModel)e.Item).Mushroom));
             await Navigation.PushAsync(new MushroomDetail(vm));
         }
     }

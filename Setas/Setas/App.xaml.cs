@@ -26,7 +26,7 @@ namespace Setas
         public static string ApiBase = "/umbraco/api/";
 
         //below this limit the identification result will be displayed as 'unknown'
-        public static float ProbabilityThreshold = 0.6f;
+        public static float ProbabilityThreshold = 0f;
 
 
 
