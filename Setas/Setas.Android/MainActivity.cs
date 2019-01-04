@@ -22,7 +22,7 @@ namespace Setas.Droid
             base.SetTheme(Resource.Style.MainTheme);
             base.OnCreate(bundle);
             global::Xamarin.Forms.Forms.Init(this, bundle);
-
+            Xamarin.Essentials.Platform.Init(this, bundle);
 
             LoadApplication(new App());
 
@@ -31,6 +31,10 @@ namespace Setas.Droid
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
         {
             Plugin.Permissions.PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }

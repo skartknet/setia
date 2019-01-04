@@ -30,10 +30,10 @@ namespace Setas
             vm.Navigation = this.Navigation;
             BindingContext = vm;
 
-            UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+            UserDialogs.Instance.AlertAsync(new AlertConfig
             {
                 Title = "Atención",
-                Message = "Nunca comas nada que no conozcas. La tecnología usada en Setia es muy avanzada pero no infalible. Siempre confirma los resultados con un experto.",
+                Message = "Utiliza esta app solo como guia de campo. NUNCA comas nada que no conozcas. Siempre confirma los resultados con un experto.",
                 OkText = "Entendido"              
             });
 

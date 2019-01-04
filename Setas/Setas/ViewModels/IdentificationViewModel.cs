@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Setas.ViewModels
@@ -129,6 +130,12 @@ namespace Setas.ViewModels
 
         private async Task IdentifyImage(MediaFile image)
         {
+            if (Connectivity.NetworkAccess == NetworkAccess.None) {
+                UserDialogs.Instance.Alert("Se necesita conexión a la red para realizar esta operación.", "Desconectado", "Aceptar");
+            };
+
+
+
             //TODO: Apply permissions recommendations: https://github.com/jamesmontemagno/MediaPlugin#permission-recommendations
             //TODO: return null exception and pick it up for AppCenter and display Userdialog (https://github.com/aritchie/userdialogs/blob/master/docs/progress.md)
 
@@ -136,9 +143,6 @@ namespace Setas.ViewModels
 
             using (UserDialogs.Instance.Loading("Analizando..."))
             {
-
-
-
                 var fileStream = image.GetStream();
 
                 PredictionResponse result = null;
@@ -170,7 +174,6 @@ namespace Setas.ViewModels
                     await Navigation.PushAsync(new IdentificationResultsPage(vm));
                 }
 
-    
             }
 
         }

@@ -3,6 +3,7 @@ using Setas.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace Setas.Services
 {
@@ -25,6 +26,9 @@ namespace Setas.Services
         /// </summary>
         public async Task SyncDataAsync()
         {
+
+            if (Connectivity.NetworkAccess == NetworkAccess.None) return;
+
             try
             {
                 _localConfig = await _localStorage.GetConfigurationAsync();

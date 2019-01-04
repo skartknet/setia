@@ -105,7 +105,7 @@
                                                 VerticalOptions="Start"
                                                 HorizontalOptions="End"
                                                 IsVisible="{Binding Mushroom.IsSafe}"/>
-                                        <Label  Text="{Binding Mushroom.CookingInterest}" VerticalOptions="CenterAndExpand"/>
+                                        <Label  Text="{Binding Mushroom.EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
                                     </StackLayout>
                                 </StackLayout>
                                 <StackLayout VerticalOptions="CenterAndExpand" 
