@@ -30,7 +30,7 @@ namespace Setas.Services
             }
 
 #if DEBUG
-            //File.Delete(DBPATH);      
+            File.Delete(DBPATH);      
             
 #endif
 

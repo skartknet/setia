@@ -25,19 +25,18 @@ namespace Setas.Services
                 try
                 {
                     HttpResponseMessage response;
-                    if (modifiedSince == DateTime.MinValue)
-                    {
-                        response = await client.GetAsync(uri);
-                    }
-                    else
-                    {
-                        response = await client.GetAsync(uri + "?modifiedSince=" + modifiedSince);
-                    }
+
+                    response = await client.GetAsync(uri + "?modifiedSince=" + modifiedSince);
+
 
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
                         items = JsonConvert.DeserializeObject<List<MushroomData>>(content);
+                    }
+                    else
+                    {
+                        throw new Exception("Couldn't query external server.");
                     }
                 }
                 catch (Exception ex)

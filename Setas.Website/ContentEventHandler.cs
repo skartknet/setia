@@ -26,12 +26,12 @@ namespace Setas.Website
                 database.Insert(new ConfigurationData
                 {
                     Alias = Common.Constants.LatestContentUpdatePropertyAlias,
-                    Value = DateTime.UtcNow.ToString()
+                    Value = DateTime.UtcNow.ToString("s")
                 });
             }
             else
             {
-                config.Value = DateTime.UtcNow.ToString();
+                config.Value = DateTime.UtcNow.ToString("s");
                 database.Update(config);
             }
         }

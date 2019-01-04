@@ -50,7 +50,7 @@ namespace Setas.Services
                     catch { Crashes.TrackError(new Exception("Error updating content.")); }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Crashes.TrackError(new Exception("Error retrieving configuration."));
             }
@@ -59,10 +59,18 @@ namespace Setas.Services
 
         private async Task InitContent()
         {
+            try
+            {
+                var sourceItems = await _remoteStorage.GetMushroomsAsync();
+                await _localStorage.InsertMushroomsAsync(sourceItems);
+                await _localStorage.SetContentUpdatedAsync();
+            }
+            catch (Exception ex)
+            {
+                Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "init db" } });
 
-            var sourceItems = await _remoteStorage.GetMushroomsAsync();
-            await _localStorage.InsertMushroomsAsync(sourceItems);
-            await _localStorage.SetContentUpdatedAsync();
+                throw ex;
+            }
 
         }
 
@@ -88,6 +96,6 @@ namespace Setas.Services
                     Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "updating db" } });
                 }
             }
-        }    
+        }
     }
 }

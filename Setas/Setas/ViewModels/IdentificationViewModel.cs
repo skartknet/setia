@@ -167,7 +167,7 @@ namespace Setas.ViewModels
 
                 if (vm != null)
                 {
-                    //await Navigation.PushAsync(new IdentificationResultsPage(vm));
+                    await Navigation.PushAsync(new IdentificationResultsPage(vm));
                 }
 
     

@@ -17,8 +17,8 @@ namespace Setas
     public partial class App : Application
     {
         public static ImageSource SourceImage { get; set; }
-        public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
-        //public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
+        //public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
+        public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
 
         //sync every week.
         public static TimeSpan SyncPeriod = new TimeSpan(0, 0, 5);
@@ -43,6 +43,8 @@ namespace Setas
                    typeof(Analytics), typeof(Crashes));
 
             InitDatabase();
+            InitApp();
+
         }
 
 
@@ -66,8 +68,6 @@ namespace Setas
                     {
                         var syncingService = scope.Resolve<ISyncingDataService>();
                         await syncingService.SyncDataAsync();
-
-                        InitApp();
                     }
                     catch (Exception ex)
                     {

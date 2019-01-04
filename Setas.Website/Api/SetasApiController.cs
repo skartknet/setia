@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Setas.Common.Enums;
 using Setas.Common.Models;
-using Setas.Core.Binding;
 using Setas.Core.Models;
 using Setas.Website.Core.Models.Data;
 using System;
@@ -9,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http.ModelBinding;
 using Umbraco.Core.Models;
 using Umbraco.Core.Persistence;
 using Umbraco.Web;
@@ -22,26 +19,14 @@ namespace Setas.Website.Api
 {
     public class SetasController : UmbracoApiController
     {
-        public HttpResponseMessage GetMushrooms([ModelBinder(typeof(CommaDelimitedArrayModelBinder))] int[] ids, DateTime? modifiedSince)
+        public HttpResponseMessage GetMushrooms(DateTime modifiedSince)
         {
 
             var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
 
             var items = Enumerable.Empty<IPublishedContent>();
 
-            if (ids != null && ids.Any())
-            {
-                items = catalogue.Children(n => ids.Contains(n.Id));
-            }
-            else
-            {
-                items = catalogue.Children();
-            }
-
-            if (modifiedSince.HasValue)
-            {
-                items = items.Where(i => i.UpdateDate >= modifiedSince);
-            }
+            items = catalogue.Children().Where(i => i.UpdateDate >= modifiedSince);
 
 
             IEnumerable<ApiModels.MushroomData> itemsMapped = null;
@@ -58,6 +43,8 @@ namespace Setas.Website.Api
             return Request.CreateResponse(HttpStatusCode.OK, itemsMapped);
 
         }
+
+
 
         public HttpResponseMessage GetMushroom(int id)
         {
@@ -86,7 +73,7 @@ namespace Setas.Website.Api
 
             var configData = database.Fetch<ConfigurationData>(new Sql().Select("*").From(Setas.Website.Core.Constants.ConfigurationTableName));
 
-           DateTime.TryParse(configData.FirstOrDefault(n => n.Alias == Setas.Common.Constants.LatestContentUpdatePropertyAlias)?.Value, out DateTime lastestUpdate);
+            DateTime.TryParse(configData.FirstOrDefault(n => n.Alias == Setas.Common.Constants.LatestContentUpdatePropertyAlias)?.Value, out DateTime lastestUpdate);
 
             var configModel = new Configuration
             {
