@@ -1,6 +1,7 @@
 using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
+using Android.Gms.Ads;
 using Android.OS;
 
 namespace Setas.Droid
@@ -21,6 +22,7 @@ namespace Setas.Droid
             base.Window.RequestFeature(Android.Views.WindowFeatures.ActionBar);
             base.SetTheme(Resource.Style.MainTheme);
             base.OnCreate(bundle);
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
 
