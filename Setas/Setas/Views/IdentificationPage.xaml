@@ -17,28 +17,30 @@
         <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
             Source="bg1.png" Aspect="AspectFill"/>
         <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
-            <StackLayout Padding="20,10" >
+            <StackLayout Padding="20,10" VerticalOptions="StartAndExpand">
                 <Label Text="Analizar Imagen" Style="{StaticResource Heading1}" HorizontalOptions="Center" Margin="10,0"/>
-                <StackLayout VerticalOptions="CenterAndExpand" IsVisible="{Binding IsNotIdentifying}">
-                    <Button Text="Hacer foto"
-                        Command="{Binding TakePhoto}"
-                        VerticalOptions="CenterAndExpand"               
-                        android:Button.UseDefaultPadding="true"
-                        android:Button.UseDefaultShadow="true"
-                        IsVisible="{Binding IsTakePhotoSupported}"                        
-                        HeightRequest="100"
-                        Opacity="0.9">
+                <StackLayout  IsVisible="{Binding IsNotIdentifying}" VerticalOptions="FillAndExpand">
+                    <StackLayout VerticalOptions="CenterAndExpand">
+                        <Button Text="Hacer foto"
+                            Command="{Binding TakePhoto}"
+                            VerticalOptions="CenterAndExpand"               
+                            android:Button.UseDefaultPadding="true"
+                            android:Button.UseDefaultShadow="true"
+                            IsVisible="{Binding IsTakePhotoSupported}"                        
+                            HeightRequest="100"
+                            Opacity="0.9">
 
-                    </Button>
-                    <Button Text="Seleccionar foto"
-                        Command="{Binding PickPhoto}"
-                        VerticalOptions="CenterAndExpand"
-                        android:Button.UseDefaultPadding="true"
-                        android:Button.UseDefaultShadow="true"
-                        IsVisible="{Binding IsPickPhotoSupported}"                         
-                        HeightRequest="100"
-                        Opacity="0.9">
-                    </Button>
+                        </Button>
+                        <Button Text="Seleccionar foto"
+                            Command="{Binding PickPhoto}"
+                            VerticalOptions="CenterAndExpand"
+                            android:Button.UseDefaultPadding="true"
+                            android:Button.UseDefaultShadow="true"
+                            IsVisible="{Binding IsPickPhotoSupported}"                         
+                            HeightRequest="100"
+                            Opacity="0.9">
+                        </Button>
+                    </StackLayout>
                 </StackLayout>
             </StackLayout>
             <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
