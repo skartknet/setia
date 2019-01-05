@@ -8,14 +8,14 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 
-[assembly: ExportRenderer(typeof(AdControlView), typeof(AdViewRenderer))]
+[assembly: ExportRenderer(typeof(AdMobView), typeof(AdMobViewRenderer))]
 namespace Setas.Droid
 {
-    public class AdViewRenderer : ViewRenderer<Setas.Controls.AdControlView, AdView>
+    public class AdMobViewRenderer : ViewRenderer<AdMobView, AdView>
     {
-        public AdViewRenderer(Context context) : base(context) { }
+        public AdMobViewRenderer(Context context) : base(context) { }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<AdControlView> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<AdMobView> e)
         {
             base.OnElementChanged(e);
 
@@ -23,13 +23,20 @@ namespace Setas.Droid
                 SetNativeControl(CreateAdView());
         }
 
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == nameof(AdView.AdUnitId))
+                Control.AdUnitId = Element.AdUnitId;
+        }
 
         private AdView CreateAdView()
         {
             var adView = new AdView(Context)
             {
-                AdSize = AdSize.SmartBanner,
-                AdUnitId = "ca-app-pub-2003726790886919/3499977722"
+                AdSize = AdSize.MediumRectangle,
+                AdUnitId = Element.AdUnitId
             };
 
             adView.LayoutParameters = new LinearLayout.LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);

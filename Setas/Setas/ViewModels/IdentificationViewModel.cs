@@ -33,6 +33,18 @@ namespace Setas.ViewModels
 
         public INavigation Navigation { get; set; }
 
+        public string AdUnitId
+        {
+            get
+            {
+                if (Device.RuntimePlatform == Device.iOS)
+                    return "iOS Key";
+                else if (Device.RuntimePlatform == Device.Android)
+                    return "ca-app-pub-2003726790886919/3499977722";
+                else return null;
+            }
+        }
+
         public bool IsTakePhotoSupported
         {
             get

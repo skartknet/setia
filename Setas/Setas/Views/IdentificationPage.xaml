@@ -41,7 +41,7 @@
                     </Button>
                 </StackLayout>
             </StackLayout>
-            <controls:AdControlView VerticalOptions="EndAndExpand" />
+            <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
         </StackLayout>
     </AbsoluteLayout>
 </ContentPage>
