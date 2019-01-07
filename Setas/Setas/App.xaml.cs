@@ -17,8 +17,8 @@ namespace Setas
     public partial class App : Application
     {
         public static ImageSource SourceImage { get; set; }
-        //public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
-        public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
+        public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
+        //public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
 
         //sync every week.
         public static TimeSpan SyncPeriod = new TimeSpan(0, 0, 5);

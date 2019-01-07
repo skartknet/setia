@@ -4,15 +4,20 @@
              x:Class="Setas.Views.CatalogueDetail"
              Title="Catálogo"
              xmlns:localenums="clr-namespace:Setas.Enums"
+             xmlns:controls="clr-namespace:Setas.Controls"
              BackgroundColor="{StaticResource Color6}">
  
-    <StackLayout Padding="10">
+    <StackLayout>
+
+        <controls:AdMobView AdUnitId="{Binding AdUnitId}"/>
+
         <ListView SeparatorColor="{StaticResource Color4}"                      
                       SelectionMode="None"
                       ItemTapped="ListView_ItemTapped"
                       IsPullToRefreshEnabled="False"
                       x:Name="DetailsList"
-                    HasUnevenRows="True">
+                      HasUnevenRows="True"
+                        Margin="10">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -61,5 +66,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+
+        <controls:AdMobView AdUnitId="{Binding AdUnitId}"  />
     </StackLayout>
 </ContentPage>

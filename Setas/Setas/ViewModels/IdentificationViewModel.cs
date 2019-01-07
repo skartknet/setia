@@ -38,7 +38,7 @@ namespace Setas.ViewModels
             get
             {
                 if (Device.RuntimePlatform == Device.iOS)
-                    return "iOS Key";
+                    return "ca-app-pub-2003726790886919/4839520685";
                 else if (Device.RuntimePlatform == Device.Android)
                     return "ca-app-pub-2003726790886919/3499977722";
                 else return null;

@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:Setas.Controls"
              x:Class="Setas.Views.HistoryPage"
              Title="Historia">
-    <StackLayout Padding="10">
+    <StackLayout >
         <ListView SeparatorColor="{StaticResource Color4}"                      
                       SelectionMode="None"
                       ItemTapped="ListView_ItemTapped"
                       IsPullToRefreshEnabled="False"
                       HasUnevenRows="True"
-                      x:Name="HistoryList">
+                      x:Name="HistoryList"
+                        Margin="10">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -59,5 +61,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
     </StackLayout>
 </ContentPage>

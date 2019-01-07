@@ -35,7 +35,7 @@ namespace Setas.Droid
         {
             var adView = new AdView(Context)
             {
-                AdSize = AdSize.MediumRectangle,
+                AdSize = AdSize.SmartBanner,
                 AdUnitId = Element.AdUnitId
             };
 

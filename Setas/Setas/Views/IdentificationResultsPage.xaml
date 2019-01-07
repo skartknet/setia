@@ -4,8 +4,8 @@
              x:Class="Setas.IdentificationResultsPage"                  
              xmlns:models="clr-namespace:Setas.ViewModels"
              xmlns:converters="clr-namespace:Setas.Converters"
-             Title="Resultado"
-             Padding="10"
+             xmlns:controls="clr-namespace:Setas.Controls"
+             Title="Resultado"           
              BackgroundColor="{StaticResource Color6}">
 
     <ContentPage.BindingContext>
@@ -15,7 +15,7 @@
 
         <StackLayout>
 
-            <Label Text="Resultado" Style="{StaticResource Heading1}"/>
+            <Label Text="Resultado Principal" Style="{StaticResource Heading1}" Margin="10, 20"/>
 
             <Frame CornerRadius="5" 
                    HorizontalOptions="Center" 
@@ -72,55 +72,67 @@
                 </StackLayout>
             </Frame>
             <Label Style="{StaticResource Paragraph}" Text="No se encontró resultado" IsVisible="{Binding IsOverProbabilityThreshold, Converter={converters:InverseBoolConverter}"/>
-            <!--Secondary results-->
-            <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}" FontSize="24" Margin="0,20,0,0"/>
-            <ListView SeparatorColor="{StaticResource Color4}"
-                      RowHeight="100"
-                      SelectionMode="None"
-                      ItemTapped="ListView_ItemTapped"
-                      IsPullToRefreshEnabled="False"
-                      ItemsSource="{Binding SecondaryResults}">
 
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="10, 10"
-                                        Orientation="Horizontal">
-                                <Image  HeightRequest="55"
-                                        WidthRequest="75"
-                                         Source="{Binding Mushroom.ImageSource}"
-                                        Aspect="AspectFill"/>
-                                <StackLayout Spacing="0" HorizontalOptions="StartAndExpand">
-                                    <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading2}" />
-                                    <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
-                                        <Label  Style="{StaticResource DangerIcon}"
-                                                VerticalOptions="Start"
+            
+            <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
+
+
+            <!--Secondary results-->
+            <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}" Margin="10, 20"/>
+
+
+            <ScrollView>
+                <StackLayout>
+                    <ListView SeparatorColor="{StaticResource Color4}"
+                          RowHeight="100"
+                          SelectionMode="None"
+                          ItemTapped="ListView_ItemTapped"
+                          IsPullToRefreshEnabled="False"
+                          ItemsSource="{Binding SecondaryResults}">
+
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Padding="10, 10"
+                                            Orientation="Horizontal">
+                                        <Image  HeightRequest="55"
+                                            WidthRequest="75"
+                                             Source="{Binding Mushroom.ImageSource}"
+                                            Aspect="AspectFill"/>
+                                        <StackLayout Spacing="0" HorizontalOptions="StartAndExpand">
+                                            <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading2}" />
+                                            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                                                <Label  Style="{StaticResource DangerIcon}"
+                                                    VerticalOptions="Start"
+                                                    HorizontalOptions="End"
+                                                    IsVisible="{Binding Mushroom.IsToxic}"/>
+                                                <Label  Style="{StaticResource WarningIcon}"
+                                                    VerticalOptions="Start"
+                                                    HorizontalOptions="End"
+                                                    IsVisible="{Binding Mushroom.IsWarning}"/>
+                                                <Label  Style="{StaticResource SafeIcon}"
+                                                    VerticalOptions="Start"
+                                                    HorizontalOptions="End"
+                                                    IsVisible="{Binding Mushroom.IsSafe}"/>
+                                                <Label  Text="{Binding Mushroom.EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
+                                            </StackLayout>
+                                        </StackLayout>
+                                        <StackLayout VerticalOptions="CenterAndExpand" 
+                                                 HorizontalOptions="End"
+                                                 Spacing="0">
+                                            <Label Text="Probabilidad" FontSize="12" VerticalOptions="End"/>
+                                            <Label Text="{Binding ProbabilityAsPercentage}" FontSize="18" 
                                                 HorizontalOptions="End"
-                                                IsVisible="{Binding Mushroom.IsToxic}"/>
-                                        <Label  Style="{StaticResource WarningIcon}"
-                                                VerticalOptions="Start"
-                                                HorizontalOptions="End"
-                                                IsVisible="{Binding Mushroom.IsWarning}"/>
-                                        <Label  Style="{StaticResource SafeIcon}"
-                                                VerticalOptions="Start"
-                                                HorizontalOptions="End"
-                                                IsVisible="{Binding Mushroom.IsSafe}"/>
-                                        <Label  Text="{Binding Mushroom.EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
+                                               VerticalOptions="End"/>
+                                        </StackLayout>
                                     </StackLayout>
-                                </StackLayout>
-                                <StackLayout VerticalOptions="CenterAndExpand" 
-                                             HorizontalOptions="End"
-                                             Spacing="0">
-                                    <Label Text="Probabilidad" FontSize="12" VerticalOptions="End"/>
-                                    <Label Text="{Binding ProbabilityAsPercentage}" FontSize="18" 
-                                            HorizontalOptions="End"
-                                           VerticalOptions="End"/>
-                                </StackLayout>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
+                </StackLayout>
+            </ScrollView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

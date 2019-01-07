@@ -17,6 +17,17 @@ namespace Setas.Views
 	public partial class HistoryPage : ContentPage
 	{
 
+        public string AdUnitId
+        {
+            get
+            {
+                if (Device.RuntimePlatform == Device.iOS)
+                    return "ca-app-pub-2003726790886919/4839520685";
+                else if (Device.RuntimePlatform == Device.Android)
+                    return "ca-app-pub-2003726790886919/3499977722";
+                else return null;
+            }
+        }
 
         private IInternalDataService _dataService { get; }
 
