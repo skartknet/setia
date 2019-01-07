@@ -144,6 +144,7 @@ namespace Setas.ViewModels
         {
             if (Connectivity.NetworkAccess == NetworkAccess.None) {
                 UserDialogs.Instance.Alert("Se necesita conexión a la red para realizar esta operación.", "Desconectado", "Aceptar");
+                return;
             };
 
 
