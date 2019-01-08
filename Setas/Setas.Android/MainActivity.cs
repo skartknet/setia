@@ -23,6 +23,8 @@ namespace Setas.Droid
             base.SetTheme(Resource.Style.MainTheme);
             base.OnCreate(bundle);
 
+            Android.Gms.Ads.MobileAds.Initialize(ApplicationContext, "ca-app-pub-2003726790886919~4164647540");
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);
 

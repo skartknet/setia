@@ -9,8 +9,6 @@
  
     <StackLayout>
 
-        <controls:AdMobView AdUnitId="{Binding AdUnitId}"/>
-
         <ListView SeparatorColor="{StaticResource Color4}"                      
                       SelectionMode="None"
                       ItemTapped="ListView_ItemTapped"
@@ -68,6 +66,6 @@
         </ListView>
 
 
-        <controls:AdMobView AdUnitId="{Binding AdUnitId}"  />
+        <controls:AdMobView x:Name="AdView"  />
     </StackLayout>
 </ContentPage>

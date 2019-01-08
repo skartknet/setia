@@ -38,11 +38,6 @@ namespace Setas.Views
                 history.Title = "Historia";
                 history.Icon = "listIcon.png";
 
-
-                //var dictionaryPage = new Dictionary();
-                //dictionaryPage.Title = "Diccionario";
-                //dictionaryPage.Icon = "dictionaryIcon.png";
-
                 Children.Add(identifierNavigation);
                 Children.Add(catalogueNavigation);
                 Children.Add(history);

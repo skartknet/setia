@@ -18,18 +18,7 @@ namespace Setas.Views
         public ObservableCollection<MushroomDisplayModel> Mushrooms;
 
         public IInternalDataService _dataService { get; }
-
-        public string AdUnitId
-        {
-            get
-            {
-                if (Device.RuntimePlatform == Device.iOS)
-                    return "ca-app-pub-2003726790886919/4839520685";
-                else if (Device.RuntimePlatform == Device.Android)
-                    return "ca-app-pub-2003726790886919/3499977722";
-                else return null;
-            }
-        }
+        
 
 
         public CatalogueDetail(IInternalDataService dataService, Edible[] edibles)
@@ -50,6 +39,8 @@ namespace Setas.Views
             InitializeComponent();
 
             DetailsList.ItemsSource = Mushrooms;
+
+            AdView.AdUnitId = App.AdUnitId;
 
         }
 

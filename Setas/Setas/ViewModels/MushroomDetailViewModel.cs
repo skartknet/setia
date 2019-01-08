@@ -4,9 +4,18 @@ using System.ComponentModel;
 
 namespace Setas.ViewModels
 {
-    public class MushroomDetailViewModel : INotifyPropertyChanged
+    public class MushroomDetailViewModel
     {
         public MushroomDisplayModel Mushroom { get; set; }
+
+        public string AdUnitId
+        {
+            get
+            {
+                return App.AdUnitId;
+            }
+        }
+
 
         public MushroomDetailViewModel()
         {
@@ -17,8 +26,6 @@ namespace Setas.ViewModels
         {
             Mushroom = item;
         }
-  
-
-        public event PropertyChangedEventHandler PropertyChanged;
+          
     }
 }

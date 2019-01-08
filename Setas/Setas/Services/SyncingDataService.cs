@@ -32,49 +32,49 @@ namespace Setas.Services
             try
             {
                 _localConfig = await _localStorage.GetConfigurationAsync();
-
-                if (_localConfig.LatestContentUpdate == null || !_localConfig.LatestContentUpdate.HasValue)
-                {
-                    try
-                    {
-                        await InitContent();
-                    }
-                    catch (Exception ex)
-                    {
-                        Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
-                        throw ex;
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        await UpdateContent();
-                    }
-                    catch { Crashes.TrackError(new Exception("Error updating content.")); }
-                }
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(new Exception("Error retrieving configuration."));
+                Crashes.TrackError(new Exception("Error retrieving configuration.", ex));
+            }
+
+            if (_localConfig.LatestContentUpdate == null || !_localConfig.LatestContentUpdate.HasValue)
+            {
+                try
+                {
+                    await InitContent();
+                    App.StorageInitialized = true;
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "first run" } });
+                    throw ex;
+                }
+            }
+            else
+            {
+                try
+                {
+                    await UpdateContent();
+                    App.StorageInitialized = true;
+
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "updating content" } });
+
+                }
             }
         }
 
 
+
+
         private async Task InitContent()
         {
-            try
-            {
-                var sourceItems = await _remoteStorage.GetMushroomsAsync();
-                await _localStorage.InsertMushroomsAsync(sourceItems);
-                await _localStorage.SetContentUpdatedAsync();
-            }
-            catch (Exception ex)
-            {
-                Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "init db" } });
-
-                throw ex;
-            }
+            var sourceItems = await _remoteStorage.GetMushroomsAsync();
+            await _localStorage.InsertMushroomsAsync(sourceItems);
+            await _localStorage.SetContentUpdatedAsync();
 
         }
 
@@ -89,16 +89,9 @@ namespace Setas.Services
             if (_localConfig.LatestContentUpdate.HasValue && extConfig.LatestContentUpdate.Value > _localConfig.LatestContentUpdate.Value)
             {
                 //Internal DB out of date
-                try
-                {
-                    var sourceItems = await _remoteStorage.GetMushroomsAsync(_localConfig.LatestContentUpdate.Value);
-                    await _localStorage.InsertMushroomsAsync(sourceItems);
-                    await _localStorage.SetContentUpdatedAsync();
-                }
-                catch (Exception ex)
-                {
-                    Crashes.TrackError(ex, new Dictionary<string, string> { { "stage", "updating db" } });
-                }
+                var sourceItems = await _remoteStorage.GetMushroomsAsync(_localConfig.LatestContentUpdate.Value);
+                await _localStorage.InsertMushroomsAsync(sourceItems);
+                await _localStorage.SetContentUpdatedAsync();
             }
         }
     }
