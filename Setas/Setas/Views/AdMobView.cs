@@ -16,5 +16,21 @@ namespace Setas.Controls
             set => SetValue(AdUnitIdProperty, value);
         }
 
+
+        public static readonly BindableProperty AdSizeProperty = BindableProperty.Create(
+             nameof(AdSize),
+               typeof(string),
+               typeof(AdMobView),
+               string.Empty
+            );
+
+        public string AdSize
+        {
+            get => (string)GetValue(AdSizeProperty);
+            set => SetValue(AdSizeProperty, value);
+        }
+
+
+
     }
 }

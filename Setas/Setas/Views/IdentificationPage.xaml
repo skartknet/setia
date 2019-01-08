@@ -43,7 +43,7 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
-            <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
+            <controls:AdMobView AdUnitId="{Binding AdUnitId}" AdSize="MEDIUM_RECTANGLE"  VerticalOptions="End" />
         </StackLayout>
     </AbsoluteLayout>
 </ContentPage>
