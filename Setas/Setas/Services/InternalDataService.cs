@@ -83,7 +83,8 @@ namespace Setas.Services
         }
 
         public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params int[] ids)
-        {
+        {            
+
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
@@ -101,9 +102,10 @@ namespace Setas.Services
                 result = result.Where(m => options.Edibles.Contains(m.CookingInterest));
             }
 
-
-
-            return await result.OrderBy(n=>n.Name).ToListAsync();
+            return await result.OrderBy(n=>n.Name)
+                    .Skip((options.Page - 1) * options.ItemsPerPage)
+                    .Take(options.ItemsPerPage)
+                    .ToListAsync();
         }
 
 

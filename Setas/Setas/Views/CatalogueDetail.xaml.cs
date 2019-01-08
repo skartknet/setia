@@ -15,25 +15,24 @@ namespace Setas.Views
     public partial class CatalogueDetail : ContentPage
     {
 
-        public ObservableCollection<MushroomDisplayModel> Mushrooms;
+        public ObservableCollection<MushroomDisplayModel> Mushrooms = new ObservableCollection<MushroomDisplayModel>();
 
         public IInternalDataService _dataService { get; }
-        
+
+        //select edibles
+        private Edible[] _edibles;
+
+        private int _page = 0;
 
 
         public CatalogueDetail(IInternalDataService dataService, Edible[] edibles)
         {
             _dataService = dataService;
+            _edibles = edibles;
 
             Task.Run(async () =>
             {
-                var data = await _dataService.GetMushroomsAsync(new SearchOptions
-                {
-                    Edibles = edibles
-                });
-
-                Mushrooms = new ObservableCollection<MushroomDisplayModel>(data.Select(m => new MushroomDisplayModel(m)));
-
+                await GetItemsAsync();
             }).Wait();
 
             InitializeComponent();
@@ -48,6 +47,34 @@ namespace Setas.Views
         {
             var vm = new MushroomDetailViewModel((MushroomDisplayModel)e.Item);
             await Navigation.PushAsync(new MushroomDetail(vm));
+        }
+
+        async private void DetailsList_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        {
+            var item = e.Item as MushroomDisplayModel;
+            var lastItem = Mushrooms.LastOrDefault();
+            if (lastItem != null && lastItem.Id == item.Id)
+            {
+                await GetItemsAsync();
+            }
+
+        }
+
+        async private Task GetItemsAsync()
+        {
+            var data = await _dataService.GetMushroomsAsync(new SearchOptions
+            {
+                Edibles = _edibles,
+                Page = _page + 1
+            });
+
+
+            foreach (var item in data)
+            {
+                Mushrooms.Add(new MushroomDisplayModel(item));
+            }
+
+            _page++;
         }
     }
 }

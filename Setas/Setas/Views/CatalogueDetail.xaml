@@ -12,6 +12,7 @@
         <ListView SeparatorColor="{StaticResource Color4}"                      
                       SelectionMode="None"
                       ItemTapped="ListView_ItemTapped"
+                        ItemAppearing="DetailsList_ItemAppearing"
                       IsPullToRefreshEnabled="False"
                       x:Name="DetailsList"
                       HasUnevenRows="True"
