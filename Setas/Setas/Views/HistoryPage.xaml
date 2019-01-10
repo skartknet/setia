@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:Setas.Controls"
+             xmlns:views="clr-namespace:Setas.Views"
              x:Class="Setas.Views.HistoryPage"
              Title="Historia">
     <StackLayout >
@@ -28,13 +29,17 @@
                                 <ColumnDefinition Width="75"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
+                                <views:SetiaImage   
+                                            HeightRequest="75"
+                                            WidthRequest="75"
+                                            Aspect="AspectFill"
+                                            VerticalOptions="CenterAndExpand"
+                                            Grid.Row="0" Grid.Column="0" Grid.RowSpan="3">
+                                    <views:SetiaImage.Source>
+                                        <UriImageSource Uri="{Binding Mushroom.ImageSource}"/>
+                                    </views:SetiaImage.Source>
+                                </views:SetiaImage>
 
-                            <Image  HeightRequest="75"
-                                    WidthRequest="75"
-                                    Source="{Binding Mushroom.ImageSource}"
-                                    Aspect="AspectFill"
-                                    VerticalOptions="CenterAndExpand"
-                                    Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
 
                                 <Label Grid.Row="0" Grid.Column="1" VerticalOptions="StartAndExpand" Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" />
 

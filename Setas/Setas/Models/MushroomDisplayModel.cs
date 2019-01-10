@@ -24,12 +24,12 @@ namespace Setas.Models
             Subclass = m.Subclass;
             Synonyms = m.Synonyms;
         }
-        public Xamarin.Forms.ImageSource ImageSource
+        public Uri ImageSource
         {
             get
             {
-                var image = Xamarin.Forms.ImageSource.FromUri(new Uri(App.ExternalService, this.Image));
-                return image;
+                var uri = new Uri(App.ExternalService, this.Image);
+                return uri;
             }
         }
         public EdibleTopClassEnum EdibleOverview
@@ -66,9 +66,9 @@ namespace Setas.Models
                 switch (CookingInterest)
                 {
                     case Common.Enums.Edible.BuenComestible:
-                        return "Comestible";                        
+                        return "Comestible";
                     case Common.Enums.Edible.ComestibleBajaCalidad:
-                        return "Comestible Baja Calidad";                        
+                        return "Comestible Baja Calidad";
                     case Common.Enums.Edible.ComestibleCalidadMedia:
                         return "Comestible Calidad Media";
                     case Common.Enums.Edible.Toxica:

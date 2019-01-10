@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.Gms.Ads;
 using Android.OS;
+using FFImageLoading.Forms.Droid;
 
 namespace Setas.Droid
 {
@@ -23,10 +24,10 @@ namespace Setas.Droid
             base.SetTheme(Resource.Style.MainTheme);
             base.OnCreate(bundle);
 
-            Android.Gms.Ads.MobileAds.Initialize(ApplicationContext, "ca-app-pub-2003726790886919~4164647540");
-
+            MobileAds.Initialize(ApplicationContext, "ca-app-pub-2003726790886919~4164647540");
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            Xamarin.Essentials.Platform.Init(this, bundle);
+            Xamarin.Essentials.Platform.Init(this, bundle);            
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: false);
 
             LoadApplication(new App());
 

@@ -5,8 +5,9 @@
              Title="Catálogo"
              xmlns:localenums="clr-namespace:Setas.Enums"
              xmlns:controls="clr-namespace:Setas.Controls"
+             xmlns:views="clr-namespace:Setas.Views"
              BackgroundColor="{StaticResource Color6}">
- 
+
     <StackLayout>
 
         <ListView SeparatorColor="{StaticResource Color4}"                      
@@ -21,7 +22,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        
+
                         <Grid Padding="0,10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
@@ -33,12 +34,18 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Image  HeightRequest="75"
-                                    WidthRequest="75"
-                                    Source="{Binding ImageSource}"
-                                    Aspect="AspectFill"
-                                    VerticalOptions="CenterAndExpand"
-                                    Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
+                            <views:SetiaImage   HeightRequest="75"
+                                                WidthRequest="75"
+                                                Aspect="AspectFill"
+                                                VerticalOptions="CenterAndExpand"
+                                                Grid.Row="0" Grid.Column="0" Grid.RowSpan="3">
+                                <views:SetiaImage.Source>
+                                    <UriImageSource Uri="{Binding ImageSource}"/>
+                                </views:SetiaImage.Source>
+                            </views:SetiaImage>
+
+
+
 
                             <Label Grid.Row="0" Grid.Column="1" VerticalOptions="StartAndExpand" Text="{Binding Name}" Style="{StaticResource Heading1}" />
 
@@ -57,7 +64,7 @@
                                     IsVisible="{Binding IsSafe}"/>
                                 <Label   Text="{Binding EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
                             </StackLayout>
-             
+
                         </Grid>
 
 

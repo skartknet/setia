@@ -5,6 +5,7 @@
              xmlns:models="clr-namespace:Setas.ViewModels"
              xmlns:converters="clr-namespace:Setas.Converters"
              xmlns:controls="clr-namespace:Setas.Controls"
+             xmlns:views="clr-namespace:Setas.Views"
              Title="Resultado"           
              BackgroundColor="{StaticResource Color6}">
 
@@ -39,12 +40,17 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <Image Grid.Column="0" Grid.Row="0"
-                                HeightRequest="95"
-                                WidthRequest="95"                       
-                                Source="{Binding FirstResult.Mushroom.ImageSource}"
-                                Aspect="AspectFill">
-                        </Image>
+                     
+                        <views:SetiaImage   
+                            Grid.Column="0" Grid.Row="0"
+                            HeightRequest="95"
+                            WidthRequest="95"
+                            Aspect="AspectFill"
+                            VerticalOptions="CenterAndExpand">
+                            <views:SetiaImage.Source>
+                                <UriImageSource Uri="{Binding FirstResult.Mushroom.ImageSource}"/>
+                            </views:SetiaImage.Source>
+                        </views:SetiaImage>
 
                         <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}">
                             <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
@@ -95,10 +101,15 @@
                                 <ViewCell>
                                     <StackLayout Padding="10, 10"
                                             Orientation="Horizontal">
-                                        <Image  HeightRequest="55"
+                                        <views:SetiaImage   
+                                            HeightRequest="55"
                                             WidthRequest="75"
-                                             Source="{Binding Mushroom.ImageSource}"
-                                            Aspect="AspectFill"/>
+                                            Aspect="AspectFill"
+                                            VerticalOptions="CenterAndExpand">
+                                            <views:SetiaImage.Source>
+                                                <UriImageSource Uri="{Binding Mushroom.ImageSource}"/>
+                                            </views:SetiaImage.Source>
+                                        </views:SetiaImage>
                                         <StackLayout Spacing="0" HorizontalOptions="StartAndExpand">
                                             <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading2}" />
                                             <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
