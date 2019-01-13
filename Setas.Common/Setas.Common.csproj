@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Edible.cs" />
+    <Compile Include="Models\Api\ImportNodeContent.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\Mushroom.cs" />
     <Compile Include="Models\SearchOptions.cs" />

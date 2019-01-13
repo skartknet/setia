@@ -36,7 +36,7 @@ namespace Setas.Views
 
                 var history = new NavigationPage(new HistoryPage(scope.Resolve<IInternalDataService>()));
                 history.Title = "Historia";
-                history.Icon = "historyIcon.png";
+                history.Icon = "eyeIcon.png";
 
                 Children.Add(identifierNavigation);
                 Children.Add(catalogueNavigation);

@@ -44,8 +44,6 @@ namespace Setas.Website.Api
 
         }
 
-
-
         public HttpResponseMessage GetMushroom(int id)
         {
             var catalogue = Umbraco.TypedContentAtRoot().First(n => n.DocumentTypeAlias == Catalogue.ModelTypeAlias);
