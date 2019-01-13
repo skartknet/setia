@@ -2,6 +2,7 @@
 using Setas.Common.Models.Api;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CustomVisionImporter
@@ -20,7 +21,10 @@ namespace CustomVisionImporter
             var umbracoService = new UmbracoService();
             umbracoService.ApiBase = new Uri("http://setia-dev.azurewebsites.net/umbraco/api");
 
-            var cognitiveService = new CustomVisionService(new Uri("https://southcentralus.api.cognitive.microsoft.com/customvision/v2.2/Training/projects/"), "d6443721d97b46479be1634493aa83e2");
+            var cognitiveService = new CustomVisionService(
+                baseUrl: new Uri("https://southcentralus.api.cognitive.microsoft.com/customvision/v2.2/Training/"),
+                projectId: "2e7aba89-bdde-479f-9b27-be098914db6a",
+                trainingKey: "a22435bc415740ad9f59e7628fab4cf8");
             
 
 
@@ -49,10 +53,14 @@ namespace CustomVisionImporter
 
 
                 //Foreach image in the folder
-                foreach (var img in images)
+                int page = 0;
+                int imgsPerBatch = 64; //limit of the API
+                while (true)
                 {
-
+                    var batch = images.Skip(page * imgsPerBatch).Take(imgsPerBatch);
+                    CustomVisionService.CreateImagesFromFilesAsync(batch);
                 }
+                
                 //Upload image with tag "id":"name"
             }
 
