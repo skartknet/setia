@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Setas.Services
 {
 
-    public class ExternalDataService : IExternalDataService
+    public class UmbracoExternalDataService : IExternalDataService
     {
 
         readonly Uri baseUrl = new Uri(App.ExternalService, App.ApiBase);

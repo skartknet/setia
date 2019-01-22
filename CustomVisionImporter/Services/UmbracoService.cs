@@ -1,4 +1,5 @@
-﻿using Setas.Common.Models.Api;
+﻿using Newtonsoft.Json;
+using Setas.Common.Models.Api;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -26,8 +27,8 @@ namespace CustomVisionImporter.Services
         {
             string endpoint = "content/createnode";
 
-            var queryContent = new StringContent(content.ToString(), Encoding.UTF8, "application/json");
-            var result = _client.PostAsync(new Uri(ApiBase, endpoint), queryContent).Result;
+            var queryContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json");
+            var result = await _client.PostAsync(new Uri(ApiBase, endpoint), queryContent);
 
             if (result.IsSuccessStatusCode)
             {
@@ -38,7 +39,8 @@ namespace CustomVisionImporter.Services
                 }
                 else
                 {
-                    return 0;
+                    Console.WriteLine("Error parsing Umbraco node id: " + rContent);
+                    return default(int);
                 }
             }
             else

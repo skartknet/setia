@@ -1,5 +1,6 @@
 ﻿using Setas.Common.Enums;
 using SQLite;
+using System;
 
 namespace Setas.Common.Models
 {
@@ -7,7 +8,7 @@ namespace Setas.Common.Models
     public class MushroomData
     {
         [PrimaryKey]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Order { get; set; }
         public string PopularNames { get; set; }

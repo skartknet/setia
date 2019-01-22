@@ -30,6 +30,15 @@ namespace Setas
         //below this limit the identification result will be displayed as 'unknown'
         public static float ProbabilityThreshold = 0f;
 
+
+        //HEADLESS
+        public static string HeadlessUrl = "https://marios-amiable-red-panda.s1.umbraco.io";
+        public static string HeadlessUsername = "";
+        public static string HeadlessPassword = "";
+
+
+
+
         public static string AdUnitId
         {
             get

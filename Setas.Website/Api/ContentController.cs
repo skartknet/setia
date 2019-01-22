@@ -20,7 +20,7 @@ namespace Setas.Website.Api
         [HttpPost]
         public int CreateNode(ImportNodeContent content)
         {
-            var node = Services.ContentService.CreateContent(content.Name, _mushroomsRoot.Id, Mushroom.ModelTypeAlias);
+            var node = Services.ContentService.CreateContentWithIdentity(content.Name, _mushroomsRoot.Id, Mushroom.ModelTypeAlias);
 
             return node.Id;
         }
