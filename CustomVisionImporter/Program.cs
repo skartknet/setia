@@ -37,48 +37,99 @@ namespace CustomVisionImporter
             //for each folder...
             foreach (var folder in foldersPaths)
             {
+                var name = FirstCharToUpper(new DirectoryInfo(folder).Name);
+
+                Console.WriteLine($"Processing folder {name} ...");
+
                 #region Create node in Umbraco
-                var name = new DirectoryInfo(folder).Name;
                 var umbracoContent = new ImportNodeContent();
 
                 //take the name of the folder (this is mushroom name)
-                umbracoContent.Name = FirstCharToUpper(name);
+                umbracoContent.Name = name;
                 int nodeId;
 
                 try
                 {
+                    Console.WriteLine("Importing info into Umbraco...");
                     //Create a node in umbraco with this name
                     nodeId = umbracoService.CreateNode(umbracoContent).Result;
 
                     //parsing of returned id failed.
                     if (nodeId.Equals(default(int)))
+                    {
+                        Console.WriteLine("ERROR Importing info into Umbraco!");
+
                         continue;
+                    }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"Error creating node in Umbraco with name {name}. Reason: {ex.Message}");
                     continue;
                 }
+
+                Console.WriteLine($"Success importing info into Umbraco. Node ID: {nodeId}");
                 #endregion
 
                 #region Upload images to Customvision
+                Console.WriteLine("Uploading images into custom vision...");
+
+
                 var images = Directory.EnumerateFiles(folder);
 
-                var tag = trainingApi.CreateTag(projectId, $"\"{nodeId}\":\"{FirstCharToUpper(name).Replace(" ", "")}\"");
+                //avoid duplicate tags
+                var currentTags = trainingApi.GetTags(projectId);
 
+                string tagValue = $"\"{nodeId}\":\"{name.Replace(" ", "")}\"";
+                Tag tag = currentTags.FirstOrDefault(t => t.Name == tagValue);
+                if (tag == null)
+                {
+                    tag = trainingApi.CreateTag(projectId, tagValue);
+                }
 
-                var imageFiles = images.Select(img => new ImageFileCreateEntry(Path.GetFileName(img), File.ReadAllBytes(img))).ToList();
-                trainingApi.CreateImagesFromFiles(projectId, new ImageFileCreateBatch(new List<ImageFileCreateEntry>() { imageFiles.First() }
-                , new List<Guid>() { tag.Id }));
+                int page = 0;
+
+                var batch = new ImageFileCreateBatch();
+                var imageFiles = TakeImagesBatch(images, page);
+
+                while (imageFiles.Any())
+                {
+                    Console.WriteLine($"Importing {imageFiles.Count()} out of {images.Count()}...");
+
+                    batch = new ImageFileCreateBatch(imageFiles.ToList(), new List<Guid>() { tag.Id });
+
+                    var summary = trainingApi.CreateImagesFromFiles(projectId, batch);
+
+                    if (!summary.IsBatchSuccessful)
+                    {
+                        foreach (var img in summary.Images.Where(img => img.Status != "OK"))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"- Error uploading image {Path.GetFileName(img.SourceUrl)}. Status: {img.Status}");
+                        }
+                    }
+
+                    page++;
+                    imageFiles = TakeImagesBatch(images, page);
+                }
 
 
                 #endregion
+
+                Console.WriteLine($"SUCCESS: Folder {name} processed succesfully.");
+                Console.WriteLine();
             }
 
+            Console.WriteLine();
+            Console.WriteLine($"Import finished!. Processed {foldersPaths.Length} folders.");
+            Console.ReadLine();
 
         }
 
-
+        private static IEnumerable<ImageFileCreateEntry> TakeImagesBatch(IEnumerable<string> images, int page, int imgsPerBatch = 64)
+        {
+            return images.Skip(page * imgsPerBatch).Take(imgsPerBatch).Select(fileName => new ImageFileCreateEntry(fileName, File.ReadAllBytes(fileName)));
+        }
 
         public static string FirstCharToUpper(string value)
         {

@@ -20,7 +20,18 @@ namespace Setas.Website.Api
         [HttpPost]
         public int CreateNode(ImportNodeContent content)
         {
-            var node = Services.ContentService.CreateContentWithIdentity(content.Name, _mushroomsRoot.Id, Mushroom.ModelTypeAlias);
+            var existingNode = Umbraco.TypedSearch(content.Name);
+            IContent node;
+            if (!existingNode.Any())
+            {
+                //new node
+                node = Services.ContentService.CreateContentWithIdentity(content.Name, _mushroomsRoot.Id, Mushroom.ModelTypeAlias);
+            }
+            else
+            {
+                //node exists, we update info.
+                node = Services.ContentService.GetById(existingNode.First().Id);
+            }
 
             return node.Id;
         }
