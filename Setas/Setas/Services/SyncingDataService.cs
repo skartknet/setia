@@ -2,6 +2,7 @@
 using Setas.Common.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 
@@ -69,12 +70,15 @@ namespace Setas.Services
 
 
 
-
         private async Task InitContent()
         {
-            var sourceItems = await _remoteStorage.GetMushroomsAsync();
-            await _localStorage.InsertMushroomsAsync(sourceItems);
-            await _localStorage.SetContentUpdatedAsync();
+            var sourceItems = await _remoteStorage.GetAllMushroomsAsync();
+
+            if (sourceItems.Any())
+            {
+                await _localStorage.InsertMushroomsAsync(sourceItems);
+                await _localStorage.SetContentUpdatedAsync();
+            }
 
         }
 
@@ -83,16 +87,13 @@ namespace Setas.Services
             //if the sync period hasn't been reached we don't sync.
             if (_localConfig.LatestContentUpdate.Value.Add(App.SyncPeriod) > DateTime.UtcNow) return;
 
-            var extConfig = await _remoteStorage.GetConfigurationAsync();
-
-            //we update
-            if (_localConfig.LatestContentUpdate.HasValue && extConfig.LatestContentUpdate.Value > _localConfig.LatestContentUpdate.Value)
+            var sourceItems = await _remoteStorage.GetMushroomsAsync(_localConfig.LatestContentUpdate.Value);
+            if (sourceItems.Any())
             {
-                //Internal DB out of date
-                var sourceItems = await _remoteStorage.GetMushroomsAsync(_localConfig.LatestContentUpdate.Value);
                 await _localStorage.InsertMushroomsAsync(sourceItems);
                 await _localStorage.SetContentUpdatedAsync();
             }
+
         }
     }
 }

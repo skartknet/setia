@@ -20,12 +20,14 @@ namespace Setas
         public static bool StorageInitialized { get; set; } = false;
 
         //public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
-        public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
+        //public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
+        public static Uri ExternalService = new Uri("https://marios-amiable-red-panda.s1.umbraco.io");
+
 
         //sync every week.
         public static TimeSpan SyncPeriod = new TimeSpan(0, 0, 5);
 
-        public static string ApiBase = "/umbraco/api/";
+        //public static string ApiBase = "/umbraco/api/";
 
         //below this limit the identification result will be displayed as 'unknown'
         public static float ProbabilityThreshold = 0f;
@@ -33,8 +35,8 @@ namespace Setas
 
         //HEADLESS
         public static string HeadlessUrl = "https://marios-amiable-red-panda.s1.umbraco.io";
-        public static string HeadlessUsername = "";
-        public static string HeadlessPassword = "";
+        public static string HeadlessUsername = "testingdevlopezadeh@gmail.com";
+        public static string HeadlessPassword = "$LfJ2&asZ7oE3$y2";
 
 
 

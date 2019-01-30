@@ -5,12 +5,12 @@ namespace Setas.Helpers
 {
     public static class Predictions
     {
-        public static int TagToItemId(string tag)
+        public static Guid TagToItemId(string tag)
         {
-            int id = 0;
+            Guid id;
             try
             {
-                id = JArray.Parse("[" + tag + "]")[0].Value<int>();
+                id = JArray.Parse("[" + tag + "]")[0].Value<Guid>();
             }
             catch (Exception ex)
             { }

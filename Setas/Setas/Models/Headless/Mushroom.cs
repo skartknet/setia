@@ -1,15 +1,12 @@
 ﻿using Setas.Common.Enums;
 using SQLite;
 using System;
+using Umbraco.Headless.Client.Net.Models;
 
-namespace Setas.Common.Models
+namespace Setas.Common.Models.Headless
 {
-    [Table("Mushroom")]
-    public class MushroomData
+    public class Mushroom : ContentBase
     {
-        [PrimaryKey]
-        public Guid Id { get; set; }
-        public string Name { get; set; }
         public string Order { get; set; }
         public string[] PopularNames { get; set; }
         public string Season { get; set; }
@@ -18,10 +15,10 @@ namespace Setas.Common.Models
         public string[] Synonyms { get; set; }
         public string Confusion { get; set; }
         public string CookingInstructions { get; set; }
-        public Edible CookingInterest { get; set; }
+        public string CookingInterest { get; set; }
         public string Description { get; set; }
         public string Family { get; set; }
         public string Habitat { get; set; }
-        public string Image { get; set; }
+        public string[] Images { get; set; }
     }
 }

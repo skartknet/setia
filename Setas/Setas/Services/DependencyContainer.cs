@@ -11,7 +11,7 @@ namespace Setas.Services
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<UmbracoExternalDataService>().As<IExternalDataService>().SingleInstance();
+            builder.RegisterType<HeadlessExternalDataService>().As<IExternalDataService>().SingleInstance();
             builder.RegisterType<InternalDataService>().As<IInternalDataService>().SingleInstance();
             builder.RegisterType<SyncingDataService>().As<ISyncingDataService>().SingleInstance();
             builder.RegisterType<PredictionService>().As<IPredictionService>().SingleInstance();

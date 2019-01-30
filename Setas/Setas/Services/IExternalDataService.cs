@@ -10,9 +10,6 @@ namespace Setas.Services
     {        
 
         Task<IEnumerable<MushroomData>> GetMushroomsAsync(DateTime modifiedSince);
-        Task<IEnumerable<MushroomData>> GetMushroomsAsync();
-
-
-        Task<Configuration> GetConfigurationAsync();
+        Task<IEnumerable<MushroomData>> GetAllMushroomsAsync();
     }
 }

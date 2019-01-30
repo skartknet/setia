@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Setas.Models.Data;
+using System;
 
 namespace Setas.Services
 {
     public interface IInternalDataService
     {
-        Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params int[] ids);
-        Task<MushroomData> GetMushroomAsync(int id);
+        Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params Guid[] ids);
+        Task<MushroomData> GetMushroomAsync(Guid id);
         Task<Configuration> GetConfigurationAsync();
         Task InsertMushroomsAsync(IEnumerable<MushroomData> sourceItems);
 

@@ -11,7 +11,7 @@ namespace Setas.Models.Data
         public DateTime TakenOn { get; set; }
 
         [ForeignKey(typeof(MushroomData))]
-        public int MushroomId { get; set; }
+        public Guid MushroomId { get; set; }
 
         [ManyToOne(ReadOnly = true)]
         public MushroomData Mushroom { get; set; }
