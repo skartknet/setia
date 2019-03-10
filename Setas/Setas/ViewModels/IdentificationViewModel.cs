@@ -1,5 +1,7 @@
 ﻿using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Setas.Common.Models;
@@ -23,7 +25,7 @@ namespace Setas.ViewModels
 
         private IInternalDataService _dataService;
 
-        private IPredictionService _predictionService;
+        private ICustomVisionPredictionClient _predictionService;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -32,6 +34,9 @@ namespace Setas.ViewModels
         public ICommand PickPhoto { get; }
 
         public INavigation Navigation { get; set; }
+
+
+        
 
         public string AdUnitId
         {
@@ -83,7 +88,7 @@ namespace Setas.ViewModels
         public IdentificationViewModel()
         { }
 
-        public IdentificationViewModel(IInternalDataService dataService, IPredictionService predictionService)
+        public IdentificationViewModel(IInternalDataService dataService, ICustomVisionPredictionClient predictionService)
         {
             _dataService = dataService;
             _predictionService = predictionService;
@@ -154,12 +159,19 @@ namespace Setas.ViewModels
             {
                 var fileStream = image.GetStream();
 
-                PredictionResponse result = null;
+                App.SourceImage = ImageSource.FromStream(() =>
+                {
+                    return image.GetStream();
+                });
+
+
+
+                ImagePrediction result = null;
 
                 try
                 {
 
-                    result = await _predictionService.Analyse(StreamToBytes(fileStream));
+                    result = await _predictionService.PredictImageAsync(App.CustomVisionProjectKey, fileStream);
                 }
                 catch (Exception ex)
                 {
@@ -169,10 +181,7 @@ namespace Setas.ViewModels
 
 
 
-                App.SourceImage = ImageSource.FromStream(() =>
-                {
-                    return image.GetStream();
-                });
+               
 
 
 
@@ -187,28 +196,38 @@ namespace Setas.ViewModels
 
         }
 
-        private async System.Threading.Tasks.Task<ResultsViewModel> CreateResultViewModel(PredictionResponse result)
+        private async System.Threading.Tasks.Task<ResultsViewModel> CreateResultViewModel(ImagePrediction result)
         {
 
             var vm = new ResultsViewModel();
 
             try
             {
+                if (!result.Predictions.Any()) return null;
+
                 var firstResultPrediction = result.Predictions.FirstOrDefault(m=>m.Probability >= App.ProbabilityThreshold);
 
-                IEnumerable<Prediction> secondaryResultsPredictions = Enumerable.Empty<Prediction>();
+                IEnumerable<PredictionModel> secondaryResultsPredictions = Enumerable.Empty<PredictionModel>();                
 
                 if (firstResultPrediction != null)
                 {
+                    var firstResultViewModel = new Prediction();
                     var rId = Helpers.Predictions.TagToItemId(firstResultPrediction.TagName);
-                    firstResultPrediction.Mushroom = new MushroomDisplayModel(await _dataService.GetMushroomAsync(rId));
+
+                    firstResultViewModel.Mushroom = new MushroomDisplayModel(await _dataService.GetMushroomAsync(rId));
+                    firstResultViewModel.Probability = firstResultPrediction.Probability;
+                    vm.FirstResult = firstResultViewModel;
+
                     secondaryResultsPredictions = result.Predictions.Skip(1);
+
 
                     var hItem = new Models.Data.HistoryItem()
                     {
                         TakenOn = DateTime.Now,
-                        MushroomId = firstResultPrediction.Mushroom.Id
+                        MushroomId = firstResultViewModel.Mushroom.Id
                     };
+
+
 
                     await _dataService.SaveHistoryItemAsync(hItem);
                 }
@@ -221,14 +240,21 @@ namespace Setas.ViewModels
                 var rIds = secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray();
                 var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(new SearchOptions(), rIds);
 
+                var secResultsViewModel = new List<Prediction>();
+
                 foreach (var item in secondaryResultsPredictions)
                 {
-                    item.Mushroom = new MushroomDisplayModel(secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName)));
+                    var viewModel = new Prediction
+                    {
+                        Mushroom = new MushroomDisplayModel(secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName))),
+                       Probability = item.Probability
+                    };
+
+                    secResultsViewModel.Add(viewModel);
                 }
 
 
-                vm.FirstResult = firstResultPrediction;
-                vm.SecondaryResults = secondaryResultsPredictions.ToArray();
+                vm.SecondaryResults = secResultsViewModel.ToArray();
 
             }
             catch (WebException ex)

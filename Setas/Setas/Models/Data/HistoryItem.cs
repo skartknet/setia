@@ -1,4 +1,4 @@
-﻿using Setas.Common.Models;
+﻿using Setas.Data;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using System;
@@ -10,11 +10,11 @@ namespace Setas.Models.Data
     {
         public DateTime TakenOn { get; set; }
 
-        [ForeignKey(typeof(MushroomData))]
+        [ForeignKey(typeof(Mushroom))]
         public int MushroomId { get; set; }
 
         [ManyToOne(ReadOnly = true)]
-        public MushroomData Mushroom { get; set; }
+        public Mushroom Mushroom { get; set; }
 
     }
 }

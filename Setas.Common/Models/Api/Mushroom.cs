@@ -2,13 +2,11 @@
 using SQLite;
 using System;
 
-namespace Setas.Common.Models
+namespace Setas.Common.Models.Api
 {
-    [Table("Mushroom")]
-    public class MushroomData
+    public class Mushroom
     {
-        [PrimaryKey]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Order { get; set; }
         public string PopularNames { get; set; }

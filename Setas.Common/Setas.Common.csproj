@@ -59,9 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\Edible.cs" />
-    <Compile Include="Models\Api\ImportNodeContent.cs" />
     <Compile Include="Models\Configuration.cs" />
-    <Compile Include="Models\MushroomData.cs" />
+    <Compile Include="Models\Api\Mushroom.cs" />
     <Compile Include="Models\SearchOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetiaConstants.cs" />

@@ -2,6 +2,7 @@
 using Microsoft.AppCenter.Crashes;
 using Setas.Common;
 using Setas.Common.Models;
+using Setas.Data;
 using Setas.Models.Data;
 using SQLite;
 using SQLiteNetExtensionsAsync.Extensions;
@@ -31,7 +32,7 @@ namespace Setas.Services
             }
 
 #if DEBUG
-            //File.Delete(DBPATH);      
+            File.Delete(DBPATH);      
             
 #endif
 
@@ -59,14 +60,14 @@ namespace Setas.Services
         {
             try
             {
-                _database.CreateTableAsync<MushroomData>();
-                _database.CreateTableAsync<ConfigurationData>();
+                _database.CreateTableAsync<Mushroom>();
+                _database.CreateTableAsync<Models.Data.ConfigurationItem>();
                 _database.CreateTableAsync<HistoryItem>();
 
 
-                var configElements = new List<ConfigurationData>()
+                var configElements = new List<Models.Data.ConfigurationItem>()
                 {
-                    new ConfigurationData
+                    new Models.Data.ConfigurationItem
                     {
                         Alias = Constants.LatestContentUpdatePropertyAlias,
                         Value = null
@@ -82,7 +83,7 @@ namespace Setas.Services
 
         }
 
-        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params int[] ids)
+        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options, params int[] ids)
         {            
 
             if (options == null)
@@ -90,7 +91,7 @@ namespace Setas.Services
                 throw new ArgumentNullException(nameof(options));
             }
 
-            AsyncTableQuery<MushroomData> result = _database.Table<MushroomData>();
+            AsyncTableQuery<Mushroom> result = _database.Table<Mushroom>();
 
             if (ids != null && ids.Any())
             {
@@ -109,12 +110,12 @@ namespace Setas.Services
         }
 
 
-        public Task<MushroomData> GetMushroomAsync(int id)
+        public Task<Mushroom> GetMushroomAsync(int id)
         {
-            return _database.Table<MushroomData>().FirstOrDefaultAsync(m => m.Id == id);
+            return _database.Table<Mushroom>().FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task InsertMushroomsAsync(IEnumerable<MushroomData> items)
+        public async Task InsertMushroomsAsync(IEnumerable<Mushroom> items)
         {
             foreach (var item in items)
             {
@@ -132,17 +133,17 @@ namespace Setas.Services
             await _database.InsertAsync(item);
         }
 
-        public Task InsertMushroomAsync(MushroomData item)
+        public Task InsertMushroomAsync(Mushroom item)
         {
             return _database.InsertOrReplaceAsync(item);
         }
 
-        public async Task<Configuration> GetConfigurationAsync()
+        public async Task<Common.Models.Configuration> GetConfigurationAsync()
         {
-            var config = new Configuration();
+            var config = new Common.Models.Configuration();
             try
             {
-                var data = await _database.Table<ConfigurationData>().ToListAsync();
+                var data = await _database.Table<Models.Data.ConfigurationItem>().ToListAsync();
                 if (DateTime.TryParse(data.FirstOrDefault(r => r.Alias == Constants.LatestContentUpdatePropertyAlias).Value.ToString(), out DateTime _lastUpdate))
                 {
                     config.LatestContentUpdate = _lastUpdate;
@@ -157,9 +158,9 @@ namespace Setas.Services
         }
 
 
-        private async Task<IEnumerable<ConfigurationData>> GetConfigurationDataAsync()
+        private async Task<IEnumerable<Models.Data.ConfigurationItem>> GetConfigurationDataAsync()
         {
-            var data = await _database.Table<ConfigurationData>().ToListAsync();
+            var data = await _database.Table<Models.Data.ConfigurationItem>().ToListAsync();
             return data;
         }
 
@@ -184,7 +185,7 @@ namespace Setas.Services
             }
             else
             {
-                ConfigurationData d = new ConfigurationData
+                Models.Data.ConfigurationItem d = new Models.Data.ConfigurationItem
                 {
                     Alias = Constants.LatestContentUpdatePropertyAlias,
                     Value = DateTime.UtcNow.ToString()

@@ -1,5 +1,8 @@
 ﻿using Autofac;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Setas.Enums;
+
+
 
 namespace Setas.Services
 {
@@ -14,7 +17,7 @@ namespace Setas.Services
             builder.RegisterType<UmbracoExternalDataService>().As<IExternalDataService>().SingleInstance();
             builder.RegisterType<InternalDataService>().As<IInternalDataService>().SingleInstance();
             builder.RegisterType<SyncingDataService>().As<ISyncingDataService>().SingleInstance();
-            builder.RegisterType<PredictionService>().As<IPredictionService>().SingleInstance();
+            builder.RegisterType<CustomVisionPredictionClient>().As<ICustomVisionPredictionClient>().SingleInstance();
 
             Container = builder.Build();
         }

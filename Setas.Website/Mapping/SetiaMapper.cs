@@ -6,7 +6,7 @@ using System.Linq;
 using Umbraco.Core;
 using Umbraco.Core.Models.Mapping;
 using Umbraco.Web;
-using ApiModels = Setas.Common.Models;
+using ApiModels = Setas.Common.Models.Api;
 
 
 namespace Setas.Website.Api
@@ -16,7 +16,7 @@ namespace Setas.Website.Api
         public override void ConfigureMappings(IConfiguration config, ApplicationContext applicationContext)
         {
 
-            config.CreateMap<Mushroom, ApiModels.MushroomData>()
+            config.CreateMap<Mushroom, ApiModels.Mushroom>()
                 .ForMember(n => n.Image, exp => exp.ResolveUsing(p => p.Images != null && p.Images.Any() ?
                                                                      string.Join(",", p.Images.Select(img => img.Url)) :
                                                                      null))
