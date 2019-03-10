@@ -48,10 +48,41 @@ namespace Setas.Services
             }
         }
 
-        public async Task<IEnumerable<MushroomData>> GetAllMushroomsAsync()
+        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync()
         {
             return await this.GetMushroomsAsync(DateTime.MinValue);
         }
-        
+
+
+
+        public async Task<Configuration> GetConfigurationAsync()
+        {
+            Configuration configuration = null;
+            using (var client = new HttpClient())
+            {
+                client.Timeout = new TimeSpan(0, 0, 10);
+
+
+                var uri = new Uri(baseUrl, "setas/GetConfiguration");
+                try
+                {
+                    var response = await client.GetAsync(uri);
+
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+                        configuration = JsonConvert.DeserializeObject<Configuration>(content);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+            }
+
+            return configuration;
+        }
     }
 }

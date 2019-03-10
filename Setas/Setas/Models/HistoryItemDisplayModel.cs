@@ -8,7 +8,7 @@ namespace Setas.Models
     {
         public string TakenOn { get; set; }
 
-        public Guid MushroomId { get; set; }
+        public int MushroomId { get; set; }
 
         public MushroomDisplayModel Mushroom { get; set; }
     }

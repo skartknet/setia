@@ -82,7 +82,7 @@ namespace Setas.Services
 
         }
 
-        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params Guid[] ids)
+        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(SearchOptions options, params int[] ids)
         {            
 
             if (options == null)
@@ -109,7 +109,7 @@ namespace Setas.Services
         }
 
 
-        public Task<MushroomData> GetMushroomAsync(Guid id)
+        public Task<MushroomData> GetMushroomAsync(int id)
         {
             return _database.Table<MushroomData>().FirstOrDefaultAsync(m => m.Id == id);
         }
