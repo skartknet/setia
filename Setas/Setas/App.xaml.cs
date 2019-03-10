@@ -3,6 +3,7 @@ using Autofac;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Setas.Models.Mapping;
 using Setas.Services;
 using Setas.Views;
 using System;
@@ -31,10 +32,8 @@ namespace Setas
         public static float ProbabilityThreshold = 0f;
 
 
-        //HEADLESS
-        public static string HeadlessUrl = "https://marios-amiable-red-panda.s1.umbraco.io";
-        public static string HeadlessUsername = "";
-        public static string HeadlessPassword = "";
+        //Custom Vision
+        public static Guid CustomVisionProjectKey = new Guid("8a05ddf9-4473-4131-bd29-b6eb7ae2ecd2");
 
 
 
@@ -51,11 +50,12 @@ namespace Setas
             }
         }
 
-        public static string Error { get; set; }
+   
 
         public App()
         {
             DependencyContainer.Register(this);
+            MappingConfiguration.Init();
         }
 
 
@@ -94,7 +94,7 @@ namespace Setas
                     }
                     catch (Exception ex)
                     {
-                        App.Error = "Error iniciando base de datos.";
+                        await UserDialogs.Instance.AlertAsync("Error initialising database", "Error");
                     }
 
 

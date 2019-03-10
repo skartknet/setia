@@ -11,7 +11,7 @@ using Umbraco.Core.Models;
 using Umbraco.Core.Persistence;
 using Umbraco.Web;
 using Umbraco.Web.WebApi;
-using ApiModels = Setas.Common.Models;
+using ApiModels = Setas.Common.Models.Api;
 using CoreModels = Setas.Core.Models;
 
 
@@ -29,11 +29,11 @@ namespace Setas.Website.Api
             items = catalogue.Children().Where(i => i.UpdateDate >= modifiedSince);
 
 
-            IEnumerable<ApiModels.MushroomData> itemsMapped = null;
+            IEnumerable<ApiModels.Mushroom> itemsMapped = null;
             var mush = items.OfType<Mushroom>();
             try
             {
-                itemsMapped = Mapper.Map<IEnumerable<ApiModels.MushroomData>>(mush);
+                itemsMapped = Mapper.Map<IEnumerable<ApiModels.Mushroom>>(mush);
             }
             catch (Exception ex)
             {
@@ -51,10 +51,10 @@ namespace Setas.Website.Api
 
             if (item == null) return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Item not found.");
 
-            ApiModels.MushroomData itemMapped = null;
+            ApiModels.Mushroom itemMapped = null;
             try
             {
-                itemMapped = Mapper.Map<ApiModels.MushroomData>(item);
+                itemMapped = Mapper.Map<ApiModels.Mushroom>(item);
             }
             catch (Exception ex)
             {

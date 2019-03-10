@@ -12,9 +12,6 @@ namespace CustomVisionImporter
     class Program
     {
 
-
-
-
         static void Main(string[] args)
         {
             //select a root folder: ie. A
@@ -42,7 +39,7 @@ namespace CustomVisionImporter
                 Console.WriteLine($"Processing folder {name} ...");
 
                 #region Create node in Umbraco
-                var umbracoContent = new ImportNodeContent();
+                var umbracoContent = new Mushroom();
 
                 //take the name of the folder (this is mushroom name)
                 umbracoContent.Name = name;

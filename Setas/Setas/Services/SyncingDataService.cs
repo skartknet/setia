@@ -1,8 +1,10 @@
-﻿using Microsoft.AppCenter.Crashes;
-using Setas.Common.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AppCenter.Crashes;
+using Setas.Common.Models;
+using Setas.Data;
 using Xamarin.Essentials;
 
 namespace Setas.Services
@@ -68,12 +70,14 @@ namespace Setas.Services
         }
 
 
-
-
         private async Task InitContent()
         {
             var sourceItems = await _remoteStorage.GetMushroomsAsync();
-            await _localStorage.InsertMushroomsAsync(sourceItems);
+
+            var data = Mapper.Map<IEnumerable<Mushroom>>(sourceItems);
+
+
+            await _localStorage.InsertMushroomsAsync(data);
             await _localStorage.SetContentUpdatedAsync();
 
         }
@@ -83,16 +87,18 @@ namespace Setas.Services
             //if the sync period hasn't been reached we don't sync.
             if (_localConfig.LatestContentUpdate.Value.Add(App.SyncPeriod) > DateTime.UtcNow) return;
 
-            var extConfig = await _remoteStorage.GetConfigurationAsync();
+            var updateSince = _localConfig.LatestContentUpdate.HasValue ? _localConfig.LatestContentUpdate.Value :
+                DateTime.MinValue;
 
-            //we update
-            if (_localConfig.LatestContentUpdate.HasValue && extConfig.LatestContentUpdate.Value > _localConfig.LatestContentUpdate.Value)
-            {
-                //Internal DB out of date
-                var sourceItems = await _remoteStorage.GetMushroomsAsync(_localConfig.LatestContentUpdate.Value);
-                await _localStorage.InsertMushroomsAsync(sourceItems);
-                await _localStorage.SetContentUpdatedAsync();
-            }
+
+            //Internal DB out of date
+            var sourceItems = await _remoteStorage.GetMushroomsAsync(updateSince);
+
+            var data = Mapper.Map<IEnumerable<Mushroom>>(sourceItems);
+
+            await _localStorage.InsertMushroomsAsync(data);
+            await _localStorage.SetContentUpdatedAsync();
+
         }
     }
 }

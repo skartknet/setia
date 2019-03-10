@@ -7,10 +7,10 @@ namespace Setas.Helpers
     {
         public static int TagToItemId(string tag)
         {
-            int id = 0;
+            int id = default(int);
             try
             {
-                id = JArray.Parse("[" + tag + "]")[0].Value<int>();
+                id = int.Parse(JArray.Parse("[" + tag + "]")[0].Value<string>());
             }
             catch (Exception ex)
             { }

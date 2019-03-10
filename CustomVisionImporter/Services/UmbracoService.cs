@@ -23,7 +23,7 @@ namespace CustomVisionImporter.Services
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        public async Task<int> CreateNode(ImportNodeContent content)
+        public async Task<int> CreateNode(Mushroom content)
         {
             string endpoint = "content/createnode";
 

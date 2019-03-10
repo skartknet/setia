@@ -1,5 +1,6 @@
 ﻿
 using Autofac;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Setas.Services;
 using Setas.ViewModels;
 using Xamarin.Forms;
@@ -22,7 +23,7 @@ namespace Setas.Views
 
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
-                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IInternalDataService>(), scope.Resolve<IPredictionService>());
+                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IInternalDataService>(), scope.Resolve<ICustomVisionPredictionClient>());
 
                 var identifierNavigation = new NavigationPage(new IdentificationPage(identificationViewModel))
                 {

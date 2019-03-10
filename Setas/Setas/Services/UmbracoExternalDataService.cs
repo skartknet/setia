@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Setas.Common.Models;
+using Setas.Common.Models.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,12 @@ namespace Setas.Services
         readonly Uri baseUrl = new Uri(App.ExternalService, App.ApiBase);
 
 
-        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync(DateTime modifiedSince)
+        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(DateTime modifiedSince)
         {
             using (HttpClient client = new HttpClient())
             {
                 var uri = new Uri(baseUrl, "setas/GetMushrooms");
-                var items = Enumerable.Empty<MushroomData>();
+                var items = Enumerable.Empty<Mushroom>();
 
                 try
                 {
@@ -32,7 +33,7 @@ namespace Setas.Services
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        items = JsonConvert.DeserializeObject<List<MushroomData>>(content);
+                        items = JsonConvert.DeserializeObject<List<Mushroom>>(content);
                     }
                     else
                     {
@@ -48,7 +49,7 @@ namespace Setas.Services
             }
         }
 
-        public async Task<IEnumerable<MushroomData>> GetMushroomsAsync()
+        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync()
         {
             return await this.GetMushroomsAsync(DateTime.MinValue);
         }

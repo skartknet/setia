@@ -1,4 +1,4 @@
-﻿using Setas.Common.Models.Api;
+﻿using ApiModels = Setas.Common.Models.Api;
 using Setas.Core.Models;
 using System.Linq;
 using System.Web.Http;
@@ -18,7 +18,7 @@ namespace Setas.Website.Api
         }
 
         [HttpPost]
-        public int CreateNode(ImportNodeContent content)
+        public int CreateNode(ApiModels.Mushroom content)
         {
             var existingNode = Umbraco.TypedSearch(content.Name);
             IContent node;

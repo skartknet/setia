@@ -1,12 +1,12 @@
-﻿using Setas.Common.Models;
+﻿using Setas.Data;
 using Setas.Enums;
 using System;
 
 namespace Setas.Models
 {
-    public class MushroomDisplayModel : MushroomData
+    public class MushroomDisplayModel : Mushroom
     {
-        public MushroomDisplayModel(MushroomData m)
+        public MushroomDisplayModel(Mushroom m)
         {
             Class = m.Class;
             Confusion = m.Confusion;

@@ -6,9 +6,7 @@ namespace Setas.Models
     public class Prediction
     {
         //Prediction details
-        public string TagId { get; set; }
-        public string TagName { get; set; }
-        public float Probability { get; set; }
+        public double Probability { get; set; }
 
         public string ProbabilityAsPercentage
         {
