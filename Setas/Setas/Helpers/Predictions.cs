@@ -10,7 +10,7 @@ namespace Setas.Helpers
             int id = default(int);
             try
             {
-                id = int.Parse(JArray.Parse("[" + tag + "]")[0].Value<string>());
+                id = int.Parse(tag.Split(':')[0]);
             }
             catch (Exception ex)
             { }

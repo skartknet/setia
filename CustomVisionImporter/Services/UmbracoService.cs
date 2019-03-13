@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json;
-using Setas.Common.Models.Api;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Setas.Common.Models.Api;
 
 namespace CustomVisionImporter.Services
 {
@@ -23,7 +23,7 @@ namespace CustomVisionImporter.Services
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>
-        public async Task<int> CreateNode(Mushroom content)
+        public async Task<int> CreateNodeAsync(Mushroom content)
         {
             string endpoint = "content/createnode";
 
@@ -33,7 +33,7 @@ namespace CustomVisionImporter.Services
             if (result.IsSuccessStatusCode)
             {
                 var rContent = await result.Content.ReadAsStringAsync();
-                if(int.TryParse(rContent, out int nodeId))
+                if (int.TryParse(rContent, out int nodeId))
                 {
                     return nodeId;
                 }
@@ -49,5 +49,28 @@ namespace CustomVisionImporter.Services
             }
         }
 
+        /// <summary>
+        /// Check if a node already exists using the name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public async Task<bool> MushroomExistsAsync(string name)
+        {
+            string endpoint = "content/NodeExists";
+            var builder = new UriBuilder(new Uri(ApiBase, endpoint));
+            builder.Query = $"name={name}";
+
+            var result = await _client.GetAsync(builder.Uri);
+
+            if (result.IsSuccessStatusCode)
+            {
+                var content = await result.Content.ReadAsStringAsync();                
+                return bool.Parse(content);
+            }
+            else
+            {
+                throw new Exception(result.ReasonPhrase);
+            }
+        }
     }
 }

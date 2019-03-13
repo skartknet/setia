@@ -1,9 +1,10 @@
-﻿using ApiModels = Setas.Common.Models.Api;
-using Setas.Core.Models;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Http;
+using Setas.Core.Models;
 using Umbraco.Core.Models;
+using Umbraco.Web;
 using Umbraco.Web.WebApi;
+using ApiModels = Setas.Common.Models.Api;
 
 namespace Setas.Website.Api
 {
@@ -34,6 +35,16 @@ namespace Setas.Website.Api
             }
 
             return node.Id;
+        }
+
+        [HttpGet]
+        public bool NodeExists(string name)
+        {
+            var node = Services.ContentService.GetDescendants(_mushroomsRoot.Id)
+                .FirstOrDefault(c => c.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
+
+            return node != null;
+
         }
 
     }

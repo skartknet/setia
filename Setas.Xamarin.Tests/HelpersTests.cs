@@ -10,7 +10,7 @@ namespace Setas.Xamarin.Tests
         [TestMethod]
         public void TagToItemId()
         {
-            var id = Predictions.TagToItemId("\"123\" , \"asd\"");
+            var id = Predictions.TagToItemId("123:asd");
 
             Assert.AreEqual(123, id);
         }

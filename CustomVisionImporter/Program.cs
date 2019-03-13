@@ -1,132 +1,123 @@
-﻿using CustomVisionImporter.Services;
-using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training;
-using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
-using Setas.Common.Models.Api;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
+using CustomVisionImporter.Services;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
+using Setas.Common.Models.Api;
 
 namespace CustomVisionImporter
 {
     class Program
     {
-
         static void Main(string[] args)
         {
-            //select a root folder: ie. A
-            var filesPath = @"C:\Users\koben\Documents\setas\setas";
-            var trainingApiKey = "a22435bc415740ad9f59e7628fab4cf8";
-            var projectId = new Guid("2e7aba89-bdde-479f-9b27-be098914db6a");
+            //---------- Configuration -------------------
+            const string filesPath = @"D:\Mushrooms";
+            const string trainingApiKey = "fb972b87bc4b45e5b80c396c2f36fc1d";
+            Guid projectId = new Guid("aaedaff8-49db-48e9-aa8d-6cf0262a29d1");
+            //Uri apiBase = new Uri("http://localhost:22481/umbraco/api/");
+            Uri apiBase = new Uri("http://setia-dev.azurewebsites.net/umbraco/api/");
 
-            //open all folders in A. There must be one folder per mushroom
-            var foldersPaths = Directory.GetDirectories(filesPath);
+            const string trainingEndpoint = "https://southcentralus.api.cognitive.microsoft.com";
+            const string readyFolderId = "clean";
+            //----------------------------------------------
+
 
             //init services
             var umbracoService = new UmbracoService();
-            umbracoService.ApiBase = new Uri("http://localhost:22481/umbraco/api/");
+            umbracoService.ApiBase = apiBase;
 
-            var trainingApi = new CustomVisionTrainingClient();
-            trainingApi.ApiKey = trainingApiKey;
-            trainingApi.Endpoint = "https://southcentralus.api.cognitive.microsoft.com";
+            var customVisionService = new CustomVisionService(trainingApiKey, trainingEndpoint, projectId);
+            //----------------
 
+            var lettersFolders = Directory.GetDirectories(filesPath);
 
-            //for each folder...
-            foreach (var folder in foldersPaths)
+            foreach (var letterFolder in lettersFolders)
             {
-                var name = FirstCharToUpper(new DirectoryInfo(folder).Name);
 
-                Console.WriteLine($"Processing folder {name} ...");
+                var mushroomsFolders = Directory.GetDirectories(letterFolder).Where(folder => folder.Contains(readyFolderId, StringComparison.OrdinalIgnoreCase));
 
-                #region Create node in Umbraco
-                var umbracoContent = new Mushroom();
-
-                //take the name of the folder (this is mushroom name)
-                umbracoContent.Name = name;
-                int nodeId;
-
-                try
+                foreach (var mushroomFolder in mushroomsFolders)
                 {
-                    Console.WriteLine("Importing info into Umbraco...");
-                    //Create a node in umbraco with this name
-                    nodeId = umbracoService.CreateNode(umbracoContent).Result;
+                    var name = FirstCharToUpper(new DirectoryInfo(mushroomFolder).Name);
+                    var cleanName = name.Replace(" - clean", "", StringComparison.OrdinalIgnoreCase)
+                                        .Trim();
 
-                    //parsing of returned id failed.
-                    if (nodeId.Equals(default(int)))
+                    Console.WriteLine($"Processing folder {name} ...");
+
+                    #region Create node in Umbraco
+                    var umbracoContent = new Mushroom
                     {
-                        Console.WriteLine("ERROR Importing info into Umbraco!");
+                        Name = cleanName
+                    };
 
+                    int nodeId = 0;
+
+                    try
+                    {
+                        Console.WriteLine("Importing info into Umbraco...");
+
+                        var exists = umbracoService.MushroomExistsAsync(cleanName).Result;
+
+                        if (!exists)
+                        {
+                            //Create a node in umbraco with this name
+                            nodeId = umbracoService.CreateNodeAsync(umbracoContent).Result;
+
+                            //parsing of returned id failed.
+                            if (nodeId.Equals(default(int)))
+                            {
+                                Console.WriteLine("ERROR Importing info into Umbraco!");
+
+                                continue;
+                            }
+                            Console.WriteLine($"Success importing info into Umbraco. Node ID: {nodeId}");
+
+                            #region Upload images to Customvision
+                            Console.WriteLine("Uploading images into custom vision...");
+
+                            var images = Directory.EnumerateFiles(mushroomFolder);
+
+                            Tag tag = customVisionService.CreateTag(nodeId.ToString(), cleanName.Replace(" ", ""));
+
+                            customVisionService.UploadImages(images, tag);
+
+                            #endregion
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Node {name} already exists in Umbraco.");
+
+                        }
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error creating node in Umbraco with name {name}. Reason: {ex.Message}");
+                        Console.WriteLine();
                         continue;
                     }
+
+                    #endregion
+
+
+
+                    Console.WriteLine($"SUCCESS: Folder {name} processed succesfully.");
+                    Console.WriteLine();
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error creating node in Umbraco with name {name}. Reason: {ex.Message}");
-                    continue;
-                }
-
-                Console.WriteLine($"Success importing info into Umbraco. Node ID: {nodeId}");
-                #endregion
-
-                #region Upload images to Customvision
-                Console.WriteLine("Uploading images into custom vision...");
-
-
-                var images = Directory.EnumerateFiles(folder);
-
-                //avoid duplicate tags
-                var currentTags = trainingApi.GetTags(projectId);
-
-                string tagValue = $"\"{nodeId}\":\"{name.Replace(" ", "")}\"";
-                Tag tag = currentTags.FirstOrDefault(t => t.Name == tagValue);
-                if (tag == null)
-                {
-                    tag = trainingApi.CreateTag(projectId, tagValue);
-                }
-
-                int page = 0;
-
-                var batch = new ImageFileCreateBatch();
-                var imageFiles = TakeImagesBatch(images, page);
-
-                while (imageFiles.Any())
-                {
-                    Console.WriteLine($"Importing {imageFiles.Count()} out of {images.Count()}...");
-
-                    batch = new ImageFileCreateBatch(imageFiles.ToList(), new List<Guid>() { tag.Id });
-
-                    var summary = trainingApi.CreateImagesFromFiles(projectId, batch);
-
-                    if (!summary.IsBatchSuccessful)
-                    {
-                        foreach (var img in summary.Images.Where(img => img.Status != "OK"))
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"- Error uploading image {Path.GetFileName(img.SourceUrl)}. Status: {img.Status}");
-                        }
-                    }
-
-                    page++;
-                    imageFiles = TakeImagesBatch(images, page);
-                }
-
-
-                #endregion
-
-                Console.WriteLine($"SUCCESS: Folder {name} processed succesfully.");
-                Console.WriteLine();
             }
 
+
+
             Console.WriteLine();
-            Console.WriteLine($"Import finished!. Processed {foldersPaths.Length} folders.");
+            Console.WriteLine($"Import finished!");
             Console.ReadLine();
 
         }
 
-        private static IEnumerable<ImageFileCreateEntry> TakeImagesBatch(IEnumerable<string> images, int page, int imgsPerBatch = 64)
-        {
-            return images.Skip(page * imgsPerBatch).Take(imgsPerBatch).Select(fileName => new ImageFileCreateEntry(fileName, File.ReadAllBytes(fileName)));
-        }
+
 
         public static string FirstCharToUpper(string value)
         {

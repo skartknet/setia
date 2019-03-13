@@ -1,67 +1,96 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
 
 namespace CustomVisionImporter.Services
 {
     class CustomVisionService
     {
-        private HttpClient _client => new HttpClient();
+        private readonly CustomVisionTrainingClient trainingApi;
+        private readonly Guid projectId;
 
-        public Uri BaseUrl { get; }
-        public string ProjectId { get; }
-        public string TrainingKey { get; }
-
-
-        public CustomVisionService(Uri baseUrl, string projectId, string trainingKey)
+        public CustomVisionService(string trainingApiKey, string trainingEndpoint, Guid projectId)
         {
-            if (baseUrl == null)
+            trainingApi = new CustomVisionTrainingClient
             {
-                throw new ArgumentNullException(nameof(baseUrl));
-            }
-
-            if (string.IsNullOrWhiteSpace(projectId))
-            {
-                throw new ArgumentException("A project id is needed", nameof(projectId));
-            }
-
+                ApiKey = trainingApiKey,
+                Endpoint = trainingEndpoint
+            };
+            this.projectId = projectId;
         }
 
-        public async Task CreateImagesFromFilesAsync(IEnumerable<string> files)
+        /// <summary>
+        /// It creates a tag with format `1234:name` or gets it if exists and returns it
+        /// </summary>
+        internal Tag CreateTag(string nodeId, string name)
         {
+            //avoid duplicate tags
+            var currentTags = trainingApi.GetTags(projectId);
 
-            var endpoint = $"projects/{ProjectId}/images/files";
+            string tagValue = $"{nodeId}:{name}";
 
-            _client.DefaultRequestHeaders.Add("Training-Key", "");
-            _client.DefaultRequestHeaders.Add("Training-Key", TrainingKey);
-
-            // Request body
-
-            byte[] byteData = await EncodeFiles(files);
-
-            using (var content = new ByteArrayContent(byteData))
+            Tag tag = currentTags.FirstOrDefault(t => t.Name == tagValue);
+            if (tag == null)
             {
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                var response = await _client.PostAsync(new Uri(BaseUrl, endpoint), content);
+                tag = trainingApi.CreateTag(projectId, tagValue);
             }
 
-
+            return tag;
         }
 
-        private async Task<byte[]> EncodeFiles(IEnumerable<string> files)
+        /// <summary>
+        /// updloads images to custom service and assigned to a tag.
+        /// </summary>
+        /// <param name="images"></param>
+        internal void UploadImages(IEnumerable<string> images, Tag tag, int page = 0, int retry = 0)
         {
-            using (var ms = new MemoryStream())
+
+            var batch = new ImageFileCreateBatch();
+            var imageFiles = TakeImagesBatch(images, page);
+
+            while (imageFiles.Any())
             {
-                foreach (var item in files)
+                Console.WriteLine($"Importing {imageFiles.Count() * (page + 1)} out of {images.Count()}...");
+
+                batch = new ImageFileCreateBatch(imageFiles.ToList(), new List<Guid>() { tag.Id });
+                try
                 {
-                    yield return await File.ReadAllBytesAsync(item);
+                    var summary = trainingApi.CreateImagesFromFiles(projectId, batch);
+
+                    if (!summary.IsBatchSuccessful)
+                    {
+                        foreach (var img in summary.Images.Where(img => img.Status != "OK"))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine($"- Error uploading image {Path.GetFileName(img.SourceUrl)}. Status: {img.Status}");
+                        }
+                    }
+
+                    imageFiles = TakeImagesBatch(images, ++page);
                 }
+                catch (Exception ex)
+                {
+
+                    if (retry < 5)
+                    {
+                        Console.WriteLine($"Upload failed ({ex.Message}). Retrying {retry + 1} out of 5");
+                        Task.Delay(1000 * retry).ContinueWith(t => UploadImages(images, tag, page, ++retry));
+                    }
+                }
+
+
             }
+
+
+        }
+
+        private static IEnumerable<ImageFileCreateEntry> TakeImagesBatch(IEnumerable<string> images, int page, int imgsPerBatch = 10)
+        {
+            return images.Skip(page * imgsPerBatch).Take(imgsPerBatch).Select(fileName => new ImageFileCreateEntry(fileName, File.ReadAllBytes(fileName)));
         }
     }
 }

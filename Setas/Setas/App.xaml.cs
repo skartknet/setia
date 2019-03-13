@@ -33,9 +33,7 @@ namespace Setas
 
 
         //Custom Vision
-        public static Guid CustomVisionProjectKey = new Guid("8a05ddf9-4473-4131-bd29-b6eb7ae2ecd2");
-
-
+        public static Guid CustomVisionProjectKey = new Guid("aaedaff8-49db-48e9-aa8d-6cf0262a29d1");
 
 
         public static string AdUnitId

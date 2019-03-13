@@ -13,11 +13,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Website", "Setas.Webs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Website.Core", "Setas.Core\Setas.Website.Core.csproj", "{024B0BCD-A178-45A5-AFB2-3C9C0381602D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Xamarin.Tests", "Setas.Xamarin.Tests\Setas.Xamarin.Tests.csproj", "{D3E821CA-D731-4E69-A4A1-08F131037A02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Tests", "Setas.Xamarin.Tests\Setas.Tests.csproj", "{D3E821CA-D731-4E69-A4A1-08F131037A02}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setas.Common", "Setas.Common\Setas.Common.csproj", "{67608141-0E1A-4A6C-B4B4-D2C5EE946805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomVisionImporter", "CustomVisionImporter\CustomVisionImporter.csproj", "{E2F30ECB-D1D2-49BF-8E0D-AF6FF5A92D88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomVisionImporter", "CustomVisionImporter\CustomVisionImporter.csproj", "{E2F30ECB-D1D2-49BF-8E0D-AF6FF5A92D88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setia.ImporterTests", "Setia.ImporterTests\Setia.ImporterTests.csproj", "{CD94137F-C955-4BB2-A96B-7542AA8D2F29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -263,6 +265,30 @@ Global
 		{E2F30ECB-D1D2-49BF-8E0D-AF6FF5A92D88}.Release|iPhone.Build.0 = Release|Any CPU
 		{E2F30ECB-D1D2-49BF-8E0D-AF6FF5A92D88}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{E2F30ECB-D1D2-49BF-8E0D-AF6FF5A92D88}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.AppStore|Any CPU.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Release|iPhone.Build.0 = Release|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{CD94137F-C955-4BB2-A96B-7542AA8D2F29}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
