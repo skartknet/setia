@@ -48,49 +48,55 @@ namespace CustomVisionImporter.Services
         /// <param name="images"></param>
         internal void UploadImages(IEnumerable<string> images, Tag tag, int page = 0, int retry = 0)
         {
+            IEnumerable<ImageFileCreateEntry> imageFiles;            
 
-            var batch = new ImageFileCreateBatch();
-            var imageFiles = TakeImagesBatch(images, page);
+            imageFiles = TakeImagesBatch(images, page);
 
-            while (imageFiles.Any())
+
+            var resizedImages = ResizedImages();
+
+            if (!imageFiles.Any()) return;
+
+            var batch = new ImageFileCreateBatch(imageFiles.ToList(), new List<Guid>() { tag.Id });
+
+            Console.WriteLine($"Importing {imageFiles.Count() * (page + 1)} out of {images.Count()}...");
+
+            try
             {
-                Console.WriteLine($"Importing {imageFiles.Count() * (page + 1)} out of {images.Count()}...");
+                var summary = trainingApi.CreateImagesFromFiles(projectId, batch);
 
-                batch = new ImageFileCreateBatch(imageFiles.ToList(), new List<Guid>() { tag.Id });
-                try
+                if (!summary.IsBatchSuccessful)
                 {
-                    var summary = trainingApi.CreateImagesFromFiles(projectId, batch);
-
-                    if (!summary.IsBatchSuccessful)
+                    foreach (var img in summary.Images.Where(img => img.Status != "OK"))
                     {
-                        foreach (var img in summary.Images.Where(img => img.Status != "OK"))
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine($"- Error uploading image {Path.GetFileName(img.SourceUrl)}. Status: {img.Status}");
-                        }
-                    }
-
-                    imageFiles = TakeImagesBatch(images, ++page);
-                }
-                catch (Exception ex)
-                {
-
-                    if (retry < 5)
-                    {
-                        Console.WriteLine($"Upload failed ({ex.Message}). Retrying {retry + 1} out of 5");
-                        Task.Delay(1000 * retry).ContinueWith(t => UploadImages(images, tag, page, ++retry));
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"- Error uploading image {Path.GetFileName(img.SourceUrl)}. Status: {img.Status}");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
-
 
             }
+            catch (Exception ex)
+            {
 
+                if (retry < 3)
+                {
+                    Console.WriteLine($"Upload failed ({ex.Message}). Retrying {retry + 1} out of 3");
+                    Task.Delay(1000 * retry).ContinueWith(t => UploadImages(images, tag, page, ++retry));
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
 
+            page++;
+            UploadImages(images, tag, page);
         }
 
         private static IEnumerable<ImageFileCreateEntry> TakeImagesBatch(IEnumerable<string> images, int page, int imgsPerBatch = 10)
         {
-            return images.Skip(page * imgsPerBatch).Take(imgsPerBatch).Select(fileName => new ImageFileCreateEntry(fileName, File.ReadAllBytes(fileName)));
+            return images.Skip(page * imgsPerBatch).Take(imgsPerBatch).Select(fileName => new ImageFileCreateEntry(fileName, ImagesManager.ResizeImage(File.ReadAllBytes(fileName))));
         }
     }
 }
