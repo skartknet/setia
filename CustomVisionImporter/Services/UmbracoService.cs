@@ -56,7 +56,7 @@ namespace CustomVisionImporter.Services
         /// <returns></returns>
         public async Task<int?> GetMushroomIdAsync(string name)
         {
-            string endpoint = "content/GetNode";
+            string endpoint = "content/GetNodeId";
             var builder = new UriBuilder(new Uri(ApiBase, endpoint));
             builder.Query = $"name={name}";
 
@@ -64,8 +64,12 @@ namespace CustomVisionImporter.Services
 
             if (result.IsSuccessStatusCode)
             {
-                var content = await result.Content.ReadAsStringAsync();                
-                return int.Parse(content);
+                var content = await result.Content.ReadAsStringAsync();
+                if (int.TryParse(content, out int id))
+                {
+                    return id;
+                }
+                return null;
             }
             else
             {

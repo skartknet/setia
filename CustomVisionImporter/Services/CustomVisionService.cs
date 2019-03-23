@@ -46,20 +46,18 @@ namespace CustomVisionImporter.Services
         /// updloads images to custom service and assigned to a tag.
         /// </summary>
         /// <param name="images"></param>
-        internal void UploadImages(IEnumerable<string> images, Tag tag, int page = 0, int retry = 0)
+        internal void UploadImages(IEnumerable<string> images, Tag tag, int page = 0, int retry = 0, int imagesPerBatch = 10)
         {
             IEnumerable<ImageFileCreateEntry> imageFiles;            
 
-            imageFiles = TakeImagesBatch(images, page);
-
-
-            var resizedImages = ResizedImages();
+            imageFiles = TakeImagesBatch(images, page, imagesPerBatch);
+            
 
             if (!imageFiles.Any()) return;
 
             var batch = new ImageFileCreateBatch(imageFiles.ToList(), new List<Guid>() { tag.Id });
 
-            Console.WriteLine($"Importing {imageFiles.Count() * (page + 1)} out of {images.Count()}...");
+            Console.WriteLine($"Importing {imageFiles.Count() + (imagesPerBatch * page)} out of {images.Count()}...");
 
             try
             {

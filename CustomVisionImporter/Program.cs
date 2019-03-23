@@ -56,7 +56,7 @@ namespace CustomVisionImporter
                     var cleanName = name.Replace(" - clean", "", StringComparison.OrdinalIgnoreCase)
                                         .Trim();
 
-                    Console.WriteLine($"Processing folder {name} ...");
+                    Console.WriteLine($"==== Processing folder {cleanName} ====");
 
                     #region Create node in Umbraco
 
@@ -67,7 +67,7 @@ namespace CustomVisionImporter
                     }
                     catch (Exception ex)
                     {
-                        ConsoleError("Error mapping content.");
+                        ConsoleError($"Error mapping content. Error: {ex.Message}");
 
                         continue;
                     }
@@ -76,14 +76,14 @@ namespace CustomVisionImporter
 
                     try
                     {
-                        Console.WriteLine("Importing info into Umbraco...");
+                        Console.WriteLine("--- Importing info into Umbraco ---");
 
-                        nodeId = umbracoService.GetMushroomIdAsync(cleanName).Result;
+                        nodeId = await umbracoService.GetMushroomIdAsync(cleanName);
 
                         if (!nodeId.HasValue)
                         {
                             //Create a node in umbraco with this name
-                            nodeId = umbracoService.CreateNodeAsync(umbracoContent).Result;
+                            nodeId = await umbracoService.CreateNodeAsync(umbracoContent);
 
                             //parsing of returned id failed.
                             if (nodeId == null)
@@ -96,22 +96,24 @@ namespace CustomVisionImporter
                         {
                             Console.WriteLine($"Node {name} already exists in Umbraco.");
                         }
-                        
+
                     }
                     catch (Exception ex)
                     {
-                        ConsoleError($"Error creating node in Umbraco with name {name}. Reason: {ex.Message}");
+                        ConsoleError($"ERROR creating node in Umbraco with name {name}. Reason: {ex.Message}");
 
                         continue;
                     }
 
-                    
 
-                    Console.WriteLine($"Success importing info into Umbraco. Node ID: {nodeId}");
-                    
-                    Console.WriteLine("Uploading images into custom vision...");
+
+                    Console.WriteLine($"SUCCESS importing info into Umbraco. Node ID: {nodeId}");
+
+                    Console.WriteLine("--- Uploading images into custom vision ---");
 
                     var images = Directory.EnumerateFiles(mushroomFolder);
+
+                    Console.WriteLine($"There's a total of {images.Count()} images.");
 
                     Tag tag = customVisionService.CreateTag(nodeId.ToString(), cleanName.Replace(" ", ""));
 
@@ -125,11 +127,11 @@ namespace CustomVisionImporter
                         ConsoleError(ex.Message);
                     }
 
-                    
+
 
                     #endregion
 
-                    Console.WriteLine($"SUCCESS: Folder {name} processed succesfully.");
+                    Console.WriteLine($"==== SUCCESS: Folder {name} processed succesfully. ====");
                     Console.WriteLine();
                 }
             }
