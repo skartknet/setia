@@ -130,9 +130,9 @@ namespace Setas.Core.Models
 		/// Popular Names
 		///</summary>
 		[ImplementPropertyType("popularNames")]
-		public IEnumerable<string> PopularNames
+		public string PopularNames
 		{
-			get { return this.GetPropertyValue<IEnumerable<string>>("popularNames"); }
+			get { return this.GetPropertyValue<string>("popularNames"); }
 		}
 
 		///<summary>
@@ -157,9 +157,9 @@ namespace Setas.Core.Models
 		/// Synonyms
 		///</summary>
 		[ImplementPropertyType("synonyms")]
-		public IEnumerable<string> Synonyms
+		public string Synonyms
 		{
-			get { return this.GetPropertyValue<IEnumerable<string>>("synonyms"); }
+			get { return this.GetPropertyValue<string>("synonyms"); }
 		}
 	}
 }

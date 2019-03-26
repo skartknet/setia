@@ -22,8 +22,12 @@ namespace Setas.Views
                          .SetBarSelectedItemColor(Color.Red);
 
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
-            {
-                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IInternalDataService>(), scope.Resolve<ICustomVisionPredictionClient>());
+            {                
+                var predictionClient = scope.Resolve<ICustomVisionPredictionClient>();
+                predictionClient.ApiKey = App.CustomVisionPredictionKey;
+                predictionClient.Endpoint = App.PredictionEndpoint;
+
+                var identificationViewModel = new IdentificationViewModel(scope.Resolve<IInternalDataService>(), predictionClient);
 
                 var identifierNavigation = new NavigationPage(new IdentificationPage(identificationViewModel))
                 {

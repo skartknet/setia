@@ -165,14 +165,14 @@ namespace CustomVisionImporter
                 Subclass = textInfo.ToTitleCase(contentPage.GetMushroomDetailsValue("Subclase").ToLowerInvariant()),
                 Order = textInfo.ToTitleCase(contentPage.GetMushroomDetailsValue("Orden").ToLowerInvariant()),
                 Family = textInfo.ToTitleCase(contentPage.GetMushroomDetailsValue("Familia").ToLowerInvariant()),
-                Synonyms = textInfo.ToTitleCase(contentPage.GetMushroomDetailsValue("Sinónimos").ToLowerInvariant().Replace("\n", " ")),
-                Description = contentPage.GetMushroomDetailsValue("Descripción macroscópica").Replace("\n", " "),
-                Confusion = contentPage.GetMushroomDetailsValue("Confusiones").Replace("\n", " "),
+                Synonyms = textInfo.ToTitleCase(contentPage.GetMushroomDetailsValue("Sinónimos").ToLowerInvariant().Replace("\n", "").Replace("\r", "")),
+                Description = contentPage.GetMushroomDetailsValue("Descripción macroscópica").Replace("\n", "").Replace("\r", ""),
+                Confusion = contentPage.GetMushroomDetailsValue("Confusiones").Replace("\n", "").Replace("\r", ""),
                 CookingInterest = SiteScrapperService.EdibleStringToEnum(cookingInterest),
                 PopularNames = textInfo.ToTitleCase(contentPage.GetMushroomDetailsValue("Nombres Populares").ToLowerInvariant()),
-                CookingInstructions = contentPage.GetMushroomDetailsValue("Cocina").Replace("\n", " "),
-                Habitat = contentPage.GetMushroomDetailsValue("Hábitat").Replace("\n", " "),
-                Season = contentPage.GetMushroomDetailsValue("Temporada").Replace("\n", " "),
+                CookingInstructions = contentPage.GetMushroomDetailsValue("Cocina").Replace("\n", "").Replace("\r", ""),
+                Habitat = contentPage.GetMushroomDetailsValue("Hábitat").Replace("\n", "").Replace("\r", ""),
+                Season = contentPage.GetMushroomDetailsValue("Temporada").Replace("\n", "").Replace("\r", ""),
 
             };
 

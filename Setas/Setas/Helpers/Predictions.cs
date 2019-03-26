@@ -1,16 +1,20 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace Setas.Helpers
 {
-    public static class Predictions
+    public static class PredictionsExtensions
     {
-        public static int TagToItemId(string tag)
+        /// <summary>
+        /// Extracts the id form a Tag of type 123:name
+        /// </summary>
+        public static int CmsNodeId(this PredictionModel model)
         {
             int id = default(int);
             try
             {
-                id = int.Parse(tag.Split(':')[0]);
+                id = int.Parse(model.TagName.Split(':')[0]);
             }
             catch (Exception ex)
             { }

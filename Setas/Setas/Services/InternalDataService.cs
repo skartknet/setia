@@ -83,7 +83,21 @@ namespace Setas.Services
 
         }
 
-        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options, params int[] ids)
+
+        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(IEnumerable<int> ids)
+        {
+            AsyncTableQuery<Mushroom> result = _database.Table<Mushroom>();
+
+            if (ids != null && ids.Any())
+            {
+                result = result.Where(m => ids.Contains(m.Id));
+            }
+
+            return await result.ToListAsync();
+        }
+
+
+        public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options)
         {            
 
             if (options == null)
@@ -91,12 +105,7 @@ namespace Setas.Services
                 throw new ArgumentNullException(nameof(options));
             }
 
-            AsyncTableQuery<Mushroom> result = _database.Table<Mushroom>();
-
-            if (ids != null && ids.Any())
-            {
-                result = result.Where(m => ids.Contains(m.Id));
-            }
+            AsyncTableQuery<Mushroom> result = _database.Table<Mushroom>();       
 
             if (options.Edibles != null && options.Edibles.Any())
             {

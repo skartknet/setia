@@ -9,7 +9,9 @@ namespace Setas.Services
 {
     public interface IInternalDataService
     {
-        Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options, params int[] ids);
+        Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options);
+        Task<IEnumerable<Mushroom>> GetMushroomsAsync(IEnumerable<int> ids);
+
         Task<Mushroom> GetMushroomAsync(int id);
         Task<Configuration> GetConfigurationAsync();
         Task InsertMushroomsAsync(IEnumerable<Mushroom> sourceItems);

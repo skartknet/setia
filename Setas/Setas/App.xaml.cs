@@ -1,4 +1,6 @@
-﻿using Acr.UserDialogs;
+﻿using System;
+using System.Threading.Tasks;
+using Acr.UserDialogs;
 using Autofac;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
@@ -6,8 +8,6 @@ using Microsoft.AppCenter.Crashes;
 using Setas.Models.Mapping;
 using Setas.Services;
 using Setas.Views;
-using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,8 +20,8 @@ namespace Setas
         public static ImageSource SourceImage { get; set; }
         public static bool StorageInitialized { get; set; } = false;
 
-        //public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
-        public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
+        public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
+        //public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
 
         //sync every week.
         public static TimeSpan SyncPeriod = new TimeSpan(0, 0, 5);
@@ -33,8 +33,9 @@ namespace Setas
 
 
         //Custom Vision
-        public static Guid CustomVisionProjectKey = new Guid("aaedaff8-49db-48e9-aa8d-6cf0262a29d1");
-
+        public static Guid CustomVisionProjectId = new Guid("aaedaff8-49db-48e9-aa8d-6cf0262a29d1");
+        public static string CustomVisionPredictionKey = "46809c785461496aa166cf82c4bdf6b7";
+        public static string PredictionEndpoint = "https://southcentralus.api.cognitive.microsoft.com";
 
         public static string AdUnitId
         {
@@ -48,7 +49,7 @@ namespace Setas
             }
         }
 
-   
+
 
         public App()
         {
@@ -63,8 +64,14 @@ namespace Setas
             AppCenter.Start("android=86311dca-ab38-41be-bf0d-77b43d392cd4;",
                    typeof(Analytics), typeof(Crashes));
 
-            InitDatabase();
-            InitApp();
+            Task.Run(async () =>
+            {
+                await InitDatabase();
+            }).ContinueWith(t =>
+            {
+                InitApp();
+            });
+
 
         }
 
@@ -76,27 +83,26 @@ namespace Setas
 
         protected override void OnResume()
         {
-            InitDatabase();
+            Task.Run(async () =>
+            {
+                await InitDatabase();
+            }).Wait();
         }
 
-        private void InitDatabase()
+        private async Task InitDatabase()
         {
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
-                Task.Run(async () =>
+
+                try
                 {
-                    try
-                    {
-                        var syncingService = scope.Resolve<ISyncingDataService>();
-                        await syncingService.SyncDataAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        await UserDialogs.Instance.AlertAsync("Error initialising database", "Error");
-                    }
-
-
-                }).Wait();
+                    var syncingService = scope.Resolve<ISyncingDataService>();
+                    await syncingService.SyncDataAsync();
+                }
+                catch (Exception ex)
+                {
+                    await UserDialogs.Instance.AlertAsync("Error initialising database", "Error");
+                }
             }
 
         }

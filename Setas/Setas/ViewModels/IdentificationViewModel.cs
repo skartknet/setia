@@ -1,4 +1,11 @@
-﻿using Acr.UserDialogs;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction.Models;
@@ -7,14 +14,7 @@ using Plugin.Media.Abstractions;
 using Setas.Common.Models;
 using Setas.Models;
 using Setas.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using Setas.Helpers;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -36,7 +36,7 @@ namespace Setas.ViewModels
         public INavigation Navigation { get; set; }
 
 
-        
+
 
         public string AdUnitId
         {
@@ -132,18 +132,19 @@ namespace Setas.ViewModels
                     await IdentifyImage(photo);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
-                
 
-            
+
+
         }
 
         private async Task IdentifyImage(MediaFile image)
         {
-            if (Connectivity.NetworkAccess == NetworkAccess.None) {
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
+            {
                 UserDialogs.Instance.Alert("Se necesita conexión a la red para realizar esta operación.", "Desconectado", "Aceptar");
                 return;
             };
@@ -170,27 +171,24 @@ namespace Setas.ViewModels
 
                 try
                 {
-
-                    result = await _predictionService.PredictImageAsync(App.CustomVisionProjectKey, fileStream);
+                    result = await _predictionService.PredictImageAsync(App.CustomVisionProjectId, fileStream);
                 }
                 catch (Exception ex)
                 {
                     Crashes.TrackError(ex);
                     await UserDialogs.Instance.AlertAsync("Error analizando imagen. No se pudo conectar con el servicio.", "Error");
+
+                    return;
                 }
 
-
-
-               
-
-
-
-                var vm = await CreateResultViewModel(result);
-
-                if (vm != null)
+                try
                 {
+                    var vm = await CreateResultViewModel(result);
+
                     await Navigation.PushAsync(new IdentificationResultsPage(vm));
+
                 }
+                catch { return; }
 
             }
 
@@ -205,79 +203,66 @@ namespace Setas.ViewModels
             {
                 if (!result.Predictions.Any()) return null;
 
-                var firstResultPrediction = result.Predictions.FirstOrDefault(m=>m.Probability >= App.ProbabilityThreshold);
+                var resultsToDisplay = await MapToPredictionDisplay(result.Predictions);
 
-                IEnumerable<PredictionModel> secondaryResultsPredictions = Enumerable.Empty<PredictionModel>();                
+                vm.FirstResult = resultsToDisplay.FirstOrDefault(m => m.Probability >= App.ProbabilityThreshold);
 
-                if (firstResultPrediction != null)
+
+                if (vm.FirstResult != null)
                 {
-                    var firstResultViewModel = new Prediction();
-                    var rId = Helpers.Predictions.TagToItemId(firstResultPrediction.TagName);
+                    resultsToDisplay.Remove(vm.FirstResult);
 
-                    firstResultViewModel.Mushroom = new MushroomDisplayModel(await _dataService.GetMushroomAsync(rId));
-                    firstResultViewModel.Probability = firstResultPrediction.Probability;
-                    vm.FirstResult = firstResultViewModel;
-
-                    secondaryResultsPredictions = result.Predictions.Skip(1);
-
-
-                    var hItem = new Models.Data.HistoryItem()
+                    await _dataService.SaveHistoryItemAsync(new Models.Data.HistoryItem()
                     {
                         TakenOn = DateTime.Now,
-                        MushroomId = firstResultViewModel.Mushroom.Id
-                    };
+                        MushroomId = vm.FirstResult.Mushroom.Id
+                    });
+                }                                                
 
 
-
-                    await _dataService.SaveHistoryItemAsync(hItem);
-                }
-                else
-                {
-                    secondaryResultsPredictions = result.Predictions;
-                }
-
-
-                var rIds = secondaryResultsPredictions.Select(r => Helpers.Predictions.TagToItemId(r.TagName)).ToArray();
-                var secondaryResultsMushrooms = await _dataService.GetMushroomsAsync(new SearchOptions(), rIds);
-
-                var secResultsViewModel = new List<Prediction>();
-
-                foreach (var item in secondaryResultsPredictions)
-                {
-                    var viewModel = new Prediction
-                    {
-                        Mushroom = new MushroomDisplayModel(secondaryResultsMushrooms.FirstOrDefault(m => m.Id == Helpers.Predictions.TagToItemId(item.TagName))),
-                       Probability = item.Probability
-                    };
-
-                    secResultsViewModel.Add(viewModel);
-                }
-
-
-                vm.SecondaryResults = secResultsViewModel.ToArray();
+                vm.SecondaryResults = resultsToDisplay.ToArray();
 
             }
             catch (WebException ex)
             {
                 Crashes.TrackError(ex);
                 await UserDialogs.Instance.AlertAsync("Error conectando a servicio de datos.", "Error");
+                throw;
             }
             catch (Exception ex)
             {
                 Crashes.TrackError(ex);
                 await UserDialogs.Instance.AlertAsync("Error de datos.", "Error");
+                throw;
+
             }
 
             return vm;
 
         }
 
-        private byte[] StreamToBytes(Stream stream)
+        private async Task<IList<Prediction>> MapToPredictionDisplay(IList<PredictionModel> models)
         {
-            BinaryReader binaryReader = new BinaryReader(stream);
-            var byteData = binaryReader.ReadBytes((int)stream.Length);
-            return byteData;
+            var rIds = models.Select(r => r.CmsNodeId()).ToArray();
+            var resultToDisplay = await _dataService.GetMushroomsAsync(rIds);
+
+            var resultsViewModel = new List<Prediction>();
+
+            foreach (var model in models)
+            {
+                var viewModel = new Prediction
+                {
+                    Mushroom = new MushroomDisplayModel(resultToDisplay.FirstOrDefault(m => m.Id == model.CmsNodeId())),
+                    Probability = model.Probability
+                };
+
+                resultsViewModel.Add(viewModel);
+            }
+
+            return resultsViewModel.OrderByDescending(n=>n.Probability).ToList();
         }
+
+
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
