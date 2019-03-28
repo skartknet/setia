@@ -21,5 +21,6 @@ namespace Setas.Common.Models.Api
         public string Family { get; set; }
         public string Habitat { get; set; }
         public string Image { get; set; }
+        public string ImageLicense { get; set; }
     }
 }

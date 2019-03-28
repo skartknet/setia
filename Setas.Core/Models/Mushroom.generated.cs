@@ -109,6 +109,15 @@ namespace Setas.Core.Models
 		}
 
 		///<summary>
+		/// Image License
+		///</summary>
+		[ImplementPropertyType("imageLicense")]
+		public IHtmlString ImageLicense
+		{
+			get { return this.GetPropertyValue<IHtmlString>("imageLicense"); }
+		}
+
+		///<summary>
 		/// Images
 		///</summary>
 		[ImplementPropertyType("images")]
