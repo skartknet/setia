@@ -18,7 +18,23 @@ namespace Setas.Views
 
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
-                Detail = new NavigationPage(new CatalogueDetail(scope.Resolve<IInternalDataService>(), null));
+                Detail = new NavigationPage(new CatalogueItemListing(scope.Resolve<IInternalDataService>(), null));
+            }
+        }
+
+        protected override void OnAppearing()
+        {
+            if(MasterPage.ListView.SelectedItem == null)
+            {
+                using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+                {
+                    var edibles = GetEdiblesClasses(EdibleTopClassEnum.Safe);
+
+                    var listing = new CatalogueItemListing(scope.Resolve<IInternalDataService>(), edibles);
+
+                    Detail = new NavigationPage(listing);
+                    IsPresented = false;
+                }
             }
         }
 
@@ -31,9 +47,9 @@ namespace Setas.Views
 
                     var edibles = GetEdiblesClasses(((CatalogueMenuItem)e.SelectedItem).Value);
 
-                    var catalogueDetail = new CatalogueDetail(scope.Resolve<IInternalDataService>(), edibles);
+                    var listing = new CatalogueItemListing(scope.Resolve<IInternalDataService>(), edibles);
 
-                    Detail = new NavigationPage(catalogueDetail);
+                    Detail = new NavigationPage(listing);
                     IsPresented = false;
 
                     MasterPage.ListView.SelectedItem = null;

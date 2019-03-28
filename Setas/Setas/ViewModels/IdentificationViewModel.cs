@@ -94,11 +94,11 @@ namespace Setas.ViewModels
             _predictionService = predictionService;
 
 
-            TakePhoto = new Command(TakePhotoProcess);
-            PickPhoto = new Command(PickPhotoProcess);
+            TakePhoto = new Command(async (obj)=> await TakePhotoProcess(obj));
+            PickPhoto = new Command(async (obj)=> await PickPhotoProcess(obj));
         }
 
-        private async void TakePhotoProcess(object obj)
+        private async Task TakePhotoProcess(object obj)
         {
             var photo = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
             {
@@ -112,11 +112,11 @@ namespace Setas.ViewModels
 
             if (photo != null)
             {
-                await IdentifyImage(photo);
+                await IdentifyImageAsync(photo);
             }
         }
 
-        private async void PickPhotoProcess(object obj)
+        private async Task PickPhotoProcess(object obj)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace Setas.ViewModels
 
                 if (photo != null)
                 {
-                    await IdentifyImage(photo);
+                    await IdentifyImageAsync(photo);
                 }
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace Setas.ViewModels
 
         }
 
-        private async Task IdentifyImage(MediaFile image)
+        private async Task IdentifyImageAsync(MediaFile image)
         {
             if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
@@ -170,8 +170,9 @@ namespace Setas.ViewModels
                 ImagePrediction result = null;
 
                 try
-                {
-                    result = await _predictionService.PredictImageAsync(App.CustomVisionProjectId, fileStream);
+                {              
+
+                    result = await _predictionService.ClassifyImageAsync(App.CustomVisionProjectId, "Iteration1", fileStream);
                 }
                 catch (Exception ex)
                 {
@@ -183,7 +184,7 @@ namespace Setas.ViewModels
 
                 try
                 {
-                    var vm = await CreateResultViewModel(result);
+                    var vm = await CreateResultViewModelAsync(result);
 
                     await Navigation.PushAsync(new IdentificationResultsPage(vm));
 
@@ -194,7 +195,7 @@ namespace Setas.ViewModels
 
         }
 
-        private async System.Threading.Tasks.Task<ResultsViewModel> CreateResultViewModel(ImagePrediction result)
+        private async Task<ResultsViewModel> CreateResultViewModelAsync(ImagePrediction result)
         {
 
             var vm = new ResultsViewModel();
@@ -203,9 +204,9 @@ namespace Setas.ViewModels
             {
                 if (!result.Predictions.Any()) return null;
 
-                var resultsToDisplay = await MapToPredictionDisplay(result.Predictions);
+                var resultsToDisplay = await MapToPredictionDisplayAsync(result.Predictions);
 
-                vm.FirstResult = resultsToDisplay.FirstOrDefault(m => m.Probability >= App.ProbabilityThreshold);
+                vm.FirstResult = resultsToDisplay.FirstOrDefault(m => m.Probability >= App.ProbabilityThresholdFirstResult);
 
 
                 if (vm.FirstResult != null)
@@ -220,7 +221,7 @@ namespace Setas.ViewModels
                 }                                                
 
 
-                vm.SecondaryResults = resultsToDisplay.ToArray();
+                vm.SecondaryResults = resultsToDisplay.Where(m=>m.Probability >= App.ProbabilityThresholdSecondaryResults).Take(5).ToArray();
 
             }
             catch (WebException ex)
@@ -241,19 +242,24 @@ namespace Setas.ViewModels
 
         }
 
-        private async Task<IList<Prediction>> MapToPredictionDisplay(IList<PredictionModel> models)
+        private async Task<IList<Prediction>> MapToPredictionDisplayAsync(IList<PredictionModel> models)
         {
             var rIds = models.Select(r => r.CmsNodeId()).ToArray();
+
+            //this line will not return thos results that are not in the database.
             var resultToDisplay = await _dataService.GetMushroomsAsync(rIds);
 
             var resultsViewModel = new List<Prediction>();
 
-            foreach (var model in models)
+
+            //so here we iterate only over those valid results instead the whole list of predictions
+            foreach (var model in resultToDisplay)
             {
+                var t = models.FirstOrDefault(m => m.CmsNodeId() == model.Id);
                 var viewModel = new Prediction
                 {
-                    Mushroom = new MushroomDisplayModel(resultToDisplay.FirstOrDefault(m => m.Id == model.CmsNodeId())),
-                    Probability = model.Probability
+                    Mushroom = new MushroomDisplayModel(model),
+                    Probability = t.Probability
                 };
 
                 resultsViewModel.Add(viewModel);

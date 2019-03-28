@@ -29,7 +29,9 @@ namespace Setas
         public static string ApiBase = "/umbraco/api/";
 
         //below this limit the identification result will be displayed as 'unknown'
-        public static float ProbabilityThreshold = 0f;
+        public static float ProbabilityThresholdFirstResult = 60f;
+        public static float ProbabilityThresholdSecondaryResults = 30f;
+
 
 
         //Custom Vision
@@ -67,11 +69,9 @@ namespace Setas
             Task.Run(async () =>
             {
                 await InitDatabase();
-            }).ContinueWith(t =>
-            {
-                InitApp();
             });
 
+            InitApp();
 
         }
 
@@ -99,7 +99,7 @@ namespace Setas
                     var syncingService = scope.Resolve<ISyncingDataService>();
                     await syncingService.SyncDataAsync();
                 }
-                catch (Exception ex)
+                catch
                 {
                     await UserDialogs.Instance.AlertAsync("Error initialising database", "Error");
                 }

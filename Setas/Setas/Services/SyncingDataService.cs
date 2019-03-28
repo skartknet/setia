@@ -44,7 +44,7 @@ namespace Setas.Services
             {
                 try
                 {
-                    await InitContent();
+                    await InitContentAsync();
                     App.StorageInitialized = true;
                 }
                 catch (Exception ex)
@@ -57,7 +57,7 @@ namespace Setas.Services
             {
                 try
                 {
-                    await UpdateContent();
+                    await UpdateContentAsync();
                     App.StorageInitialized = true;
 
                 }
@@ -70,7 +70,7 @@ namespace Setas.Services
         }
 
 
-        private async Task InitContent()
+        private async Task InitContentAsync()
         {
             var sourceItems = await _remoteStorage.GetMushroomsAsync();
 
@@ -82,7 +82,7 @@ namespace Setas.Services
 
         }
 
-        private async Task UpdateContent()
+        private async Task UpdateContentAsync()
         {
             //if the sync period hasn't been reached we don't sync.
             if (_localConfig.LatestContentUpdate.Value.Add(App.SyncPeriod) > DateTime.UtcNow) return;

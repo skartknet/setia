@@ -16,7 +16,7 @@ namespace Setas.Helpers
             {
                 id = int.Parse(model.TagName.Split(':')[0]);
             }
-            catch (Exception ex)
+            catch
             { }
 
             return id;
