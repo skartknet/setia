@@ -5,6 +5,7 @@
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -49,11 +50,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\CatalogueItemListing.xaml.cs">
+      <DependentUpon>CatalogueItemListing.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\CatalogueMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\MushroomDetail.xaml.cs">
-      <DependentUpon>MushroomDetail.xaml</DependentUpon>
+    <Compile Update="Views\MushroomDetailPage.xaml.cs">
+      <DependentUpon>MushroomDetailPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -61,7 +65,7 @@
     <EmbeddedResource Update="Views\Catalogue.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\CatalogueDetail.xaml">
+    <EmbeddedResource Update="Views\CatalogueItemListing.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\CatalogueMaster.xaml">
@@ -76,7 +80,7 @@
     <EmbeddedResource Update="Views\IdentificationResultsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MushroomDetail.xaml">
+    <EmbeddedResource Update="Views\MushroomDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\MainPage.xaml">

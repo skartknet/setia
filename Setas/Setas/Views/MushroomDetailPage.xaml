@@ -5,7 +5,7 @@
              xmlns:controls="clr-namespace:Setas.Controls"
              xmlns:views="clr-namespace:Setas.Views"
              
-             x:Class="Setas.Views.MushroomDetail"
+             x:Class="Setas.Views.MushroomDetailPage"
              Title="{Binding Mushroom.Name}"
              >
     <ContentPage.BindingContext>
@@ -22,24 +22,26 @@
                     </views:SetiaImage.Source>
                 </views:SetiaImage>
 
-                <StackLayout>
-                    <Label Text="Interés Gastronómico" Style="{StaticResource Heading2}" Margin="10"/>
-                    <Label Text="{Binding EdibleAsReadableString}" Style="{StaticResource Paragraph}" Margin="10"/>
+                <WebView x:Name="licenseWebView" WidthRequest="1000" HeightRequest="30"  />
 
-                    <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}" Margin="10"/>
-                    <Label Text="{Binding Description}" Style="{StaticResource Paragraph}" Margin="10"/>
+                <StackLayout Margin="10,0,10,0">
+                    <Label Text="Interés Gastronómico" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding CookingInterest}" Style="{StaticResource Paragraph}"/>
+
+                    <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>
 
 
                     <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
 
 
-                    <Label Text="Confusiones" Style="{StaticResource Heading2}" Margin="10"/>
+                    <Label Text="Confusiones" Style="{StaticResource Heading2}"/>
                     <Label Text="{Binding Confusion}"
-                           Style="{StaticResource Paragraph}" Margin="10"/>
+                           Style="{StaticResource Paragraph}" />
 
-                    <Label Text="Habitat" Style="{StaticResource Heading2}" Margin="10"/>
+                    <Label Text="Habitat" Style="{StaticResource Heading2}"/>
                     <Label Text="{Binding Habitat}"
-                           Style="{StaticResource Paragraph}" Margin="10"/>
+                           Style="{StaticResource Paragraph}" />
 
 
                     <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />

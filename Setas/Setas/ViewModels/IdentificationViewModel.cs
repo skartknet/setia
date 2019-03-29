@@ -206,7 +206,7 @@ namespace Setas.ViewModels
 
                 var resultsToDisplay = await MapToPredictionDisplayAsync(result.Predictions);
 
-                vm.FirstResult = resultsToDisplay.FirstOrDefault(m => m.Probability >= App.ProbabilityThresholdFirstResult);
+                vm.FirstResult = resultsToDisplay.FirstOrDefault(m => m.Probability * 100 >= App.ProbabilityThresholdFirstResult);
 
 
                 if (vm.FirstResult != null)
@@ -221,7 +221,7 @@ namespace Setas.ViewModels
                 }                                                
 
 
-                vm.SecondaryResults = resultsToDisplay.Where(m=>m.Probability >= App.ProbabilityThresholdSecondaryResults).Take(5).ToArray();
+                vm.SecondaryResults = resultsToDisplay.Where(m=>m.Probability * 100 >= App.ProbabilityThresholdSecondaryResults).Take(5).ToArray();
 
             }
             catch (WebException ex)

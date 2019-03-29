@@ -40,7 +40,7 @@ namespace Setas.Views
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var vm = new MushroomDetailViewModel(new MushroomDisplayModel(((HistoryItemDisplayModel)e.Item).Mushroom));
-            await Navigation.PushAsync(new MushroomDetail(vm));
+            await Navigation.PushAsync(new MushroomDetailPage(vm));
         }
     }
 }

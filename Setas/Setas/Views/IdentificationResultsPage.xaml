@@ -14,9 +14,9 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
 
-        <StackLayout>
+        <StackLayout Margin="10,0,10,0">
 
-            <Label Text="Resultado Principal" Style="{StaticResource Heading1}" Margin="10, 20"/>
+            <Label Text="Resultado Principal" Style="{StaticResource Heading1}"/>
 
             <Frame CornerRadius="5" 
                    HorizontalOptions="Center" 
@@ -52,7 +52,7 @@
                             </views:SetiaImage.Source>
                         </views:SetiaImage>
 
-                        <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}">
+                        <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}" WidthRequest="1000">
                             <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
                             <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
                                 <Label  Style="{StaticResource DangerIcon}"
@@ -77,14 +77,17 @@
                     </Grid>
                 </StackLayout>
             </Frame>
-            <Label Style="{StaticResource Paragraph}" Text="No se encontró resultado" IsVisible="{Binding IsOverProbabilityThreshold, Converter={converters:InverseBoolConverter}"/>
+            <Label Style="{StaticResource Paragraph}"
+                   Text="No se encontró resultado"
+                   IsVisible="{Binding IsOverProbabilityThreshold, Converter={converters:InverseBoolConverter}"
+                   />
 
             
             <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
 
 
             <!--Secondary results-->
-            <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}" Margin="10, 20"/>
+            <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}"/>
 
 
             <ScrollView>

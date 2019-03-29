@@ -44,7 +44,7 @@ namespace Setas
         {
             var model = new MushroomDetailViewModel(((Prediction)e.Item).Mushroom);
 
-            Navigation.PushAsync(new MushroomDetail(model));
+            Navigation.PushAsync(new MushroomDetailPage(model));
         }
     }
 }

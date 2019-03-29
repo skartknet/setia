@@ -23,7 +23,7 @@ namespace Setas.ViewModels
 
         public bool IsOverProbabilityThreshold { get
             {
-                return FirstResult != null ? FirstResult.Probability > App.ProbabilityThreshold :  false;
+                return FirstResult != null ? FirstResult.Probability * 100 > App.ProbabilityThresholdFirstResult :  false;
             }
         }
 
@@ -35,7 +35,7 @@ namespace Setas.ViewModels
         void NavToItemDetails(MushroomDisplayModel mushroom)
         {
             var model = new MushroomDetailViewModel(mushroom);
-            Navigation.PushAsync(new MushroomDetail(model));
+            Navigation.PushAsync(new MushroomDetailPage(model));
         }
 
 

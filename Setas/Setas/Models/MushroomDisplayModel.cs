@@ -23,6 +23,7 @@ namespace Setas.Models
             Season = m.Season;
             Subclass = m.Subclass;
             Synonyms = m.Synonyms;
+            ImageLicense = m.ImageLicense;
         }
         public Uri ImageSource
         {
