@@ -1,7 +1,9 @@
 ﻿using Setas.Common.Models;
 using Setas.Models;
 using Setas.Views;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -21,9 +23,16 @@ namespace Setas.ViewModels
             }
         }
 
-        public bool IsOverProbabilityThreshold { get
+        public bool FirstResultExists { get
             {
-                return FirstResult != null ? FirstResult.Probability * 100 > App.ProbabilityThresholdFirstResult :  false;
+                return FirstResult != null;
+            }
+        }
+        public bool SecondaryResultsExist
+        {
+            get
+            {
+                return SecondaryResults != null && SecondaryResults.Any();
             }
         }
 
@@ -36,6 +45,8 @@ namespace Setas.ViewModels
         {
             var model = new MushroomDetailViewModel(mushroom);
             Navigation.PushAsync(new MushroomDetailPage(model));
+
+            SecondaryResults = Enumerable.Empty<Prediction>();
         }
 
 
@@ -49,19 +60,21 @@ namespace Setas.ViewModels
                 {
                     _firstResult = value;
                     OnPropertyChanged("FirstResult");
-                    OnPropertyChanged("IsOverProbabilityThreshold");
+                    OnPropertyChanged("FirstResultExists");
                 }
             }
         }
 
-        Prediction[] _secondaryResults;
-        public Prediction[] SecondaryResults
+        IEnumerable<Prediction> _secondaryResults;
+        public IEnumerable<Prediction> SecondaryResults
         {
             get => _secondaryResults;
             set
             {
                 _secondaryResults = value;
                 OnPropertyChanged("SecondaryResults");
+                OnPropertyChanged("SecondaryResultsExist");
+
             }
         }
 

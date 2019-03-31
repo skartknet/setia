@@ -14,139 +14,139 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
 
-        <StackLayout Margin="10,0,10,0">
+        <StackLayout Margin="10">
+            <StackLayout  IsVisible="{Binding FirstResultExists}">
+                <Label Text="Resultado Principal" Style="{StaticResource Heading1}"/>
 
-            <Label Text="Resultado Principal" Style="{StaticResource Heading1}"/>
-
-            <Frame CornerRadius="5" 
+                <Frame CornerRadius="5" 
                    HorizontalOptions="Center" 
                    VerticalOptions="Start"
                    HasShadow="True"
-                   Padding="0"
-                    IsVisible="{Binding IsOverProbabilityThreshold}">
-                <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
+                   Padding="0">
+                    <StackLayout BackgroundColor="{StaticResource Color2}" Padding="10"
                          Orientation="Horizontal">
-                    <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding NavToItemDetailsCommand}"
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NavToItemDetailsCommand}"
                                           CommandParameter="{Binding FirstResult.Mushroom}"/>
-                    </StackLayout.GestureRecognizers>
+                        </StackLayout.GestureRecognizers>
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="95"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                     
-                        <views:SetiaImage   
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="95"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <views:SetiaImage   
                             Grid.Column="0" Grid.Row="0"
                             HeightRequest="95"
                             WidthRequest="95"
                             Aspect="AspectFill"
                             VerticalOptions="CenterAndExpand">
-                            <views:SetiaImage.Source>
-                                <UriImageSource Uri="{Binding FirstResult.Mushroom.ImageSource}"/>
-                            </views:SetiaImage.Source>
-                        </views:SetiaImage>
+                                <views:SetiaImage.Source>
+                                    <UriImageSource Uri="{Binding FirstResult.Mushroom.ImageSource}"/>
+                                </views:SetiaImage.Source>
+                            </views:SetiaImage>
 
-                        <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}" WidthRequest="1000">
-                            <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
-                            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
-                                <Label  Style="{StaticResource DangerIcon}"
+                            <StackLayout Grid.Column="1" Grid.Row="0" BindingContext="{Binding FirstResult}" WidthRequest="1000">
+                                <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" TextColor="White" />
+                                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                                    <Label  Style="{StaticResource DangerIcon}"
                                                         VerticalOptions="StartAndExpand"
                                                         HorizontalOptions="End"
                                                         IsVisible="{Binding Mushroom.IsToxic}"/>
-                                <Label  Style="{StaticResource WarningIcon}"
+                                    <Label  Style="{StaticResource WarningIcon}"
                                                         VerticalOptions="StartAndExpand"
                                                         HorizontalOptions="End"
                                                         IsVisible="{Binding Mushroom.IsWarning}"/>
-                                <Label  Style="{StaticResource SafeIcon}"
+                                    <Label  Style="{StaticResource SafeIcon}"
                                                         VerticalOptions="StartAndExpand"
                                                         HorizontalOptions="End"
                                                         IsVisible="{Binding Mushroom.IsSafe}"/>
-                                <Label Text="{Binding Mushroom.EdibleAsReadableString}" FontSize="14" TextColor="White" />
+                                    <Label Text="{Binding Mushroom.EdibleAsReadableString}" FontSize="14" TextColor="White" />
+                                </StackLayout>
                             </StackLayout>
-                        </StackLayout>
-                        <StackLayout Grid.Column="2" Grid.Row="0" BindingContext="{Binding FirstResult}" VerticalOptions="CenterAndExpand">
-                            <Label Text="Probabilidad:" FontSize="12" TextColor="White" HorizontalOptions="End" />
-                            <Label Text="{Binding ProbabilityAsPercentage}" FontSize="27"  TextColor="White" HorizontalOptions="End"  />
-                        </StackLayout>
-                    </Grid>
-                </StackLayout>
-            </Frame>
+                            <StackLayout Grid.Column="2" Grid.Row="0" BindingContext="{Binding FirstResult}" VerticalOptions="CenterAndExpand">
+                                <Label Text="Probabilidad:" FontSize="12" TextColor="White" HorizontalOptions="End" />
+                                <Label Text="{Binding ProbabilityAsPercentage}" FontSize="27"  TextColor="White" HorizontalOptions="End"  />
+                            </StackLayout>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+                
+                <controls:AdMobView AdUnitId="{Binding AdUnitId}"
+                                VerticalOptions="End" />
+
+            </StackLayout>
+
             <Label Style="{StaticResource Paragraph}"
                    Text="No se encontró resultado"
-                   IsVisible="{Binding IsOverProbabilityThreshold, Converter={converters:InverseBoolConverter}"
+                   IsVisible="{Binding FirstResultExists, Converter={converters:InverseBoolConverter}}"
                    />
-
-            
-            <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
-
-
-            <!--Secondary results-->
-            <Label Text="Otros Resultados" TextColor="Black" Style="{StaticResource Heading1}"/>
-
-
-            <ScrollView>
-                <StackLayout>
-                    <ListView SeparatorColor="{StaticResource Color4}"
+            <StackLayout IsVisible="{Binding SecondaryResultsExist}">
+                <!--Secondary results-->
+                <Label Text="Otros Posibles Resultados" TextColor="Black" Style="{StaticResource Heading1}"/>
+                <ScrollView>
+                    <StackLayout>
+                        <ListView SeparatorColor="{StaticResource Color4}"
                           RowHeight="100"
                           SelectionMode="None"
                           ItemTapped="ListView_ItemTapped"
                           IsPullToRefreshEnabled="False"
                           ItemsSource="{Binding SecondaryResults}">
 
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout Padding="10, 10"
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout Padding="10, 10"
                                             Orientation="Horizontal">
-                                        <views:SetiaImage   
+                                            <views:SetiaImage   
                                             HeightRequest="55"
                                             WidthRequest="75"
                                             Aspect="AspectFill"
                                             VerticalOptions="CenterAndExpand">
-                                            <views:SetiaImage.Source>
-                                                <UriImageSource Uri="{Binding Mushroom.ImageSource}"/>
-                                            </views:SetiaImage.Source>
-                                        </views:SetiaImage>
-                                        <StackLayout Spacing="0" HorizontalOptions="StartAndExpand">
-                                            <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading2}" />
-                                            <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
-                                                <Label  Style="{StaticResource DangerIcon}"
+                                                <views:SetiaImage.Source>
+                                                    <UriImageSource Uri="{Binding Mushroom.ImageSource}"/>
+                                                </views:SetiaImage.Source>
+                                            </views:SetiaImage>
+                                            <StackLayout Spacing="0" HorizontalOptions="StartAndExpand">
+                                                <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading2}" />
+                                                <StackLayout Orientation="Horizontal" VerticalOptions="EndAndExpand">
+                                                    <Label  Style="{StaticResource DangerIcon}"
                                                     VerticalOptions="Start"
                                                     HorizontalOptions="End"
                                                     IsVisible="{Binding Mushroom.IsToxic}"/>
-                                                <Label  Style="{StaticResource WarningIcon}"
+                                                    <Label  Style="{StaticResource WarningIcon}"
                                                     VerticalOptions="Start"
                                                     HorizontalOptions="End"
                                                     IsVisible="{Binding Mushroom.IsWarning}"/>
-                                                <Label  Style="{StaticResource SafeIcon}"
+                                                    <Label  Style="{StaticResource SafeIcon}"
                                                     VerticalOptions="Start"
                                                     HorizontalOptions="End"
                                                     IsVisible="{Binding Mushroom.IsSafe}"/>
-                                                <Label  Text="{Binding Mushroom.EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
+                                                    <Label  Text="{Binding Mushroom.EdibleAsReadableString}" VerticalOptions="CenterAndExpand"/>
+                                                </StackLayout>
                                             </StackLayout>
-                                        </StackLayout>
-                                        <StackLayout VerticalOptions="CenterAndExpand" 
+                                            <StackLayout VerticalOptions="CenterAndExpand" 
                                                  HorizontalOptions="End"
                                                  Spacing="0">
-                                            <Label Text="Probabilidad" FontSize="12" VerticalOptions="End"/>
-                                            <Label Text="{Binding ProbabilityAsPercentage}" FontSize="18" 
+                                                <Label Text="Probabilidad" FontSize="12" VerticalOptions="End"/>
+                                                <Label Text="{Binding ProbabilityAsPercentage}" FontSize="18" 
                                                 HorizontalOptions="End"
                                                VerticalOptions="End"/>
+                                            </StackLayout>
                                         </StackLayout>
-                                    </StackLayout>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
-                </StackLayout>
-            </ScrollView>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

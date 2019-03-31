@@ -33,10 +33,9 @@ namespace Setas.Services
 
 #if DEBUG
             File.Delete(DBPATH);      
-            
 #endif
 
-            CreateDatabaseStructure();
+           Task.Run(async () =>await  CreateDatabaseStructure()).Wait();
         }
 
 
@@ -56,13 +55,13 @@ namespace Setas.Services
         }
 
 
-        private void CreateDatabaseStructure()
+        private async Task CreateDatabaseStructure()
         {
             try
             {
-                _database.CreateTableAsync<Mushroom>();
-                _database.CreateTableAsync<Models.Data.ConfigurationItem>();
-                _database.CreateTableAsync<HistoryItem>();
+                await _database.CreateTableAsync<Mushroom>();
+                await _database.CreateTableAsync<Models.Data.ConfigurationItem>();
+                await _database.CreateTableAsync<HistoryItem>();
 
 
                 var configElements = new List<Models.Data.ConfigurationItem>()
@@ -74,7 +73,7 @@ namespace Setas.Services
                     }
                 };
 
-                _database.InsertAllAsync(configElements);
+                await _database.InsertAllAsync(configElements);
             }
             catch (Exception ex)
             {
@@ -119,9 +118,9 @@ namespace Setas.Services
         }
 
 
-        public Task<Mushroom> GetMushroomAsync(int id)
+        public async Task<Mushroom> GetMushroomAsync(int id)
         {
-            return _database.Table<Mushroom>().FirstOrDefaultAsync(m => m.Id == id);
+            return await _database.Table<Mushroom>().FirstOrDefaultAsync(m => m.Id == id);
         }
 
         public async Task InsertMushroomsAsync(IEnumerable<Mushroom> items)
@@ -142,9 +141,9 @@ namespace Setas.Services
             await _database.InsertAsync(item);
         }
 
-        public Task InsertMushroomAsync(Mushroom item)
+        public async Task InsertMushroomAsync(Mushroom item)
         {
-            return _database.InsertOrReplaceAsync(item);
+            await _database.InsertOrReplaceAsync(item);
         }
 
         public async Task<Common.Models.Configuration> GetConfigurationAsync()
