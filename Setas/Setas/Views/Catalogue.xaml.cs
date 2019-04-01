@@ -14,27 +14,30 @@ namespace Setas.Views
         public Catalogue()
         {
             InitializeComponent();
-            MasterPage.ListView.ItemSelected += ListView_ItemSelected;
+            MasterPage.MenuListView.ItemSelected += ListView_ItemSelected;
 
+            InitDefaultListingValues();
+
+        }
+
+        private void InitDefaultListingValues()
+        {
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
-                Detail = new NavigationPage(new CatalogueItemListing(scope.Resolve<IInternalDataService>(), null));
+                var filter = GetEdiblesClasses(EdibleTopClass.Safe);
+
+                var listing = new CatalogueItemListing(scope.Resolve<IInternalDataService>(), filter, "Todas");
+
+                Detail = new NavigationPage(listing);
             }
         }
 
         protected override void OnAppearing()
         {
-            if(MasterPage.ListView.SelectedItem == null)
+            if (MasterPage.MenuListView.SelectedItem == null)
             {
-                using (var scope = DependencyContainer.Container.BeginLifetimeScope())
-                {
-                    var edibles = GetEdiblesClasses(EdibleTopClassEnum.Safe);
-
-                    var listing = new CatalogueItemListing(scope.Resolve<IInternalDataService>(), edibles);
-
-                    Detail = new NavigationPage(listing);
-                    IsPresented = false;
-                }
+                InitDefaultListingValues();
+                IsPresented = false;
             }
         }
 
@@ -44,47 +47,46 @@ namespace Setas.Views
             {
                 if (e.SelectedItem != null)
                 {
+                    var menuItem = (CatalogueMenuItem)e.SelectedItem;
 
-                    var edibles = GetEdiblesClasses(((CatalogueMenuItem)e.SelectedItem).Value);
-
-                    var listing = new CatalogueItemListing(scope.Resolve<IInternalDataService>(), edibles);
+                    var edibles = GetEdiblesClasses(menuItem.Value);
+                    var listing = new CatalogueItemListing(scope.Resolve<IInternalDataService>(), edibles, menuItem.Title);
 
                     Detail = new NavigationPage(listing);
                     IsPresented = false;
 
-                    MasterPage.ListView.SelectedItem = null;
                 }
             }
 
         }
 
-        //Gets all the classes associated to an edible top classification
-        private Edible[] GetEdiblesClasses(EdibleTopClassEnum? topClass)
+        //Gets all the classes associated to an edible top classification. We don't give the change to select by any possible value.
+        private Edible[] GetEdiblesClasses(EdibleTopClass? topClass)
         {
             if (topClass.HasValue)
             {
                 switch (topClass)
                 {
-                    case EdibleTopClassEnum.Safe:
+                    case EdibleTopClass.Safe:
                         return new Edible[]
                         {
                             Common.Enums.Edible.BuenComestible,
                             Common.Enums.Edible.ComestibleBajaCalidad,
                             Common.Enums.Edible.ComestibleCalidadMedia
                         };
-                    case EdibleTopClassEnum.NoInterest:
+                    case EdibleTopClass.NoInterest:
                         return new Edible[]
                         {
                             Common.Enums.Edible.SinInteres
                         };
-                    case EdibleTopClassEnum.Warning:
+                    case EdibleTopClass.Warning:
                         return new Edible[]{
                             Common.Enums.Edible.PosibleToxico,
                                 Common.Enums.Edible.ComestibleConPrecaucion,
                                 Common.Enums.Edible.ComestiblePeroPeligrosa,
                                 Common.Enums.Edible.NoComestible
                             };
-                    case EdibleTopClassEnum.Toxic:
+                    case EdibleTopClass.Toxic:
                         return new Edible[] { Common.Enums.Edible.Toxica };
                     default:
                         return null;

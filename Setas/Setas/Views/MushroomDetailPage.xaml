@@ -11,9 +11,18 @@
     <ContentPage.BindingContext>
         <local:MushroomDetailViewModel/>
     </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <StyleSheet>
+            <![CDATA[
+            .license{
+                font-size: 6px;
+            }
+            ]]>
+        </StyleSheet>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
-        <StackLayout BindingContext="{Binding Mushroom}">
+            <StackLayout BindingContext="{Binding Mushroom}">
                 <views:SetiaImage  HeightRequest="200"
                         WidthRequest="125"
                         Aspect="AspectFill">
@@ -22,18 +31,51 @@
                     </views:SetiaImage.Source>
                 </views:SetiaImage>
 
-                <WebView x:Name="licenseWebView" WidthRequest="1000" HeightRequest="30"  />
-
                 <StackLayout Margin="10,0,10,0">
-                    <Label Text="Interés Gastronómico" Style="{StaticResource Heading2}"/>
-                    <Label Text="{Binding CookingInterest}" Style="{StaticResource Paragraph}"/>
+               
+
+                    <Frame Padding="8">
+                        <StackLayout Spacing="0">
+                            <Label Text="Clasificación" Style="{StaticResource Heading3}" />
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Familia:" Style="{StaticResource ParagraphBold}" />
+                                <Label Text="{Binding Family}" Style="{StaticResource Paragraph}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Orden:" Style="{StaticResource ParagraphBold}" />
+                                <Label Text="{Binding Order}" Style="{StaticResource Paragraph}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Clase:" Style="{StaticResource ParagraphBold}" />
+                                <Label Text="{Binding Class}" Style="{StaticResource Paragraph}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Subclase:" Style="{StaticResource ParagraphBold}" />
+                                <Label Text="{Binding Subclass}" Style="{StaticResource Paragraph}" />
+                            </StackLayout>
+                        </StackLayout>
+                    </Frame>
+                    <StackLayout Orientation="Horizontal" Margin="0,0,0,20">
+                        <Label     Style="{StaticResource DangerIcon}"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding IsToxic}"/>
+                        <Label   Style="{StaticResource WarningIcon}"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding IsWarning}"/>
+                        <Label   Style="{StaticResource SafeIcon}"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding IsSafe}"/>
+                        <Label Text="{Binding EdibleAsReadableString}"  VerticalOptions="End" Style="{StaticResource Subtitle1}"/>
+
+                    </StackLayout>
+                    <Label Text="Sinónimos" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding Synonyms}" Style="{StaticResource Paragraph}"/>
+
+                    <Label Text="Nombres populares" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding PopularNames}" Style="{StaticResource Paragraph}"/>
 
                     <Label Text="Descripción macroscópica" Style="{StaticResource Heading2}"/>
                     <Label Text="{Binding Description}" Style="{StaticResource Paragraph}"/>
-
-
-                    <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
-
 
                     <Label Text="Confusiones" Style="{StaticResource Heading2}"/>
                     <Label Text="{Binding Confusion}"
@@ -43,10 +85,21 @@
                     <Label Text="{Binding Habitat}"
                            Style="{StaticResource Paragraph}" />
 
+                    <Label Text="Temporada" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding Season}"
+                           Style="{StaticResource Paragraph}" />
+
+                    <Label Text="Cocina" Style="{StaticResource Heading2}"/>
+                    <Label Text="{Binding CookingInstructions}"
+                           Style="{StaticResource Paragraph}" />
 
                     <controls:AdMobView AdUnitId="{Binding AdUnitId}"  VerticalOptions="End" />
                 </StackLayout>
-
+                <WebView x:Name="licenseWebView" WidthRequest="1000" HeightRequest="30">
+                    <WebView.Source>
+                        <HtmlWebViewSource Html="{Binding ImageLicense}"/>
+                    </WebView.Source>
+                </WebView>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

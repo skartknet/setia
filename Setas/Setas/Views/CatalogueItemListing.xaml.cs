@@ -22,14 +22,22 @@ namespace Setas.Views
         //select edibles
         private Edible[] _edibles;
 
+        private string _title;
+
         private int _page = 0;
 
 
-        public CatalogueItemListing(IInternalDataService dataService, Edible[] edibles)
+        public CatalogueItemListing(IInternalDataService dataService, Edible[] ediblesFilter, string pageTitle)
         {
             _dataService = dataService;
-            _edibles = edibles;
+            _edibles = ediblesFilter;
+
+            _title = pageTitle;
+
             InitializeComponent();
+
+
+            BindingContext = this;
 
             AdView.AdUnitId = App.AdUnitId;
 
@@ -37,18 +45,19 @@ namespace Setas.Views
 
         protected override void OnAppearing()
         {
+            Title = _title;
             if (!Mushrooms.Any())
             {
                 Task.Run(async () =>
                 {
                     await GetItemsAsync();
-                }).ContinueWith(t => DetailsList.ItemsSource = Mushrooms);
+                });
             }
         }
 
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var vm = new MushroomDetailViewModel((MushroomDisplayModel)e.Item);
+            var vm = new MushroomDetailViewModel((MushroomDisplayModel)e.Item);            
             await Navigation.PushAsync(new MushroomDetailPage(vm));
         }
 
@@ -60,7 +69,6 @@ namespace Setas.Views
             {
                 await GetItemsAsync();
             }
-
         }
 
         private async Task GetItemsAsync()
@@ -71,11 +79,15 @@ namespace Setas.Views
                 Page = _page + 1
             });
 
+           
 
             foreach (var item in data)
             {
                 Mushrooms.Add(new MushroomDisplayModel(item));
             }
+
+            DetailsList.ItemsSource = Mushrooms;
+
 
             _page++;
         }

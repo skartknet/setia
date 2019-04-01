@@ -1,6 +1,7 @@
-﻿using Setas.Data;
+﻿using System;
+using Setas.Data;
 using Setas.Enums;
-using System;
+using Setas.ViewModels.Helpers;
 
 namespace Setas.Models
 {
@@ -25,6 +26,15 @@ namespace Setas.Models
             Synonyms = m.Synonyms;
             ImageLicense = m.ImageLicense;
         }
+
+        public string EdibleAsReadableString
+        {
+            get
+            {
+                return EdibleHelpers.EdibleEnumToReadableString(CookingInterest);
+            }
+        }
+
         public Uri ImageSource
         {
             get
@@ -33,68 +43,13 @@ namespace Setas.Models
                 return uri;
             }
         }
-        public EdibleTopClassEnum EdibleOverview
-        {
-            get
-            {
-                switch (CookingInterest)
-                {
-                    case Common.Enums.Edible.BuenComestible:
-                    case Common.Enums.Edible.ComestibleBajaCalidad:
-                    case Common.Enums.Edible.ComestibleCalidadMedia:
-                        return EdibleTopClassEnum.Safe;
-                    case Common.Enums.Edible.Toxica:
-                        return EdibleTopClassEnum.Toxic;
-                    case Common.Enums.Edible.SinInteres:
-                        return EdibleTopClassEnum.NoInterest;
-                    case Common.Enums.Edible.PosibleToxico:
-                    case Common.Enums.Edible.ComestibleConPrecaucion:
-                    case Common.Enums.Edible.ComestiblePeroPeligrosa:
-                    case Common.Enums.Edible.NoComestible:
-                        return EdibleTopClassEnum.Warning;
-                    default:
-                        return EdibleTopClassEnum.Warning;
-                }
-            }
-        }
 
-
-        public string EdibleAsReadableString
-        {
-            get
-            {
-
-                switch (CookingInterest)
-                {
-                    case Common.Enums.Edible.BuenComestible:
-                        return "Comestible";
-                    case Common.Enums.Edible.ComestibleBajaCalidad:
-                        return "Comestible Baja Calidad";
-                    case Common.Enums.Edible.ComestibleCalidadMedia:
-                        return "Comestible Calidad Media";
-                    case Common.Enums.Edible.Toxica:
-                        return "Tóxica";
-                    case Common.Enums.Edible.SinInteres:
-                        return "Sin Interés";
-                    case Common.Enums.Edible.PosibleToxico:
-                        return "Posible Tóxica";
-                    case Common.Enums.Edible.ComestibleConPrecaucion:
-                        return "Comestible con Precaución";
-                    case Common.Enums.Edible.ComestiblePeroPeligrosa:
-                        return "Comestible pero peligrosa";
-                    case Common.Enums.Edible.NoComestible:
-                        return "No comestible";
-                    default:
-                        return "Desconocido";
-                }
-            }
-        }
 
         public bool IsToxic
         {
             get
             {
-                return EdibleOverview == EdibleTopClassEnum.Toxic;
+                return EdibleHelpers.EdibleToTopClass(CookingInterest) == EdibleTopClass.Toxic;
             }
         }
 
@@ -102,7 +57,7 @@ namespace Setas.Models
         {
             get
             {
-                return EdibleOverview == EdibleTopClassEnum.NoInterest;
+                return EdibleHelpers.EdibleToTopClass(CookingInterest) == EdibleTopClass.NoInterest;
             }
         }
 
@@ -110,7 +65,7 @@ namespace Setas.Models
         {
             get
             {
-                return EdibleOverview == EdibleTopClassEnum.Safe;
+                return EdibleHelpers.EdibleToTopClass(CookingInterest) == EdibleTopClass.Safe;
             }
         }
 
@@ -118,7 +73,7 @@ namespace Setas.Models
         {
             get
             {
-                return EdibleOverview == EdibleTopClassEnum.Warning;
+                return EdibleHelpers.EdibleToTopClass(CookingInterest) == EdibleTopClass.Warning;
             }
         }
     }

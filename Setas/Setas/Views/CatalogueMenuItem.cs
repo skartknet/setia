@@ -15,7 +15,7 @@ namespace Setas.Views
         {
           
         }
-        public EdibleTopClassEnum? Value { get; set; }
+        public EdibleTopClass? Value { get; set; }
         public string Title { get; set; }
 
     }

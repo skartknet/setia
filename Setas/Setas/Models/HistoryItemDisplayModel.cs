@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Setas.Models
 {
-    class HistoryItemDisplayModel
+    public class HistoryItemDisplayModel
     {
         public string TakenOn { get; set; }
 

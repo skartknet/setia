@@ -1,7 +1,7 @@
 ﻿namespace Setas.Enums
 {
 
-    public enum EdibleTopClassEnum
+    public enum EdibleTopClass
     {
         Safe,
         Toxic,

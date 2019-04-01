@@ -12,36 +12,42 @@
                       IsPullToRefreshEnabled="False"
                       HasUnevenRows="True"
                       x:Name="HistoryList"
-                        Margin="10">
+                      Margin="10"
+                      ItemsSource="{Binding Mushrooms}">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout>
-                            <Label Text="{Binding TakenOn}"/>
-                            <Grid Padding="0,10">
+                        <StackLayout Padding="0,10,0,10">
+                            <StackLayout Orientation="Horizontal">
+                                <Label FontFamily="fa-solid.otf#Font Awesome 5 Free Solid" Text="&#xf073;" />
+                                <Label Text="{Binding TakenOn}"/>
+                            </StackLayout>
+                            <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="auto" />
                                 <RowDefinition Height="auto" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="75"/>
+                                <ColumnDefinition Width="95"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                                 <views:SetiaImage   
-                                            HeightRequest="75"
-                                            WidthRequest="75"
+                                            HeightRequest="95"
+                                            WidthRequest="95"
                                             Aspect="AspectFill"
-                                            VerticalOptions="CenterAndExpand"
+                                            VerticalOptions="CenterAndExpand"                                    
                                             Grid.Row="0" Grid.Column="0" Grid.RowSpan="3">
                                     <views:SetiaImage.Source>
                                         <UriImageSource Uri="{Binding Mushroom.ImageSource}"/>
                                     </views:SetiaImage.Source>
                                 </views:SetiaImage>
 
-
-                                <Label Grid.Row="0" Grid.Column="1" VerticalOptions="StartAndExpand" Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" />
+                                <StackLayout  Grid.Row="0" Grid.Column="1" VerticalOptions="StartAndExpand">
+                                    <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Heading1}" />
+                                    <Label Text="{Binding Mushroom.Synonyms}" Style="{StaticResource Subtitle2}" FontFamily="LibreBaskerville-Italic.ttf#LibreBaskerville" />
+                                </StackLayout>
 
                             <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >
                                 <Label     Style="{StaticResource DangerIcon}"

@@ -1,0 +1,74 @@
+{
+  "MushroomDetailPage.xaml": {
+    "Mushroom": {
+      "Order": "Poriales",
+      "Class": "Baasidiomycotina",
+      "Family": "Lentinaceae",
+      "Subclass": "Aphyllocuracae",
+      "ImageLicense": "<p class=\"license\">Foto de <a href=\"https://mushroomobserver.org/observer/show_user/1\">Nathan Wilson</a>. No modificada. <a rel=\"noopener\" href=\"https://creativecommons.org/licenses/by-sa/3.0/legalcode\" target=\"_blank\">CC BY-SA 3.0</a> </p>",
+      "Name": "Amanita Muscaria",
+      "Synonyms": "better, be, right, about, this",
+      "Description": "All right, kid. But you'd better be right about this. All right. What's your plan? Uh...Threepio, hand me those binders there will you? Okay. Now, I'm going to put these on you. Okay. Han, you put these on. Don't worry, Chewie. I think I know what he has in mind. Master Luke, sir! Pardon me for asking...but, ah...what should Artoo and I do if we're discovered here? Lock the door! And hope they don't have blasters. That isn't very reassuring.",
+      "EdibleAsReadableString": "Comestible",
+      "ImageSource": "http://setia-dev.azurewebsites.net/media/1012/1280px-agaricus_campestris.jpg",
+      "Confusion": "All right, kid. But you'd better be right about this. All right. What's your plan? Uh...Threepio, hand me those binders there will you? Okay. Now, I'm going to put these on you. Okay. Han, you put these on. Don't worry, Chewie. I think I know what he has in mind. Master Luke, sir! Pardon me for asking...but, ah...what should Artoo and I do if we're discovered here? Lock the door! And hope they don't have blasters. That isn't very reassuring.",
+      "IsToxic": false,
+      "IsWarning": false,
+      "IsSafe": true
+    }
+  },
+  "CatalogueItemListing.xaml": {
+    "Mushrooms": [
+      {
+        "Name": "Amanita Muscaria",
+        "Synonyms": "better, be, right, about, this",
+   
+        "ImageSource": "http://setia-dev.azurewebsites.net/media/1012/1280px-agaricus_campestris.jpg",
+        "EdibleAsReadableString": "Comestible",
+        "IsToxic": false,
+        "IsWarning": false,
+        "IsSafe": true
+      },
+      {
+        "Name": "Amanita Faloides",
+        "Synonyms": "better, be, right, about, this",
+
+        "ImageSource": "http://setia-dev.azurewebsites.net/media/1012/1280px-agaricus_campestris.jpg",
+        "EdibleAsReadableString": "Toxica",
+        "IsToxic": true,
+        "IsWarning": false,
+        "IsSafe": false
+      }
+    ]
+  },
+  "HistoryPage.xaml": {
+    "Mushrooms": [
+      {
+        "TakenOn": "12/12/2019",
+        "Mushroom": {
+          "Name": "Amanita Muscaria",
+          "Synonyms": "better, be, right, about, this",
+
+          "ImageSource": "http://setia-dev.azurewebsites.net/media/1012/1280px-agaricus_campestris.jpg",
+          "EdibleAsReadableString": "Comestible",
+          "IsToxic": false,
+          "IsWarning": false,
+          "IsSafe": true
+        }
+      },
+      {
+        "TakenOn": "12/12/2019",
+        "Mushroom": {
+          "Name": "Amanita Faloides",
+          "Synonyms": "better, be, right, about, this",
+
+          "ImageSource": "http://setia-dev.azurewebsites.net/media/1012/1280px-agaricus_campestris.jpg",
+          "EdibleAsReadableString": "Toxica",
+          "IsToxic": true,
+          "IsWarning": false,
+          "IsSafe": false
+        }
+      }
+    ]
+  }
+}

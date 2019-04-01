@@ -12,6 +12,8 @@
 
             <!--Light background-->
             <Color x:Key="Color6">#fff5e0</Color>
+            
+            
             <Style TargetType="Button">
                 <Setter Property="FontFamily">
                     <OnPlatform x:TypeArguments="x:String" >
@@ -35,17 +37,29 @@
             </Style>
 
             <Style x:Key="Heading1" TargetType="Label">
-                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="FontSize" Value="20"/>
                 <Setter Property="TextColor" Value="{StaticResource Color5}" />
                 <Setter Property="FontFamily">
                     <OnPlatform x:TypeArguments="x:String" >
-                        <On Platform="Android" Value="LibreBaskerville-Bold.ttf#LibreBaskerville"/>
+                        <On Platform="Android" Value="Montserrat-Bold.ttf#Montserrat"/>
                     </OnPlatform>
                 </Setter>
             </Style>
 
             <Style x:Key="Heading2" TargetType="Label" BasedOn="{StaticResource Heading1}">
+                <Setter Property="FontSize" Value="18"/>
+            </Style>
+
+            <Style x:Key="Heading3" TargetType="Label" BasedOn="{StaticResource Heading1}">
                 <Setter Property="FontSize" Value="16"/>
+            </Style>
+
+            <Style x:Key="Subtitle1" TargetType="Label">
+                <Setter Property="FontSize" Value="16"/>
+            </Style>
+
+            <Style x:Key="Subtitle2" TargetType="Label">
+                <Setter Property="FontSize" Value="14"/>
             </Style>
 
 
@@ -75,7 +89,11 @@
 
             <Style x:Key="Paragraph" TargetType="Label">
                 <Setter Property="Margin" Value="0,0,0,15"/>
-                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
+
+            <Style x:Key="ParagraphBold" BasedOn="{StaticResource Paragraph}" TargetType="Label">
+                <Setter Property="FontFamily" Value="Montserrat-Bold.ttf#Montserrat"/>
             </Style>
 
         </ResourceDictionary>
