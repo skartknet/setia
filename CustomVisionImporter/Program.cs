@@ -1,17 +1,23 @@
-﻿using System;
+﻿using CustomVisionImporter.Services;
+using CustomVisionImporter.Services.Extensions;
+using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
+using Setas.Common.Models.Api;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CustomVisionImporter.Services;
-using CustomVisionImporter.Services.Extensions;
-using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Training.Models;
-using Setas.Common.Models.Api;
 
 namespace CustomVisionImporter
 {
     class Program
     {
+
+        private static UmbracoService umbracoService;
+        private static CustomVisionService customVisionService;
+
+
         static async Task Main(string[] args)
         {
             //---------- Configuration -------------------
@@ -27,10 +33,10 @@ namespace CustomVisionImporter
 
 
             //init services
-            var umbracoService = new UmbracoService();
+            umbracoService = new UmbracoService();
             umbracoService.ApiBase = apiBase;
 
-            var customVisionService = new CustomVisionService(trainingApiKey, trainingEndpoint, projectId);
+            customVisionService = new CustomVisionService(trainingApiKey, trainingEndpoint, projectId);
             //----------------
 
             string[] lettersFolders = default;
@@ -52,87 +58,14 @@ namespace CustomVisionImporter
 
                 foreach (var mushroomFolder in mushroomsFolders)
                 {
-                    var name = FirstCharToUpper(new DirectoryInfo(mushroomFolder).Name);
-                    var cleanName = name.Replace(" - clean", "", StringComparison.OrdinalIgnoreCase)
-                                        .Trim();
-
-                    Console.WriteLine($"==== Processing folder {cleanName} ====");
-
-                    #region Create node in Umbraco
-
-                    Mushroom umbracoContent = null;
                     try
                     {
-                        umbracoContent = await UmbracoNodeFromContent(cleanName);
+                        await ProcessFolder(mushroomFolder);
                     }
-                    catch (Exception ex)
+                    catch
                     {
-                        ConsoleError($"Error mapping content. Error: {ex.Message}");
-
                         continue;
                     }
-
-                    int? nodeId = null;
-
-                    try
-                    {
-                        Console.WriteLine("--- Importing info into Umbraco ---");
-
-                        nodeId = await umbracoService.GetMushroomIdAsync(cleanName);
-
-                        if (!nodeId.HasValue)
-                        {
-                            //Create a node in umbraco with this name
-                            nodeId = await umbracoService.CreateNodeAsync(umbracoContent);
-
-                            //parsing of returned id failed.
-                            if (nodeId == null)
-                            {
-                                ConsoleError("ERROR Importing info into Umbraco!");
-                                continue;
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Node {name} already exists in Umbraco.");
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        ConsoleError($"ERROR creating node in Umbraco with name {name}. Reason: {ex.Message}");
-
-                        continue;
-                    }
-
-
-
-                    Console.WriteLine($"SUCCESS importing info into Umbraco. Node ID: {nodeId}");
-
-                    Console.WriteLine("--- Uploading images into custom vision ---");
-
-                    var images = Directory.EnumerateFiles(mushroomFolder);
-
-                    Console.WriteLine($"There's a total of {images.Count()} images.");
-
-                    Tag tag = customVisionService.CreateTag(nodeId.ToString(), cleanName.Replace(" ", ""));
-
-                    try
-                    {
-                        customVisionService.UploadImages(images, tag);
-                    }
-                    catch (Exception ex)
-                    {
-                        ConsoleError("Error uploading images to Custom Vision", insertLineBreak: false);
-                        ConsoleError(ex.Message);
-                    }
-
-
-
-                    #endregion
-
-                    Console.WriteLine($"==== SUCCESS: Folder {name} processed succesfully. ====");
-                    Console.WriteLine();
                 }
             }
 
@@ -148,6 +81,114 @@ namespace CustomVisionImporter
             Console.WriteLine(message);
             if (insertLineBreak) Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        private static async Task ProcessFolder(string mushroomFolder)
+        {
+            var name = FirstCharToUpper(new DirectoryInfo(mushroomFolder).Name);
+            var cleanName = name.Replace(" - clean", "", StringComparison.OrdinalIgnoreCase)
+                                .Trim();
+
+            Console.WriteLine($"==== Processing folder {cleanName} ====");
+
+            #region Create node in Umbraco
+
+            Mushroom umbracoContent = null;
+            try
+            {
+                umbracoContent = await UmbracoNodeFromContent(cleanName);
+            }
+            catch (Exception ex)
+            {
+                ConsoleError($"Error mapping content. Error: {ex.Message}");
+
+                throw ex;
+            }
+
+            int? nodeId = null;
+
+            try
+            {
+                Console.WriteLine("--- Importing info into Umbraco ---");
+
+                nodeId = await umbracoService.GetMushroomIdAsync(cleanName);
+
+                if (!nodeId.HasValue)
+                {
+                    //Create a node in umbraco with this name
+                    nodeId = await umbracoService.CreateNodeAsync(umbracoContent);
+
+                    //parsing of returned id failed.
+                    if (nodeId == null)
+                    {
+                        ConsoleError("ERROR Importing info into Umbraco!");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Node {name} already exists in Umbraco.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ConsoleError($"ERROR creating node in Umbraco with name {name}. Reason: {ex.Message}");
+
+                throw ex;
+
+            }
+
+            Console.WriteLine($"SUCCESS importing info into Umbraco. Node ID: {nodeId}");
+
+            Console.WriteLine("--- Uploading images into custom vision ---");
+
+            var images = Directory.EnumerateFiles(mushroomFolder);
+
+            ExtractImagesToControlImagesFolder(images, mushroomFolder);
+
+            Console.WriteLine($"There's a total of {images.Count()} images.");
+
+            Tag tag = customVisionService.CreateTag(nodeId.ToString(), cleanName.Replace(" ", ""));
+
+            try
+            {
+                customVisionService.UploadImages(images, tag);
+            }
+            catch (Exception ex)
+            {
+                ConsoleError("Error uploading images to Custom Vision", insertLineBreak: false);
+                ConsoleError(ex.Message);
+            }
+
+
+
+            #endregion
+
+            Console.WriteLine($"==== SUCCESS: Folder {name} processed succesfully. ====");
+            Console.WriteLine();
+        }
+
+        private static void ExtractImagesToControlImagesFolder(IEnumerable<string> images, string path, int percentageImagesToTake = 20)
+        {
+            try
+            {
+                var controlDirPath = Path.Combine(path, "/control");
+                Directory.CreateDirectory(controlDirPath);
+                var imagesToTake = (int)Math.Floor(images.Count() * percentageImagesToTake / 100d);
+                var controlImages = images.Take(imagesToTake);
+
+                
+                foreach (var image in controlImages)
+                {
+                    var filename = Path.GetFileName(image);
+                    var destFile = Path.Combine(controlDirPath, filename);
+                    File.Move(image, destFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                ConsoleError($"Error creating control directory. Error: {ex.Message}");
+            }
         }
 
         private static async Task<Mushroom> UmbracoNodeFromContent(string cleanName)

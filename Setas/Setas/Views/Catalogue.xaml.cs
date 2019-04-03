@@ -28,7 +28,7 @@ namespace Setas.Views
 
                 var listing = new CatalogueItemListing(scope.Resolve<IInternalDataService>(), filter, "Todas");
 
-                Detail = new NavigationPage(listing);
+                Detail = new CustomNavigationPage(listing);
             }
         }
 

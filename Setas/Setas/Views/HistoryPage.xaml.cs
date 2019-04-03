@@ -27,18 +27,22 @@ namespace Setas.Views
 
         protected override void OnAppearing()
         {
-            var history = Task.Run(async () => await _dataService.GetHistoryAsync()).Result;
-            var items = history.Select(h => new HistoryItemDisplayModel()
+            Task.Run(async () => await _dataService.GetHistoryAsync()).ContinueWith((t) =>
             {
-                TakenOn = h.TakenOn.ToShortDateString(),
-                MushroomId = h.MushroomId,
-                Mushroom = new MushroomDisplayModel(h.Mushroom)
-            });
+                var items = t.Result.Select(h => new HistoryItemDisplayModel()
+                {
+                    TakenOn = h.TakenOn.ToShortDateString(),
+                    MushroomId = h.MushroomId,
+                    Mushroom = new MushroomDisplayModel(h.Mushroom)
+                });
 
-            foreach (var item in items)
-            {
-                Mushrooms.Add(item);
-            }
+                foreach (var item in items)
+                {
+                    Mushrooms.Add(item);
+                }
+
+                HistoryList.ItemsSource = Mushrooms;
+            });
         }
 
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)

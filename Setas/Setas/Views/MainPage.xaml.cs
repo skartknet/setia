@@ -34,14 +34,14 @@ namespace Setas.Views
                     Title = "Identificación",
                     Icon = "eyeIcon.png"
                 };
-
+                
                 var catalogueNavigation = new Catalogue();
                 catalogueNavigation.Title = "Catálogo";
                 catalogueNavigation.Icon = "listIcon.png";
 
                 var history = new NavigationPage(new HistoryPage(scope.Resolve<IInternalDataService>()));
                 history.Title = "Historia";
-                history.Icon = "eyeIcon.png";
+                history.Icon = "calendar.png";
 
                 Children.Add(identifierNavigation);
                 Children.Add(catalogueNavigation);
