@@ -55,8 +55,7 @@ namespace Setas
 
         public App()
         {
-            DependencyContainer.Register(this);
-            MappingConfiguration.Init();
+           
         }
 
 
@@ -70,6 +69,9 @@ namespace Setas
             {
                 await InitDatabase();
             });
+
+            DependencyContainer.Register(this);
+            MappingConfiguration.Init();
 
             InitApp();
 

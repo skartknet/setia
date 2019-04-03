@@ -8,6 +8,8 @@ namespace Setas.Models.Mapping
     {
         public static void Init()
         {
+
+
             Mapper.Initialize(cfg =>
                 cfg.CreateMap<ApiModels.Mushroom, DataModels.Mushroom>()
                 );

@@ -32,20 +32,31 @@ namespace Setas.Views
                 var identifierNavigation = new NavigationPage(new IdentificationPage(identificationViewModel))
                 {
                     Title = "Identificación",
-                    Icon = "eyeIcon.png"
+                    Icon = "@drawable/ic_remove_red_eye_black_24dp"
                 };
-                
-                var catalogueNavigation = new Catalogue();
-                catalogueNavigation.Title = "Catálogo";
-                catalogueNavigation.Icon = "listIcon.png";
 
-                var history = new NavigationPage(new HistoryPage(scope.Resolve<IInternalDataService>()));
-                history.Title = "Historia";
-                history.Icon = "calendar.png";
+                var catalogueNavigation = new Catalogue
+                {
+                    Title = "Catálogo",
+                    Icon = "@drawable/search_24"
+                };
+
+                var history = new NavigationPage(new HistoryPage(scope.Resolve<IInternalDataService>()))
+                {
+                    Title = "Historia",
+                    Icon = "@drawable/ic_history_black_24dp"
+                };
+
+                var info = new InfoPage
+                {
+                    Title = "Info",
+                    Icon = "@drawable/ic_help_outline_black_24dp"
+                };
 
                 Children.Add(identifierNavigation);
                 Children.Add(catalogueNavigation);
                 Children.Add(history);
+                Children.Add(info);
             }
 
 
