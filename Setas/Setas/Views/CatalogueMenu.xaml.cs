@@ -1,21 +1,25 @@
-﻿using Setas.ViewModels;
+﻿using Setas.Services;
+using Setas.ViewModels;
+using Setas.ViewModels.Helpers;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Setas.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CatalogueMaster : ContentPage
+    public partial class CatalogueMenu : ContentPage
     {
         public ListView MenuListView;
-
-        public CatalogueMaster()
+        public CatalogueMenu()
         {
             InitializeComponent();
 
             BindingContext = new CatalogueMasterViewModel();
+
             MenuListView = MenuItemsListView;
+
         }
 
+       
     }
 }

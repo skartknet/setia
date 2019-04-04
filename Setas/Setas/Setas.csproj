@@ -53,6 +53,9 @@
     <Compile Update="Views\CatalogueItemListing.xaml.cs">
       <DependentUpon>CatalogueItemListing.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\CatalogueMenu.xaml.cs">
+      <DependentUpon>CatalogueMenu.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\CatalogueMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -68,7 +71,7 @@
     <EmbeddedResource Update="Views\CatalogueItemListing.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\CatalogueMaster.xaml">
+    <EmbeddedResource Update="Views\CatalogueMenu.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ErrorModal.xaml">

@@ -1,16 +1,13 @@
 ﻿using Autofac;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
-using Setas.Enums;
-
-
 
 namespace Setas.Services
 {
-    class DependencyContainer
+    internal class DependencyContainer
     {
         public static IContainer Container { get; private set; }
 
-        public static void Register(App app)
+        public static void Register()
         {
             var builder = new ContainerBuilder();
 

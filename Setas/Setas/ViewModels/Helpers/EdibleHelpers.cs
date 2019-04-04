@@ -32,20 +32,20 @@ namespace Setas.ViewModels.Helpers
             }
         }
 
-        public static string EdibleTopClassToReadableString(EdibleTopClass value)
+        public static string EdibleTopClassToReadableString(EdibleTopClass? value)
         {
             switch (value)
             {
                 case EdibleTopClass.Safe:
-                    return "Seguro";
+                    return "Comestibles";
                 case EdibleTopClass.Toxic:
-                    return "Tóxico";
+                    return "Tóxicas";
                 case EdibleTopClass.NoInterest:
                     return "Sin interés";
                 case EdibleTopClass.Warning:
                     return "Precaución";
                 default:
-                    return string.Empty;
+                    return "Todas";
             }
         }
 
@@ -68,6 +68,45 @@ namespace Setas.ViewModels.Helpers
                     return EdibleTopClass.Warning;
                 default:
                     return EdibleTopClass.Warning;
+            }
+        }
+
+
+        //Gets all the classes associated to an edible top classification. We don't give the change to select by any possible value.
+        public static Edible[] EdibleTopClassToEdibles(EdibleTopClass? topClass)
+        {
+            if (topClass.HasValue)
+            {
+                switch (topClass)
+                {
+                    case EdibleTopClass.Safe:
+                        return new Edible[]
+                        {
+                            Common.Enums.Edible.BuenComestible,
+                            Common.Enums.Edible.ComestibleBajaCalidad,
+                            Common.Enums.Edible.ComestibleCalidadMedia
+                        };
+                    case EdibleTopClass.NoInterest:
+                        return new Edible[]
+                        {
+                            Common.Enums.Edible.SinInteres
+                        };
+                    case EdibleTopClass.Warning:
+                        return new Edible[]{
+                            Common.Enums.Edible.PosibleToxico,
+                                Common.Enums.Edible.ComestibleConPrecaucion,
+                                Common.Enums.Edible.ComestiblePeroPeligrosa,
+                                Common.Enums.Edible.NoComestible
+                            };
+                    case EdibleTopClass.Toxic:
+                        return new Edible[] { Common.Enums.Edible.Toxica };
+                    default:
+                        return null;
+                }
+            }
+            else
+            {
+                return null;
             }
         }
     }

@@ -7,20 +7,22 @@
              xmlns:controls="clr-namespace:Setas.Controls"
              xmlns:views="clr-namespace:Setas.Views"
              BackgroundColor="{StaticResource Color6}">
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="About" Order="Primary" Priority="0" Icon="interrogation.png"/>
-    </ContentPage.ToolbarItems>
+    <!--<NavigationPage.TitleView>
+        <StackLayout>
+            <Label x:Name="pageTitleView"/>
+        </StackLayout>
+    </NavigationPage.TitleView>-->
     <StackLayout>
 
         <ListView SeparatorColor="{StaticResource Color4}"                      
-                      SelectionMode="None"
-                      ItemTapped="ListView_ItemTapped"
-                        ItemAppearing="DetailsList_ItemAppearing"
-                      IsPullToRefreshEnabled="False"
-                      x:Name="DetailsList"
-                      HasUnevenRows="True"
-                        Margin="10"
-                  ItemsSource="{Binding Mushrooms}">
+                    SelectionMode="None"
+                    ItemTapped="ListView_ItemTapped"
+                    ItemAppearing="DetailsList_ItemAppearing"
+                    IsPullToRefreshEnabled="False"
+                    x:Name="DetailsList"
+                    HasUnevenRows="True"
+                    Margin="10"
+                    ItemsSource="{Binding Mushrooms}">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -51,7 +53,7 @@
                                 <Label Text="{Binding Name}" Style="{StaticResource Heading1}" />
                                 <Label Text="{Binding PopularNames}" Style="{StaticResource Subtitle2}" FontFamily="LibreBaskerville-Italic.ttf#LibreBaskerville" />
                             </StackLayout>
-                           
+
                             <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >
                                 <Label     Style="{StaticResource DangerIcon}"
                                     HorizontalOptions="End"

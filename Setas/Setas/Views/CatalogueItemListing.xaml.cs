@@ -19,49 +19,45 @@ namespace Setas.Views
 
         public IInternalDataService _dataService { get; }
 
-        //select edibles
-        private Edible[] _edibles;
-
-        private string _title;
+        //selected edibles
+        private Edible[] filter;
 
         private int _page = 0;
 
-
-        public CatalogueItemListing(IInternalDataService dataService, Edible[] ediblesFilter, string pageTitle)
+        public CatalogueItemListing(IInternalDataService dataService)
         {
-            _dataService = dataService;
-            _edibles = ediblesFilter;
 
-            _title = pageTitle;
+            _dataService = dataService;
 
             InitializeComponent();
 
-
             BindingContext = this;
-
             AdView.AdUnitId = App.AdUnitId;
 
         }
 
-        protected override void OnAppearing()
+        public async Task FilterList(Edible[] ediblesFilter, string pageTitle)
         {
-            Title = _title;
-            if (!Mushrooms.Any())
-            {
-                Task.Run(async () =>
-                {
-                    await GetItemsAsync();
-                });
-            }
+
+            _page = 0;
+            this.filter = ediblesFilter;
+            Title = pageTitle;
+
+            Mushrooms.Clear();
+
+            await GetItemsAsync();
+
         }
+
+
 
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var vm = new MushroomDetailViewModel((MushroomDisplayModel)e.Item);            
+            var vm = new MushroomDetailViewModel((MushroomDisplayModel)e.Item);
             await Navigation.PushAsync(new MushroomDetailPage(vm));
         }
 
-        private async void DetailsList_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        async void DetailsList_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
             var item = e.Item as MushroomDisplayModel;
             var lastItem = Mushrooms.LastOrDefault();
@@ -75,11 +71,10 @@ namespace Setas.Views
         {
             var data = await _dataService.GetMushroomsAsync(new SearchOptions
             {
-                Edibles = _edibles,
+                Edibles = filter,
                 Page = _page + 1
             });
 
-           
 
             foreach (var item in data)
             {
@@ -87,7 +82,6 @@ namespace Setas.Views
             }
 
             DetailsList.ItemsSource = Mushrooms;
-
 
             _page++;
         }

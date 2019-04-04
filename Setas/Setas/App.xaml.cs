@@ -55,7 +55,8 @@ namespace Setas
 
         public App()
         {
-           
+            DependencyContainer.Register();
+            MappingConfiguration.Init();
         }
 
 
@@ -67,14 +68,10 @@ namespace Setas
 
             Task.Run(async () =>
             {
-                await InitDatabase();
+                await InitDatabaseAsync();
             });
 
-            DependencyContainer.Register(this);
-            MappingConfiguration.Init();
-
             InitApp();
-
         }
 
 
@@ -87,11 +84,11 @@ namespace Setas
         {
             Task.Run(async () =>
             {
-                await InitDatabase();
-            }).Wait();
+                await InitDatabaseAsync();
+            });
         }
 
-        private async Task InitDatabase()
+        private async Task InitDatabaseAsync()
         {
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
             {
