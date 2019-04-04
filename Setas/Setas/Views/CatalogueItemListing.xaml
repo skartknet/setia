@@ -7,11 +7,11 @@
              xmlns:controls="clr-namespace:Setas.Controls"
              xmlns:views="clr-namespace:Setas.Views"
              BackgroundColor="{StaticResource Color6}">
-    <!--<NavigationPage.TitleView>
+    <NavigationPage.TitleView>
         <StackLayout>
-            <Label x:Name="pageTitleView"/>
+            <Label x:Name="pageTitleView" Style="{StaticResource Title1}"/>
         </StackLayout>
-    </NavigationPage.TitleView>-->
+    </NavigationPage.TitleView>
     <StackLayout>
 
         <ListView SeparatorColor="{StaticResource Color4}"                      
@@ -51,7 +51,7 @@
 
                             <StackLayout  Grid.Row="0" Grid.Column="1" VerticalOptions="StartAndExpand">
                                 <Label Text="{Binding Name}" Style="{StaticResource Heading1}" />
-                                <Label Text="{Binding PopularNames}" Style="{StaticResource Subtitle2}" FontFamily="LibreBaskerville-Italic.ttf#LibreBaskerville" />
+                                <Label Text="{Binding FirstPopularName}" Style="{StaticResource Subtitle2}" FontFamily="LibreBaskerville-Italic.ttf#LibreBaskerville" />
                             </StackLayout>
 
                             <StackLayout Grid.Row="2" Grid.Column="1" Orientation="Horizontal" >

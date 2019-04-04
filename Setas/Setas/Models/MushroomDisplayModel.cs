@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Setas.Data;
 using Setas.Enums;
 using Setas.ViewModels.Helpers;
@@ -41,6 +42,19 @@ namespace Setas.Models
             {
                 var uri = new Uri(App.ExternalService, this.Image);
                 return uri;
+            }
+        }
+
+        public string FirstPopularName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(PopularNames))
+                {
+                    return PopularNames.Split(',').First();
+                }
+
+                return string.Empty;
             }
         }
 

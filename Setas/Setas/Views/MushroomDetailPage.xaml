@@ -8,6 +8,11 @@
              x:Class="Setas.Views.MushroomDetailPage"
              Title="{Binding Mushroom.Name}"
              >
+    <NavigationPage.TitleView>
+        <StackLayout>
+            <Label Text="{Binding Mushroom.Name}" Style="{StaticResource Title1}"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
     <ContentPage.BindingContext>
         <local:MushroomDetailViewModel/>
     </ContentPage.BindingContext>

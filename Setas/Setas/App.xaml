@@ -25,6 +25,7 @@
                 <Setter Property="BorderRadius" Value="20"/>
 
             </Style>
+            
 
             <!--Apply Montserrrat to all labels by default-->
             <Style TargetType="Label">
@@ -36,14 +37,19 @@
                 <Setter Property="TextColor" Value="{StaticResource Color5}"/>
             </Style>
 
-            <Style x:Key="Heading1" TargetType="Label">
+
+            <Style x:Key="Title1" TargetType="Label">
                 <Setter Property="FontSize" Value="20"/>
-                <Setter Property="TextColor" Value="{StaticResource Color5}" />
+                <Setter Property="TextColor" Value="White" />
                 <Setter Property="FontFamily">
                     <OnPlatform x:TypeArguments="x:String" >
-                        <On Platform="Android" Value="Montserrat-Bold.ttf#Montserrat"/>
+                        <On Platform="Android" Value="LibreBaskerville-Regular.ttf#LibreBaskerville"/>
                     </OnPlatform>
                 </Setter>
+            </Style>
+
+            <Style x:Key="Heading1" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
             </Style>
 
             <Style x:Key="Heading2" TargetType="Label" BasedOn="{StaticResource Heading1}">

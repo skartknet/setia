@@ -41,7 +41,7 @@ namespace Setas.Views
 
             _page = 0;
             this.filter = ediblesFilter;
-            Title = pageTitle;
+            pageTitleView.Text = pageTitle;
 
             Mushrooms.Clear();
 
