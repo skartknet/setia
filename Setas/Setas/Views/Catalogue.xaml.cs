@@ -26,7 +26,7 @@ namespace Setas.Views
                 masterPage.MenuListView.ItemSelected += ListView_ItemSelected;
 
                 listPage = new CatalogueItemListing(scope.Resolve<IInternalDataService>());
-                detailsPage = new NavigationPage(listPage);
+                detailsPage = new CatalogueNavigation(listPage);
 
                 Master = masterPage;
                 Detail = detailsPage;

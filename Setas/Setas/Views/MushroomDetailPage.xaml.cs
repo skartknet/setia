@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Setas.Models;
 using Setas.ViewModels;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.Xaml;
 
 namespace Setas.Views
@@ -46,5 +47,6 @@ namespace Setas.Views
                 }
             };
         }
+
     }
 }

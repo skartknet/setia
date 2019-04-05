@@ -29,13 +29,13 @@ namespace Setas.Views
 
                 var identificationViewModel = new IdentificationViewModel(scope.Resolve<IInternalDataService>(), predictionClient);
 
-                var identifierNavigation = new NavigationPage(new IdentificationPage(identificationViewModel))
+                var identifier = new NavigationPage(new IdentificationPage(identificationViewModel))
                 {
                     Title = "Identificación",
                     Icon = "@drawable/ic_remove_red_eye_black_24dp"
                 };
 
-                var catalogueNavigation = new Catalogue
+                var catalogue = new Catalogue
                 {
                     Title = "Catálogo",
                     Icon = "@drawable/search_24"
@@ -53,8 +53,8 @@ namespace Setas.Views
                     Icon = "@drawable/ic_help_outline_black_24dp"
                 };
 
-                Children.Add(identifierNavigation);
-                Children.Add(catalogueNavigation);
+                Children.Add(identifier);
+                Children.Add(catalogue);
                 Children.Add(history);
                 Children.Add(info);
             }
