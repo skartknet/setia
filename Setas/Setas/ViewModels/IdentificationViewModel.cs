@@ -246,7 +246,7 @@ namespace Setas.ViewModels
         {
             var rIds = models.Select(r => r.CmsNodeId()).ToArray();
 
-            //this line will not return thos results that are not in the database.
+            //this line will not return those results that are not in the database.
             var resultToDisplay = await _dataService.GetMushroomsAsync(rIds);
 
             var resultsViewModel = new List<Prediction>();

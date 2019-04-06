@@ -9,8 +9,14 @@ namespace Setas.Services
 {
     public interface IInternalDataService
     {
+        bool DatabaseInitialized { get; }
+
+        Task Initialise();
+
         Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options);
         Task<IEnumerable<Mushroom>> GetMushroomsAsync(IEnumerable<int> ids);
+
+        Task<int> GetTotalCountAsync(SearchOptions options);
 
         Task<Mushroom> GetMushroomAsync(int id);
         Task<Configuration> GetConfigurationAsync();

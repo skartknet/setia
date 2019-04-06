@@ -10,6 +10,7 @@
     <NavigationPage.TitleView>
         <StackLayout>
             <Label x:Name="pageTitleView" Style="{StaticResource Title1}"/>
+            <SearchBar SearchButtonPressed="SearchBar_SearchButtonPressed" TextColor="White"  />
         </StackLayout>
     </NavigationPage.TitleView>
     <StackLayout>

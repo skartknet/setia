@@ -18,7 +18,9 @@ namespace Setas
     public partial class App : Application
     {
         public static ImageSource SourceImage { get; set; }
-        public static bool StorageInitialized { get; set; } = false;
+
+        public IInternalDataService InternalDataService { get; private set; }
+        public ISyncingDataService SyncingService { get; private set; }
 
         public static Uri ExternalService = new Uri("http://setia-dev.azurewebsites.net");
         //public static Uri ExternalService = new Uri("http://172.17.198.145:5000");
@@ -52,26 +54,39 @@ namespace Setas
         }
 
 
-
-        public App()
-        {
-            DependencyContainer.Register();
-            MappingConfiguration.Init();
-        }
-
-
         protected override void OnStart()
         {
-
             AppCenter.Start("android=86311dca-ab38-41be-bf0d-77b43d392cd4;",
                    typeof(Analytics), typeof(Crashes));
 
+            DependencyContainer.Register();
+            MappingConfiguration.Init();
+
+            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
+            {
+                SyncingService = scope.Resolve<ISyncingDataService>();
+                InternalDataService = scope.Resolve<IInternalDataService>();
+            }
+
             Task.Run(async () =>
             {
-                await InitDatabaseAsync();
-            });
+                try
+                {
+                    await InternalDataService.Initialise();
+                    await SyncingService.SyncDataAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    Crashes.TrackError(ex);
+
+                    UserDialogs.Instance.Alert($"Error initialising database. {ex.Message}");
+                }
+
+            }).Wait();
 
             InitApp();
+
         }
 
 
@@ -84,26 +99,11 @@ namespace Setas
         {
             Task.Run(async () =>
             {
-                await InitDatabaseAsync();
+                if (InternalDataService.DatabaseInitialized)
+                {
+                    await SyncingService.SyncDataAsync();
+                }
             });
-        }
-
-        private async Task InitDatabaseAsync()
-        {
-            using (var scope = DependencyContainer.Container.BeginLifetimeScope())
-            {
-
-                try
-                {
-                    var syncingService = scope.Resolve<ISyncingDataService>();
-                    await syncingService.SyncDataAsync();
-                }
-                catch
-                {
-                    await UserDialogs.Instance.AlertAsync("Error initialising database", "Error");
-                }
-            }
-
         }
 
 

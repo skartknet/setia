@@ -1,6 +1,4 @@
-﻿using Acr.UserDialogs;
-using Microsoft.AppCenter.Crashes;
-using Setas.Common;
+﻿using Setas.Common;
 using Setas.Common.Models;
 using Setas.Data;
 using Setas.Models.Data;
@@ -10,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Setas.Services
@@ -17,25 +16,36 @@ namespace Setas.Services
     //Instantiated as Single Instance by Autofac.
     public class InternalDataService : IInternalDataService
     {
-        const string DBNAME = "MushroomsDb.db3";
-
-        readonly string DBPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DBNAME);
+        private const string DBNAME = "MushroomsDb.db3";
+        private readonly string DBPATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), DBNAME);
 
         private static SQLiteAsyncConnection _database;
 
+        public bool DatabaseInitialized { get; private set; }
 
         public InternalDataService()
         {
-            if (_database == null)
+
+#if DEBUG
+            File.Delete(DBPATH);
+#endif
+        }
+
+        public async Task Initialise()
+        {
+            if (!File.Exists(DBPATH))
+            {
+                OpenDatabase();
+                await CreateDatabaseStructure();
+            }
+            else
             {
                 OpenDatabase();
             }
 
-#if DEBUG
-            File.Delete(DBPATH);      
-#endif
 
-           Task.Run(async () =>await  CreateDatabaseStructure()).Wait();
+            DatabaseInitialized = true;
+
         }
 
 
@@ -47,10 +57,7 @@ namespace Setas.Services
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
-                UserDialogs.Instance.Alert("Error creating database");
-                throw new Exception("Error creating Database", ex);
-
+                throw new Exception($"Error opening Database. {ex.Message}", ex);
             }
         }
 
@@ -74,10 +81,12 @@ namespace Setas.Services
                 };
 
                 await _database.InsertAllAsync(configElements);
+
+                DatabaseInitialized = true;
             }
             catch (Exception ex)
             {
-                throw new Exception("Error creating Database", ex);
+                throw new Exception($"Error creating Database. {ex.Message}", ex);
             }
 
         }
@@ -96,27 +105,78 @@ namespace Setas.Services
         }
 
 
+
+        public async Task<int> GetTotalCountAsync(SearchOptions options)
+        {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
+
+            var sql = new StringBuilder("SELECT COUNT(*) FROM Mushrooms");
+
+            List<string> whereArgs = new List<string>();
+
+            CreateWhereStatement(options, sql, whereArgs);
+
+            var totalItems = await _database.ExecuteScalarAsync<int>(sql.ToString(), whereArgs.ToArray());
+
+            return totalItems;
+        }
+
+
+
         public async Task<IEnumerable<Mushroom>> GetMushroomsAsync(SearchOptions options)
-        {            
+        {
 
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
 
-            AsyncTableQuery<Mushroom> result = _database.Table<Mushroom>();       
+            var sql = new StringBuilder("SELECT * FROM Mushrooms");
 
-            if (options.Edibles != null && options.Edibles.Any())
-            {
-                result = result.Where(m => options.Edibles.Contains(m.CookingInterest));
-            }
+            List<string> whereArgs = new List<string>();
 
-            return await result.OrderBy(n=>n.Name)
-                    .Skip((options.Page - 1) * options.ItemsPerPage)
-                    .Take(options.ItemsPerPage)
-                    .ToListAsync();
+            CreateWhereStatement(options, sql, whereArgs);
+
+            //add pagination statement
+            sql.Append($" ORDER BY Name LIMIT {options.PageSize} OFFSET {(options.Page - 1) * options.PageSize}");
+
+
+            List<Mushroom> result = await _database.QueryAsync<Mushroom>(sql.ToString(), whereArgs.ToArray());
+
+
+            return result;
         }
 
+
+        private static void CreateWhereStatement(SearchOptions options, StringBuilder sql, List<string> whereArgs)
+        {
+            var whereSql = new StringBuilder(" WHERE ");
+
+            //we don't filter by Edibles filter is there is a Query term.
+            if (string.IsNullOrEmpty(options.QueryTerm) && options.Edibles != null && options.Edibles.Any())
+            {
+                whereSql.Append("CookingInterest IN (?)");
+                var ediblesFilter = string.Join(",", options.Edibles.Select(s => ((int)s).ToString()).ToArray());
+                whereArgs.Add(ediblesFilter);
+            }
+
+            if (!string.IsNullOrEmpty(options.QueryTerm))
+            {
+                if (whereArgs.Count > 0) whereSql.Append(" AND ");
+
+                whereSql.Append("Name LIKE ? COLLATE NOCASE");
+                whereArgs.Add($"%{options.QueryTerm}%");
+
+            }
+
+            if (whereArgs.Any())
+            {
+                sql.Append(whereSql);
+            }
+        }
 
         public async Task<Mushroom> GetMushroomAsync(int id)
         {

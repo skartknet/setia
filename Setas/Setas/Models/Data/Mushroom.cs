@@ -4,7 +4,7 @@ using System;
 
 namespace Setas.Data
 {
-    [Table("Mushroom")]
+    [Table("Mushrooms")]
     public class Mushroom
     {
         [PrimaryKey]

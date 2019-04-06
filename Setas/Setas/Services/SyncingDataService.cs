@@ -45,7 +45,6 @@ namespace Setas.Services
                 try
                 {
                     await InitContentAsync();
-                    App.StorageInitialized = true;
                 }
                 catch (Exception ex)
                 {
@@ -58,8 +57,6 @@ namespace Setas.Services
                 try
                 {
                     await UpdateContentAsync();
-                    App.StorageInitialized = true;
-
                 }
                 catch (Exception ex)
                 {
