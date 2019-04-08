@@ -14,6 +14,8 @@ namespace Setas.Services
         private IExternalDataService _remoteStorage { get; }
         private IInternalDataService _localStorage { get; }
 
+        public bool IsSynced { get; private set; }
+
         //TODO: move configData to static App property
         private Configuration _localConfig;
 

@@ -1,13 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
-using Autofac;
+﻿using Autofac;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Setas.Models.Mapping;
 using Setas.Services;
 using Setas.Views;
+using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -53,6 +52,12 @@ namespace Setas
             }
         }
 
+        public App()
+        {
+            InitializeComponent();
+            MainPage = new LoadingPage();
+        }
+
 
         protected override void OnStart()
         {
@@ -70,22 +75,18 @@ namespace Setas
 
             Task.Run(async () =>
             {
-                try
-                {
-                    await InternalDataService.Initialise();
-                    await SyncingService.SyncDataAsync();
 
-                }
-                catch (Exception ex)
-                {
-                    Crashes.TrackError(ex);
+                await InternalDataService.Initialise();
+                await SyncingService.SyncDataAsync();
+                MainPage = new MainPage();
+            });
 
-                    UserDialogs.Instance.Alert($"Error initialising database. {ex.Message}");
-                }
 
-            }).Wait();
 
-            InitApp();
+
+
+
+
 
         }
 
@@ -95,24 +96,16 @@ namespace Setas
             // Handle when your app sleeps
         }
 
-        protected override void OnResume()
+        protected async override void OnResume()
         {
-            Task.Run(async () =>
+
+            if (InternalDataService.DatabaseInitialized)
             {
-                if (InternalDataService.DatabaseInitialized)
-                {
-                    await SyncingService.SyncDataAsync();
-                }
-            });
+                await SyncingService.SyncDataAsync();
+            }
+
         }
 
-
-        private void InitApp()
-        {
-
-            InitializeComponent();
-            MainPage = new MainPage();
-        }
     }
 
 

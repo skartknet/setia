@@ -152,30 +152,24 @@ namespace Setas.Services
 
 
         private static void CreateWhereStatement(SearchOptions options, StringBuilder sql, List<string> whereArgs)
-        {
-            var whereSql = new StringBuilder(" WHERE ");
-
-            //we don't filter by Edibles filter is there is a Query term.
-            if (string.IsNullOrEmpty(options.QueryTerm) && options.Edibles != null && options.Edibles.Any())
+        {                        
+            List<string> whereStatements = new List<string>();            
+            if (options.Edibles != null && options.Edibles.Any())
             {
-                whereSql.Append("CookingInterest IN (?)");
-                var ediblesFilter = string.Join(",", options.Edibles.Select(s => ((int)s).ToString()).ToArray());
-                whereArgs.Add(ediblesFilter);
+                var ediblesFilter = string.Join(",", options.Edibles.Select(s => ((int)s)));
+                whereStatements.Add($"CookingInterest IN ({ediblesFilter})");
             }
 
             if (!string.IsNullOrEmpty(options.QueryTerm))
-            {
-                if (whereArgs.Count > 0) whereSql.Append(" AND ");
-
-                whereSql.Append("Name LIKE ? COLLATE NOCASE");
+            {                
+                whereStatements.Add("Name LIKE ? COLLATE NOCASE");
                 whereArgs.Add($"%{options.QueryTerm}%");
-
             }
 
-            if (whereArgs.Any())
-            {
-                sql.Append(whereSql);
-            }
+            if (!whereStatements.Any()) return;
+
+            sql.Append(" WHERE ");
+            sql.Append(string.Join(" AND ", whereStatements));
         }
 
         public async Task<Mushroom> GetMushroomAsync(int id)

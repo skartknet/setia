@@ -7,6 +7,7 @@ namespace Setas.Services
 {
     public interface ISyncingDataService
     {
+        bool IsSynced { get; }
         Task SyncDataAsync();
     }
 }

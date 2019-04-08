@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Setas.Common.Enums;
 using Setas.Enums;
 using Setas.Services;
 using Setas.ViewModels.Helpers;
@@ -14,9 +13,9 @@ namespace Setas.Views
     {
 
         private EdibleTopClass? selectedOption = null;
-        CatalogueMenu masterPage;
-        NavigationPage detailsPage;
-        CatalogueItemListing listPage;
+        private CatalogueMenu masterPage;
+        private NavigationPage detailsPage;
+        private CatalogueItemListing listPage;
 
         public Catalogue()
         {
@@ -26,7 +25,7 @@ namespace Setas.Views
                 masterPage.MenuListView.ItemSelected += ListView_ItemSelected;
 
                 listPage = new CatalogueItemListing(scope.Resolve<IInternalDataService>());
-                detailsPage = new CatalogueNavigation(listPage);
+                detailsPage = new NavigationPage(listPage);
 
                 Master = masterPage;
                 Detail = detailsPage;
