@@ -36,7 +36,7 @@ namespace Setas
 
 
         //Custom Vision
-        public static Guid CustomVisionProjectId = new Guid("aaedaff8-49db-48e9-aa8d-6cf0262a29d1");
+        public static Guid CustomVisionProjectId = new Guid("7fd23595-1444-41c6-a91e-4c2ab67c96a3");
         public static string CustomVisionPredictionKey = "46809c785461496aa166cf82c4bdf6b7";
         public static string PredictionEndpoint = "https://southcentralus.api.cognitive.microsoft.com";
 
@@ -77,6 +77,7 @@ namespace Setas
             {
                 await InternalDataService.Initialise();
                 await SyncingService.SyncDataAsync();
+
                 MainPage = new MainPage();
             });
 

@@ -172,7 +172,7 @@ namespace Setas.ViewModels
                 try
                 {              
 
-                    result = await _predictionService.ClassifyImageAsync(App.CustomVisionProjectId, "Iteration1", fileStream);
+                    result = await _predictionService.ClassifyImageAsync(App.CustomVisionProjectId, "default", fileStream);
                 }
                 catch (Exception ex)
                 {

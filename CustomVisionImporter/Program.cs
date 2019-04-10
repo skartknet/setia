@@ -106,6 +106,7 @@ namespace CustomVisionImporter
         {
             string logPath = @"C:\Users\koben\Documents\Setia\ImporterLogs";
             string fileName = "\\" + DateTime.Now.ToString("yyyyMMdd-hh:mm") + ".txt";
+            
             using (StreamWriter sw = File.AppendText(logPath + fileName))
             {
                 sw.WriteLine(message);
