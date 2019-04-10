@@ -23,7 +23,7 @@ namespace CustomVisionImporter
             //---------- Configuration -------------------
             const string filesPath = @"D:\Mushrooms";
             const string trainingApiKey = "fb972b87bc4b45e5b80c396c2f36fc1d";
-            Guid projectId = new Guid("aaedaff8-49db-48e9-aa8d-6cf0262a29d1");
+            Guid projectId = new Guid("7fd23595-1444-41c6-a91e-4c2ab67c96a3");
             //Uri apiBase = new Uri("http://localhost:22481/umbraco/api/");
             Uri apiBase = new Uri("http://setia-dev.azurewebsites.net/umbraco/api/");
 
@@ -60,7 +60,7 @@ namespace CustomVisionImporter
                 {
                     try
                     {
-                        await ProcessFolder(mushroomFolder);
+                        await ProcessFolderAsync(mushroomFolder);
                     }
                     catch
                     {
@@ -70,7 +70,7 @@ namespace CustomVisionImporter
             }
 
             Console.WriteLine();
-            Console.WriteLine($"Import finished!");
+            ConsoleSuccess($"Import finished!");
             Console.ReadLine();
 
         }
@@ -80,16 +80,45 @@ namespace CustomVisionImporter
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             if (insertLineBreak) Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.White;
+
+            WriteToLog(message);
         }
 
-        private static async Task ProcessFolder(string mushroomFolder)
+        private static void ConsoleInfo(string message, bool insertLineBreak = true)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(message);
+            if (insertLineBreak) Console.WriteLine();
+
+            WriteToLog(message);
+        }
+
+        private static void ConsoleSuccess(string message, bool insertLineBreak = true)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            if (insertLineBreak) Console.WriteLine();
+
+            WriteToLog(message);
+        }
+
+        private static void WriteToLog(string message)
+        {
+            string logPath = @"C:\Users\koben\Documents\Setia\ImporterLogs";
+            string fileName = "\\" + DateTime.Now.ToString("yyyyMMdd-hh:mm") + ".txt";
+            using (StreamWriter sw = File.AppendText(logPath + fileName))
+            {
+                sw.WriteLine(message);
+            }
+        }
+
+        private static async Task ProcessFolderAsync(string mushroomFolder)
         {
             var name = FirstCharToUpper(new DirectoryInfo(mushroomFolder).Name);
             var cleanName = name.Replace(" - clean", "", StringComparison.OrdinalIgnoreCase)
                                 .Trim();
 
-            Console.WriteLine($"==== Processing folder {cleanName} ====");
+            ConsoleInfo($"==== Processing folder {cleanName} ====");            
 
             #region Create node in Umbraco
 
@@ -109,7 +138,7 @@ namespace CustomVisionImporter
 
             try
             {
-                Console.WriteLine("--- Importing info into Umbraco ---");
+                ConsoleInfo("--- Importing info into Umbraco ---");
 
                 nodeId = await umbracoService.GetMushroomIdAsync(cleanName);
 
@@ -126,7 +155,7 @@ namespace CustomVisionImporter
                 }
                 else
                 {
-                    Console.WriteLine($"Node {name} already exists in Umbraco.");
+                    ConsoleInfo($"Node {name} already exists in Umbraco.");
                 }
 
             }
@@ -138,15 +167,15 @@ namespace CustomVisionImporter
 
             }
 
-            Console.WriteLine($"SUCCESS importing info into Umbraco. Node ID: {nodeId}");
+            ConsoleSuccess($"SUCCESS importing info into Umbraco. Node ID: {nodeId}");
 
-            Console.WriteLine("--- Uploading images into custom vision ---");
+            ConsoleInfo("--- Uploading images into custom vision ---");
 
             var images = Directory.EnumerateFiles(mushroomFolder);
 
             ExtractImagesToControlImagesFolder(images, mushroomFolder);
 
-            Console.WriteLine($"There's a total of {images.Count()} images.");
+            ConsoleInfo($"There's a total of {images.Count()} images.");
 
             Tag tag = customVisionService.CreateTag(nodeId.ToString(), cleanName.Replace(" ", ""));
 
@@ -160,19 +189,16 @@ namespace CustomVisionImporter
                 ConsoleError(ex.Message);
             }
 
-
-
             #endregion
 
-            Console.WriteLine($"==== SUCCESS: Folder {name} processed succesfully. ====");
-            Console.WriteLine();
+            ConsoleSuccess($"==== SUCCESS: Folder {name} processed succesfully. ====", true);            
         }
 
         private static void ExtractImagesToControlImagesFolder(IEnumerable<string> images, string path, int percentageImagesToTake = 20)
         {
             try
             {
-                var controlDirPath = Path.Combine(path, "/control");
+                var controlDirPath = path + "\\control";
                 Directory.CreateDirectory(controlDirPath);
                 var imagesToTake = (int)Math.Floor(images.Count() * percentageImagesToTake / 100d);
                 var controlImages = images.Take(imagesToTake);
@@ -194,6 +220,11 @@ namespace CustomVisionImporter
         private static async Task<Mushroom> UmbracoNodeFromContent(string cleanName)
         {
             var contentPage = await SiteScrapperService.GetContentPage(cleanName);
+
+            if(contentPage == null)
+            {
+                throw new Exception("Site scrapper: the content page could't be found.");
+            }
 
             TextInfo textInfo = new CultureInfo("es-ES", false).TextInfo;
             var cookingInterest = contentPage.GetMushroomDetailsValue("Importancia Práctica/Interés Gastronómico");

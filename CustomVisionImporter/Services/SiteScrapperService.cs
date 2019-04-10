@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using Setas.Common.Enums;
 
 namespace CustomVisionImporter.Services
@@ -26,7 +27,7 @@ namespace CustomVisionImporter.Services
                 throw new Exception("Couldn't retrieve results page", ex);
             }
 
-            var anchor = resultsPage.QuerySelector("#articulos_container")?.Descendents().FirstOrDefault(node => node.TextContent.Equals(name, StringComparison.OrdinalIgnoreCase));
+            var anchor = resultsPage.QuerySelector("#articulos_container")?.Descendents().OfType<IHtmlAnchorElement>().FirstOrDefault(node => node.Text.Trim().Equals(name, StringComparison.OrdinalIgnoreCase));
 
             if (anchor == null)
             {

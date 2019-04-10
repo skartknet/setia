@@ -1,12 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Setas.Views.InfoPage">
+             x:Class="Setas.Views.InfoPage"
+             BackgroundColor="{StaticResource Color6}">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout Margin="10" x:Name="ContentLayout"
+                     WidthRequest="300"
+                     VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="CenterAndExpand">
+            <Image Source="logo_icon.png"
+                   Aspect="AspectFit"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"
+                   WidthRequest="55"
+                   HeightRequest="51"/>
+            <Label Text="Setia - v1.0.2" HorizontalOptions="Center"/>
+            <Label Text="Copyright 2019"
+                   HorizontalOptions="Center"/>
+            <Label Margin="0,50,0,0" HorizontalTextAlignment="Center"
+                   Text="El contenido de esta aplicación ha sido proporcionado amablemente por la Asociación Cultural 'Baxauri'">
+            </Label>
+            <Label Text="ATENCIÓN" FontAttributes="Bold"  />
+            <Label Text="Nunca coma nada que no conozca. Siempre consulte con un experto. Setia no se hace responsable de posibles errores identificando ninguna planta."/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
