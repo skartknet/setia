@@ -13,7 +13,7 @@
         </StackLayout>
     </NavigationPage.TitleView>
     <StackLayout>
-        <SearchBar SearchButtonPressed="SearchBar_SearchButtonPressed"/>
+        <SearchBar SearchButtonPressed="SearchBar_SearchButtonPressed"  TextChanged="SearchBar_TextChanged"/>
         <ListView SeparatorColor="{StaticResource Color4}"                      
                     SelectionMode="None"
                     ItemTapped="ListView_ItemTapped"

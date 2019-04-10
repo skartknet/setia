@@ -75,17 +75,10 @@ namespace Setas
 
             Task.Run(async () =>
             {
-
                 await InternalDataService.Initialise();
                 await SyncingService.SyncDataAsync();
                 MainPage = new MainPage();
             });
-
-
-
-
-
-
 
 
         }
@@ -96,12 +89,15 @@ namespace Setas
             // Handle when your app sleeps
         }
 
-        protected async override void OnResume()
+        protected override void OnResume()
         {
 
             if (InternalDataService.DatabaseInitialized)
             {
-                await SyncingService.SyncDataAsync();
+                Task.Run(async () =>
+                {
+                    await SyncingService.SyncDataAsync();
+                });
             }
 
         }

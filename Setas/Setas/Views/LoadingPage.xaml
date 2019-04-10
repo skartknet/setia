@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"   
+            x:Class="Setas.LoadingPage"
+            xmlns:local="clr-namespace:Setas.ViewModels"
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:controls="clr-namespace:Setas.Controls"
+             Title="Analizar Imagen">
+    <ContentPage.BindingContext>
+        <local:IdentificationViewModel/>
+    </ContentPage.BindingContext>
+    <NavigationPage.TitleView>
+        <StackLayout>
+            <Label Text="Analizar Imagen" Style="{StaticResource Title1}"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
+
+    <AbsoluteLayout VerticalOptions="FillAndExpand"
+                    HorizontalOptions="FillAndExpand">
+        <Image AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            Source="bg1.png" Aspect="AspectFill"/>
+    </AbsoluteLayout>
+</ContentPage>

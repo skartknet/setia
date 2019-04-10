@@ -1,5 +1,4 @@
-﻿
-using Autofac;
+﻿using Autofac;
 using Microsoft.Azure.CognitiveServices.Vision.CustomVision.Prediction;
 using Setas.Services;
 using Setas.ViewModels;
@@ -22,7 +21,7 @@ namespace Setas.Views
                          .SetBarSelectedItemColor(Color.Red);
 
             using (var scope = DependencyContainer.Container.BeginLifetimeScope())
-            {                
+            {
                 var predictionClient = scope.Resolve<ICustomVisionPredictionClient>();
                 predictionClient.ApiKey = App.CustomVisionPredictionKey;
                 predictionClient.Endpoint = App.PredictionEndpoint;

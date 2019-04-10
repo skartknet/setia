@@ -125,7 +125,7 @@ namespace Setas.Views
             return pagedResult;
         }
 
-        async void SearchBar_SearchButtonPressed(object sender, System.EventArgs e)
+        private async void SearchBar_SearchButtonPressed(object sender, System.EventArgs e)
         {
 
             ClearResults();
@@ -138,5 +138,14 @@ namespace Setas.Views
             _page = 0;
         }
 
+        private async void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var search = (SearchBar)sender;
+            if (string.IsNullOrEmpty(search.Text))
+            {
+                ClearResults();
+                await GetItemsAsync();
+            }
+        }
     }
 }

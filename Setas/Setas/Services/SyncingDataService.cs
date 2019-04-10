@@ -66,6 +66,9 @@ namespace Setas.Services
 
                 }
             }
+
+            //TODO: Use this to get data from exernal source instead?
+            IsSynced = true;
         }
 
 

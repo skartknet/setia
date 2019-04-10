@@ -5,12 +5,15 @@
             xmlns:local="clr-namespace:Setas.ViewModels"
             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
              xmlns:controls="clr-namespace:Setas.Controls"
-             Title="Identificar Hongo"
-             NavigationPage.HasNavigationBar="False">
+             Title="Analizar Imagen">
     <ContentPage.BindingContext>
         <local:IdentificationViewModel/>
     </ContentPage.BindingContext>
-
+    <NavigationPage.TitleView>
+        <StackLayout>
+            <Label Text="Analizar Imagen" Style="{StaticResource Title1}"/>
+        </StackLayout>
+    </NavigationPage.TitleView>
 
     <AbsoluteLayout VerticalOptions="FillAndExpand"
                     HorizontalOptions="FillAndExpand">
@@ -18,7 +21,6 @@
             Source="bg1.png" Aspect="AspectFill"/>
         <StackLayout AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
             <StackLayout Padding="20,10" VerticalOptions="StartAndExpand">
-                <Label Text="Analizar Imagen" Style="{StaticResource Heading1}" HorizontalOptions="Center" Margin="10,0"/>
                 <StackLayout  IsVisible="{Binding IsNotIdentifying}" VerticalOptions="FillAndExpand">
                     <StackLayout VerticalOptions="CenterAndExpand">
                         <Button Text="Hacer foto"

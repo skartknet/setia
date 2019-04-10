@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using Setas.Models;
 using Setas.Services;
 using Setas.ViewModels;
@@ -29,19 +30,22 @@ namespace Setas.Views
         {
             Task.Run(async () => await _dataService.GetHistoryAsync()).ContinueWith((t) =>
             {
-                var items = t.Result.Select(h => new HistoryItemDisplayModel()
+                using (UserDialogs.Instance.Loading("Cargando..."))
                 {
-                    TakenOn = h.TakenOn.ToShortDateString(),
-                    MushroomId = h.MushroomId,
-                    Mushroom = new MushroomDisplayModel(h.Mushroom)
-                });
+                    var items = t.Result.Select(h => new HistoryItemDisplayModel()
+                    {
+                        TakenOn = h.TakenOn.ToShortDateString(),
+                        MushroomId = h.MushroomId,
+                        Mushroom = new MushroomDisplayModel(h.Mushroom)
+                    });
 
-                foreach (var item in items)
-                {
-                    Mushrooms.Add(item);
+                    foreach (var item in items)
+                    {
+                        Mushrooms.Add(item);
+                    }
+
+                    HistoryList.ItemsSource = Mushrooms;
                 }
-
-                HistoryList.ItemsSource = Mushrooms;
             });
         }
 
